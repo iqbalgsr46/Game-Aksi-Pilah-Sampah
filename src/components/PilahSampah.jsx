@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, useAnimation, useMotionValue, animate } from 'framer-motion';
+import { motion, useMotionValue, animate } from 'framer-motion';
 import { TRASH_TYPES } from './TrashItems';
 import { saveScore } from '../utils/leaderboard';
 
@@ -46,51 +46,112 @@ const DropAnimation = ({ animation }) => {
   );
 };
 
-// Scattered Trash Component
+// ============================================================================
+// Multi-Touch Draggable Trash Item
+// ============================================================================
+// Architecture:
+//   - Each ScatteredTrashItem manages its own DragSession via refs (not state).
+//   - A DragSession is an object { pointerId, startX, startY, initialX, initialY }
+//     stored in sessionRef. Only one pointer may own this item at a time.
+//   - All position updates happen via framer-motion's useMotionValue (no React
+//     re-renders in the hot pointermove path).
+//   - setPointerCapture is called on containerRef.current (not e.target) so
+//     pointer events are reliably captured even if touch drifts off the SVG.
+//   - Multiple ScatteredTrashItem instances can each be dragged simultaneously
+//     by different pointers — they share zero mutable state between them.
+// ============================================================================
 function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
-  const [isDragging, setIsDragging] = useState(false);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const controls = useAnimation();
+  // Refs for mutable drag state — avoids React re-renders during drag
+  const containerRef = useRef(null);
+  const sessionRef = useRef(null);
+  const isDraggingRef = useRef(false);
 
-  const handlePointerDown = (e) => {
+  // MotionValues for GPU-accelerated transforms without re-renders
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const mScale = useMotionValue(1);
+
+  // z-index is the only React state — triggers re-render only on grab/release
+  const [zIndex, setZIndex] = useState(10);
+
+  // ---- pointerdown: create DragSession, capture pointer ----
+  const handlePointerDown = useCallback((e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    
-    e.target.setPointerCapture(e.pointerId);
-    setIsDragging(true);
-    e.target.dataset.startX = e.clientX;
-    e.target.dataset.startY = e.clientY;
-    e.target.dataset.initialX = x.get();
-    e.target.dataset.initialY = y.get();
-    
-    controls.start({ scale: 1.35, transition: { duration: 0.15 } });
-    
-    if (onDrag) onDrag(e, { point: { x: e.clientX, y: e.clientY } });
-  };
 
-  const handlePointerMove = (e) => {
-    if (!isDragging) return;
-    const dx = e.clientX - parseFloat(e.target.dataset.startX);
-    const dy = e.clientY - parseFloat(e.target.dataset.startY);
-    x.set(parseFloat(e.target.dataset.initialX) + dx);
-    y.set(parseFloat(e.target.dataset.initialY) + dy);
-    
-    if (onDrag) onDrag(e, { point: { x: e.clientX, y: e.clientY } });
-  };
+    // Object locking: reject if already owned by another pointer
+    if (isDraggingRef.current) return;
 
-  const handlePointerUp = (e) => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    e.target.releasePointerCapture(e.pointerId);
-    
-    controls.start({ scale: 1, transition: { duration: 0.15 } });
-    
-    if (onDragEnd) onDragEnd(e, { point: { x: e.clientX, y: e.clientY } }, trash.uid, trash.category);
-    
-    // Snap back
-    animate(x, 0, { type: "spring", stiffness: 300, damping: 20 });
-    animate(y, 0, { type: "spring", stiffness: 300, damping: 20 });
-  };
+    // Prevent browser scroll/zoom on touch
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Capture on the container div (not e.target which may be an SVG child)
+    const el = containerRef.current;
+    if (!el) return;
+    el.setPointerCapture(e.pointerId);
+
+    // Create DragSession
+    sessionRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialX: mx.get(),
+      initialY: my.get(),
+    };
+    isDraggingRef.current = true;
+
+    // Visual feedback via motionValue (no re-render)
+    mScale.set(1.35);
+    setZIndex(999);
+
+    // Notify parent for bin-hover highlight
+    if (onDrag) onDrag(trash.uid, e.clientX, e.clientY);
+  }, [trash.uid, onDrag, mx, my, mScale]);
+
+  // ---- pointermove: update position for THIS pointer only ----
+  const handlePointerMove = useCallback((e) => {
+    const session = sessionRef.current;
+    if (!session || session.pointerId !== e.pointerId) return;
+
+    e.preventDefault();
+
+    const dx = e.clientX - session.startX;
+    const dy = e.clientY - session.startY;
+    mx.set(session.initialX + dx);
+    my.set(session.initialY + dy);
+
+    // Notify parent for bin-hover highlight
+    if (onDrag) onDrag(trash.uid, e.clientX, e.clientY);
+  }, [trash.uid, onDrag, mx, my]);
+
+  // ---- pointerup / pointercancel: finalize drag, cleanup session ----
+  const handlePointerUp = useCallback((e) => {
+    const session = sessionRef.current;
+    if (!session || session.pointerId !== e.pointerId) return;
+
+    e.preventDefault();
+
+    // Release capture
+    const el = containerRef.current;
+    if (el) {
+      try { el.releasePointerCapture(e.pointerId); } catch (_) { /* already released */ }
+    }
+
+    // Clear session BEFORE callbacks to prevent race conditions
+    isDraggingRef.current = false;
+    sessionRef.current = null;
+
+    // Visual reset
+    mScale.set(1);
+    setZIndex(10);
+
+    // Notify parent with drop coordinates
+    if (onDragEnd) onDragEnd(trash.uid, trash.category, e.clientX, e.clientY);
+
+    // Snap back to origin
+    animate(mx, 0, { type: "spring", stiffness: 300, damping: 20 });
+    animate(my, 0, { type: "spring", stiffness: 300, damping: 20 });
+  }, [trash.uid, trash.category, onDragEnd, mx, my, mScale]);
 
   return (
     <motion.div
@@ -98,20 +159,21 @@ function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
         position: 'absolute',
         left: `${trash.x}%`,
         top: `${trash.y}%`,
-        zIndex: isDragging ? 999 : 10,
+        zIndex,
       }}
     >
       <motion.div
+        ref={containerRef}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        animate={controls}
         style={{
-          x,
-          y,
+          x: mx,
+          y: my,
+          scale: mScale,
           touchAction: 'none',
-          cursor: isDragging ? 'grabbing' : 'grab',
+          cursor: 'grab',
           pointerEvents: 'auto',
           position: 'relative',
         }}
@@ -122,6 +184,9 @@ function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
   );
 }
 
+// ============================================================================
+// Main Game Component
+// ============================================================================
 export default function PilahSampah({ currentGroupName, onSaveSessionScore, onClose, onGoHome, playClickSound }) {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(5);
@@ -129,10 +194,15 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
   const [dropAnimations, setDropAnimations] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [shakingBin, setShakingBin] = useState(null);
-  const [hoveredBin, setHoveredBin] = useState(null);
   const [combo, setCombo] = useState(1);
   const [floatingScores, setFloatingScores] = useState([]);
   const [timeLeft, setTimeLeft] = useState(60);
+
+  // ---- Multi-touch bin hover tracking ----
+  // Map<uid, binName|null> — tracks which bin each actively-dragged item is hovering.
+  // We derive the "any bin hovered" state from this map for visual feedback.
+  const activeDragHoversRef = useRef(new Map());
+  const [hoveredBins, setHoveredBins] = useState(new Set());
   
   const scoreRef = useRef(score);
   useEffect(() => { scoreRef.current = score; }, [score]);
@@ -152,7 +222,7 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
     }
   }, [gameOver]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Audio Context (Copied from CariSampah)
+  // Audio Context
   const playSuccessSound = useCallback(() => {
     try {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -273,16 +343,17 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
     return () => clearInterval(spawnInterval);
   }, [gameOver]);
 
-  const checkAnyBin = (x, y) => {
+  // ---- Bin hit-testing (pure function, no state dependency) ----
+  const checkAnyBin = useCallback((px, py) => {
     const checkIntersect = (ref) => {
       if (!ref.current) return false;
       const rect = ref.current.getBoundingClientRect();
       const margin = 60;
       return (
-        x >= rect.left - margin && 
-        x <= rect.right + margin && 
-        y >= rect.top - margin && 
-        y <= rect.bottom + margin
+        px >= rect.left - margin && 
+        px <= rect.right + margin && 
+        py >= rect.top - margin && 
+        py <= rect.bottom + margin
       );
     };
 
@@ -290,57 +361,79 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
     if (checkIntersect(nonOrganikRef)) return 'Non Organik';
     if (checkIntersect(b3Ref)) return 'B3';
     return null;
-  };
+  }, []);
 
-  const handleDrag = (event, info) => {
-    const bin = checkAnyBin(info.point.x, info.point.y);
-    if (bin !== hoveredBin) {
-      setHoveredBin(bin);
+  // ---- Multi-touch drag handler: tracks per-uid bin hover ----
+  // Called by each ScatteredTrashItem during drag. Each call is independent.
+  const handleDrag = useCallback((uid, px, py) => {
+    const bin = checkAnyBin(px, py);
+    const prevBin = activeDragHoversRef.current.get(uid);
+    
+    // Only update React state if the hover changed for this specific uid
+    if (bin !== prevBin) {
+      activeDragHoversRef.current.set(uid, bin);
+      // Derive the set of all currently-hovered bins from all active drags
+      const allHovered = new Set();
+      for (const b of activeDragHoversRef.current.values()) {
+        if (b) allHovered.add(b);
+      }
+      setHoveredBins(allHovered);
     }
-  };
+  }, [checkAnyBin]);
 
-  const handleDragEnd = (event, info, uid, category) => {
-    const dropX = info.point.x;
-    const dropY = info.point.y;
+  // ---- Multi-touch drag end handler ----
+  // Each pointer's drop is handled independently. No shared state is mutated
+  // except through React's setState batching which is safe.
+  const handleDragEnd = useCallback((uid, category, dropX, dropY) => {
+    // Clean up hover tracking for this uid
+    activeDragHoversRef.current.delete(uid);
+    const allHovered = new Set();
+    for (const b of activeDragHoversRef.current.values()) {
+      if (b) allHovered.add(b);
+    }
+    setHoveredBins(allHovered);
 
     const droppedBin = checkAnyBin(dropX, dropY);
-    setHoveredBin(null);
 
     if (droppedBin === category) {
       // Benar
       playSuccessSound();
-      const earnedScore = 10 * combo;
-      setScore(s => s + earnedScore);
-      
-      if (combo % 10 === 0) {
-        setLives(l => (l < 5 ? l + 1 : l));
-      }
-      
-      const newCombo = combo + 1;
-      setCombo(newCombo);
-      
-      setFloatingScores(prev => [...prev, {
-        id: Date.now(),
-        x: dropX,
-        y: dropY - 50,
-        text: newCombo > 2 ? `+${earnedScore} COMBO x${combo}!` : `+${earnedScore}`,
-        isCombo: newCombo > 2
-      }]);
+      setCombo(prevCombo => {
+        const earnedScore = 10 * prevCombo;
+        setScore(s => s + earnedScore);
 
-      setTimeout(() => setFloatingScores(prev => prev.slice(1)), 1000);
-      
-      const droppedItem = scatteredTrash.find(t => t.uid === uid);
-      if (droppedItem) {
-        setDropAnimations(prev => [...prev, {
-          id: uid,
-          Component: droppedItem.Component,
-          category: category,
+        if (prevCombo % 10 === 0) {
+          setLives(l => (l < 5 ? l + 1 : l));
+        }
+
+        const newCombo = prevCombo + 1;
+
+        setFloatingScores(prev => [...prev, {
+          id: Date.now() + Math.random(),
           x: dropX,
-          y: dropY
+          y: dropY - 50,
+          text: newCombo > 2 ? `+${earnedScore} COMBO x${prevCombo}!` : `+${earnedScore}`,
+          isCombo: newCombo > 2
         }]);
-        setTimeout(() => setDropAnimations(prev => prev.filter(anim => anim.id !== uid)), 1000);
-      }
-      setScatteredTrash(prev => prev.filter(t => t.uid !== uid));
+        setTimeout(() => setFloatingScores(prev => prev.slice(1)), 1000);
+
+        return newCombo;
+      });
+
+      setScatteredTrash(prev => {
+        const droppedItem = prev.find(t => t.uid === uid);
+        if (droppedItem) {
+          setDropAnimations(da => [...da, {
+            id: uid,
+            Component: droppedItem.Component,
+            category: category,
+            x: dropX,
+            y: dropY
+          }]);
+          setTimeout(() => setDropAnimations(da => da.filter(anim => anim.id !== uid)), 1000);
+        }
+        return prev.filter(t => t.uid !== uid);
+      });
     } else if (droppedBin !== null) {
       // Salah tong
       setCombo(1);
@@ -348,27 +441,40 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
       setShakingBin(droppedBin);
       setTimeout(() => setShakingBin(null), 500);
 
-      // Force snap back by removing and re-adding the item (re-mount resets framer drag state)
-      const itemToReset = scatteredTrash.find(t => t.uid === uid);
-      if (itemToReset) {
-        setScatteredTrash(prev => prev.filter(t => t.uid !== uid));
+      // Force snap back by re-mounting the item (resets motion values)
+      setScatteredTrash(prev => {
+        const itemToReset = prev.find(t => t.uid === uid);
+        if (!itemToReset) return prev;
+        const filtered = prev.filter(t => t.uid !== uid);
+        // Re-add with new uid to force re-mount and reset drag offset
         setTimeout(() => {
-          setScatteredTrash(prev => [...prev, itemToReset]);
+          setScatteredTrash(p => [...p, { ...itemToReset, uid: Date.now() + Math.random() }]);
         }, 10);
-      }
+        return filtered;
+      });
       
       setLives(l => {
         const newLives = l - 1;
         if (newLives <= 0) setGameOver(true);
         return newLives;
       });
-    } else {
-      // Dilepas di rumput, jangan kembalikan posisinya, biarkan menetap (drag akan menahan posisinya jika dragSnapToOrigin tidak diset)
-      // Kita tidak perlu update state karena Framer drag x/y offset sudah berada di tempat itu.
-      // Opsional: kita update koordinat X/Y agar tidak ter-reset jika re-render
-      // Tapi untuk kemudahan, framer drag offset akan bertahan.
     }
-  };
+    // If dropped on grass (droppedBin === null), the snap-back animation
+    // in ScatteredTrashItem handles returning to original position.
+  }, [checkAnyBin, playSuccessSound, playRejectSound]);
+
+  // Clean up all drag sessions on game reset
+  const handleGameReset = useCallback(() => {
+    activeDragHoversRef.current.clear();
+    setHoveredBins(new Set());
+    hasSavedRef.current = false;
+    setScore(0);
+    setLives(5);
+    setScatteredTrash([]);
+    setTimeLeft(60);
+    setCombo(1);
+    setGameOver(false);
+  }, []);
 
   return (
     <main 
@@ -467,7 +573,7 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
           <motion.div 
             ref={organikRef} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'Organik' ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            animate={shakingBin === 'Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
             transition={{ duration: shakingBin === 'Organik' ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah Organik.png" alt="Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
@@ -477,7 +583,7 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
           <motion.div 
             ref={nonOrganikRef} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'Non Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'Non Organik' ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            animate={shakingBin === 'Non Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Non Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
             transition={{ duration: shakingBin === 'Non Organik' ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah Non Organik.png" alt="Non Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
@@ -487,7 +593,7 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
           <motion.div 
             ref={b3Ref} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'B3' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'B3' ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            animate={shakingBin === 'B3' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('B3') ? { scale: 1.15 } : { x: 0, scale: 1 }}
             transition={{ duration: shakingBin === 'B3' ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah B3.png" alt="B3" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
@@ -539,13 +645,7 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
               whileTap={{ scale: 0.9 }}
               onClick={() => {
                 if(playClickSound) playClickSound();
-                hasSavedRef.current = false;
-                setScore(0);
-                setLives(5);
-                setScatteredTrash([]);
-                setTimeLeft(60);
-                setCombo(1);
-                setGameOver(false);
+                handleGameReset();
               }}
               className="px-8 py-4 short:px-4 short:py-2 bg-gradient-to-b from-emerald-400 to-emerald-600 rounded-2xl border-4 short:border-2 border-white/50 text-white font-bubbly text-2xl md:text-3xl short:text-xl shadow-[0_6px_0_rgba(6,78,59,0.8)]"
             >
