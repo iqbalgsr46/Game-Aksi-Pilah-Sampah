@@ -129,7 +129,7 @@ export default function PortalPage({ onRunGame }) {
                     onClick={handleRunGame}
                     className="bg-[#4CC2FF] hover:bg-[#3baeea] text-black font-semibold py-1.5 px-10 rounded text-[14px] shadow-sm transition-colors"
                   >
-                    Get
+                    Run Game
                   </motion.button>
                   <button className="w-8 h-8 rounded flex items-center justify-center hover:bg-white/10 transition-colors">
                     <span className="material-symbols-outlined text-[18px] text-gray-200">ios_share</span>
