@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { TRASH_TYPES } from './TrashItems';
-import { saveScore } from '../utils/leaderboardUtils';
+import { saveScore } from '../utils/leaderboard';
 
 export default function CariSampah({ onClose, onGoHome, playClickSound, currentGroupName, onSaveSessionScore }) {
   const [score, setScore] = useState(0);
