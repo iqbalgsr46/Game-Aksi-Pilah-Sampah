@@ -34,16 +34,8 @@ export default function MenuMode({ onSelectMode, onClose, onOpenLeaderboard, isM
 
         {/* ===== TOP BAR ===== */}
         <header className="w-full pt-6 px-6 flex justify-between items-start">
-          {/* Left: Score */}
-          <motion.div 
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="flex items-center gap-3 bg-amber-500/75 backdrop-blur-md border-[6px] border-white/50 rounded-2xl px-6 py-3 shadow-[0_8px_0_rgba(146,64,14,0.4)]"
-          >
-            <span className="material-symbols-outlined text-white text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>stars</span>
-            <span className="text-white text-2xl font-extrabold tracking-wide drop-shadow-sm">Score: 0</span>
-          </motion.div>
+          {/* Left: (Score dihapus) */}
+          <div />
 
           {/* Right: Action Buttons (Matches MainMenu sidebar exactly) */}
           <div className="absolute top-6 right-6 flex flex-col gap-4 z-10">
