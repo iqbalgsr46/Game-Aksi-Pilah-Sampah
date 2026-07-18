@@ -147,9 +147,9 @@ export default function PortalPage({ onRunGame }) {
                     <div className="text-[#4CC2FF] text-[13px] font-semibold mb-2 hover:underline cursor-pointer">balsdev Corporation</div>
                     <div className="flex items-center gap-3 text-[13px] text-gray-300 font-medium">
                       <div className="flex items-center">
-                         <span className="font-bold text-white mr-1 text-sm">4.8</span>
+                         <span className="font-bold text-white mr-1 text-sm">5.0</span>
                          <span className="material-symbols-outlined text-[13px] text-white">star</span>
-                         <span className="ml-2">12K ratings</span>
+                         <span className="ml-2">Jutaan download</span>
                       </div>
                       <div className="text-gray-400">Action & adventure + 5</div>
                     </div>
@@ -304,17 +304,17 @@ export default function PortalPage({ onRunGame }) {
                    <div className="p-6 bg-[#202020]">
                       <div className="flex flex-col md:flex-row gap-8 mb-8">
                          <div className="flex flex-col justify-center items-center md:items-start">
-                            <div className="text-[52px] font-bold text-white leading-none mb-2">4.2</div>
-                            <div className="text-[11px] text-gray-400 font-semibold tracking-wide">287 RATINGS</div>
+                            <div className="text-[52px] font-bold text-white leading-none mb-2">5.0</div>
+                            <div className="text-[11px] text-gray-400 font-semibold tracking-wide">JUTAAN DOWNLOAD</div>
                          </div>
                          <div className="flex flex-col gap-2 flex-1 max-w-[280px]">
                             {/* Bars */}
                             {[
-                               { star: 5, percent: '65%' },
-                               { star: 4, percent: '15%' },
-                               { star: 3, percent: '8%' },
-                               { star: 2, percent: '4%' },
-                               { star: 1, percent: '8%' },
+                               { star: 5, percent: '100%' },
+                               { star: 4, percent: '0%' },
+                               { star: 3, percent: '0%' },
+                               { star: 2, percent: '0%' },
+                               { star: 1, percent: '0%' },
                             ].map((item) => (
                                <div key={item.star} className="flex items-center gap-2 text-[11px] text-gray-300 font-medium">
                                   <span className="w-1.5 text-right">{item.star}</span>
