@@ -256,10 +256,10 @@ export default function PortalPage({ onRunGame }) {
                      <h2 className="text-[15px] font-bold text-white">Features</h2>
                    </div>
                    <div className="p-5 flex flex-col gap-4 text-[13px] text-gray-200 bg-[#202020] uppercase tracking-wide">
-                      <div>MILLIONS OF EXPERIENCES</div>
-                      <div>EXPLORE TOGETHER ANYTIME, ANYWHERE</div>
-                      <div>BE ANYTHING YOU CAN IMAGINE</div>
-                      <div>CHAT WITH FRIENDS</div>
+                      <div>3 MODE PERMAINAN EDUKATIF</div>
+                      <div>BERMAIN BERSAMA KELOMPOK</div>
+                      <div>KENALI BERBAGAI JENIS SAMPAH</div>
+                      <div>PAPAN PERINGKAT KOMPETITIF</div>
                    </div>
                 </section>
 
@@ -269,7 +269,7 @@ export default function PortalPage({ onRunGame }) {
                      <h2 className="text-[15px] font-bold text-white">What's new in this version</h2>
                    </div>
                    <div className="p-5 text-[13px] text-gray-200 bg-[#202020]">
-                      To make Game Aksi Pilah Sampah work better for you, we deliver updates regularly. These updates include bug fixes and improvements for speed and reliability.
+                      Pembaruan terbaru untuk Game Aksi Pilah Sampah membawa antarmuka portal baru yang elegan, penambahan foto tangkapan layar asli, dan perbaikan performa untuk memastikan pengalaman bermain edukatif yang lebih lancar.
                    </div>
                 </section>
 
