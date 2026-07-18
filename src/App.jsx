@@ -192,7 +192,10 @@ function App() {
 
       {gameState === 'PLAYING' && selectedMode === 'CARI' && (
         <CariSampah 
-          onClose={() => { playClickSound(); setGameState('MODE_SELECTION'); }}
+          currentGroupName={currentGroupName}
+          onSaveSessionScore={handleSaveSessionScore}
+          onClose={() => { playClickSound(); setGameState('GROUP_REGISTRATION'); }}
+          onGoHome={() => { playClickSound(); setGameState('MODE_SELECTION'); }}
           playClickSound={playClickSound}
         />
       )}

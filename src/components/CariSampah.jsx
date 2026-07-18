@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { TRASH_TYPES } from './TrashItems';
+import { saveScore } from '../utils/leaderboardUtils';
 
-export default function CariSampah({ onClose, playClickSound }) {
+export default function CariSampah({ onClose, onGoHome, playClickSound, currentGroupName, onSaveSessionScore }) {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(5); // Nyawa ditingkatkan menjadi 5
   const [missed, setMissed] = useState(0);
@@ -16,6 +17,7 @@ export default function CariSampah({ onClose, playClickSound }) {
   const [timeLeft, setTimeLeft] = useState(60); // Waktu bermain 60 detik (1 menit)
   
   const scoreRef = useRef(score);
+  const hasSavedRef = useRef(false);
   useEffect(() => { scoreRef.current = score; }, [score]);
 
   const playSuccessSound = useCallback(() => {
@@ -94,6 +96,21 @@ export default function CariSampah({ onClose, playClickSound }) {
 
     return () => clearInterval(timer);
   }, [gameOver]);
+
+  // Save to leaderboard when game ends
+  useEffect(() => {
+    if (!gameOver) return;
+    if (hasSavedRef.current) return;
+    hasSavedRef.current = true;
+    
+    if (currentGroupName) {
+      console.log('Saving score:', currentGroupName, scoreRef.current);
+      saveScore(currentGroupName, scoreRef.current, 'CARI');
+      if (onSaveSessionScore) {
+        onSaveSessionScore(currentGroupName, scoreRef.current);
+      }
+    }
+  }, [gameOver, currentGroupName, onSaveSessionScore]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Spawn trash loop (Dynamic Difficulty)
   useEffect(() => {
@@ -290,8 +307,17 @@ export default function CariSampah({ onClose, playClickSound }) {
       {/* UI OVERLAY */}
       <div className="relative z-20 w-full h-full flex flex-col pointer-events-none">
         
+        {/* Group Name Display */}
+        {currentGroupName && (
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 short:top-2 z-40 pointer-events-none">
+            <div className="bg-white/80 backdrop-blur-sm px-8 py-2 short:px-4 short:py-1 rounded-full border-4 short:border-2 border-emerald-300 shadow-md">
+              <span className="text-2xl short:text-xl font-bubbly text-emerald-800 uppercase tracking-widest">{currentGroupName}</span>
+            </div>
+          </div>
+        )}
+
         {/* Scoreboard & Timer */}
-        <div className="absolute top-6 left-6 short:top-2 short:left-2 flex flex-wrap items-center gap-4 short:gap-2 pointer-events-auto">
+        <div className="absolute top-6 left-6 short:top-2 short:left-2 flex flex-wrap items-center gap-4 short:gap-2 pointer-events-auto z-40">
           
           {/* Timer */}
           <motion.div className="bg-gradient-to-b from-blue-500/90 to-blue-700/95 backdrop-blur-md border-[4px] short:border-2 border-blue-300/60 shadow-[0_6px_0_rgba(30,58,138,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 short:px-3 short:py-1 flex items-center justify-center">
@@ -407,7 +433,7 @@ export default function CariSampah({ onClose, playClickSound }) {
 
       {/* Game Over / Time's Up Screen */}
       {gameOver && (
-        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center">
+        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center pointer-events-auto">
           <motion.h2 
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -421,23 +447,51 @@ export default function CariSampah({ onClose, playClickSound }) {
             <p className="text-xl md:text-2xl short:text-lg text-red-300 font-bubbly mb-6 short:mb-2 text-center px-4">Nyawa kamu telah habis akibat membuang sampah sembarangan!</p>
           )}
           <p className="text-4xl short:text-2xl text-white font-bubbly mb-12 short:mb-4">Score Akhir: {score}</p>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => {
-              if(playClickSound) playClickSound();
-              setScore(0);
-              setLives(5); // Nyawa dipulihkan penuh ke 5
-              setMissed(0);
-              setActiveTrash([]);
-              setTimeLeft(60); // Reset waktu kembali ke 60 detik (1 menit)
-              setCombo(1); // Reset kombo kembali ke x1
-              setGameOver(false);
-            }}
-            className="px-8 py-4 short:px-4 short:py-2 bg-gradient-to-b from-emerald-400 to-emerald-600 rounded-2xl border-4 short:border-2 border-white/50 text-white font-bubbly text-3xl short:text-xl shadow-[0_6px_0_rgba(6,78,59,0.8)]"
-          >
-            Main Lagi
-          </motion.button>
+          
+          <div className="flex flex-wrap gap-4 short:gap-2 justify-center">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => {
+                if(playClickSound) playClickSound();
+                hasSavedRef.current = false;
+                setScore(0);
+                setLives(5); // Nyawa dipulihkan penuh ke 5
+                setMissed(0);
+                setActiveTrash([]);
+                setTimeLeft(60); // Reset waktu kembali ke 60 detik (1 menit)
+                setCombo(1); // Reset kombo kembali ke x1
+                setGameOver(false);
+              }}
+              className="px-8 py-4 short:px-4 short:py-2 bg-gradient-to-b from-emerald-400 to-emerald-600 rounded-2xl border-4 short:border-2 border-white/50 text-white font-bubbly text-3xl short:text-xl shadow-[0_6px_0_rgba(6,78,59,0.8)]"
+            >
+              Main Lagi
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => {
+                if(playClickSound) playClickSound();
+                if(onClose) onClose();
+              }}
+              className="px-8 py-4 short:px-4 short:py-2 bg-gradient-to-b from-blue-400 to-blue-600 rounded-2xl border-4 short:border-2 border-white/50 text-white font-bubbly text-3xl short:text-xl shadow-[0_6px_0_rgba(30,58,138,0.8)]"
+            >
+              Ganti Kelompok
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => {
+                if(playClickSound) playClickSound();
+                if (onGoHome) onGoHome();
+              }}
+              className="px-8 py-4 short:px-4 short:py-2 bg-gradient-to-b from-amber-400 to-amber-600 rounded-2xl border-4 short:border-2 border-white/50 text-white font-bubbly text-3xl short:text-xl shadow-[0_6px_0_rgba(146,64,14,0.8)]"
+            >
+              Menu Game
+            </motion.button>
+          </div>
         </div>
       )}
     </main>
