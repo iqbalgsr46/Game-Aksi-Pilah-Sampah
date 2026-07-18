@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReviewsModal from './ReviewsModal';
+import TrashBinModal from './TrashBinModal';
 import { TRASH_TYPES } from './TrashItems';
 
 const scrollVariants = {
@@ -13,6 +14,7 @@ export default function PortalPage({ onRunGame }) {
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const [selectedTrashBin, setSelectedTrashBin] = useState(null);
   const screenshots = [1, 2, 3, 4, 5, 6];
 
   const handleCopyLink = () => {
@@ -556,6 +558,14 @@ export default function PortalPage({ onRunGame }) {
                        whileInView="visible"
                        viewport={{ once: false, amount: 0.1 }}
                        variants={scrollVariants}
+                       onClick={() => setSelectedTrashBin({
+                         title: 'Sampah Organik',
+                         image: '/assets/images/Sampah Organik.png',
+                         bgColor: 'bg-green-500',
+                         tagColor: 'bg-green-600',
+                         tag: 'Organik',
+                         description: 'Sampah organik adalah barang-barang buangan yang berasal dari sisa-sisa makhluk hidup, baik itu hewan, tanaman, maupun manusia yang dapat terurai secara alami di alam tanpa perlu campur tangan bahan kimia buatan. Contohnya adalah sisa makanan, sayuran, buah-buahan, dan daun kering.'
+                       })}
                        className="flex gap-3 cursor-pointer group">
                       <div className="w-[100px] h-[100px] bg-green-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
                          <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Organik</div>
@@ -578,6 +588,14 @@ export default function PortalPage({ onRunGame }) {
                        whileInView="visible"
                        viewport={{ once: false, amount: 0.1 }}
                        variants={scrollVariants}
+                       onClick={() => setSelectedTrashBin({
+                         title: 'Sampah Anorganik',
+                         image: '/assets/images/Sampah Non Organik.png',
+                         bgColor: 'bg-yellow-500',
+                         tagColor: 'bg-yellow-600',
+                         tag: 'Anorganik',
+                         description: 'Sampah anorganik adalah sampah yang sudah tidak dipakai lagi dan sulit terurai. Sampah jenis ini tidak bisa hancur secara alami dengan sendirinya, biasanya membutuhkan waktu bertahun-tahun atau campur tangan manusia untuk dapat didaur ulang. Contohnya adalah plastik, botol minuman, kaleng, dan kaca.'
+                       })}
                        className="flex gap-3 cursor-pointer group">
                       <div className="w-[100px] h-[100px] bg-yellow-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
                          <div className="absolute top-0 left-0 bg-yellow-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Anorganik</div>
@@ -600,6 +618,14 @@ export default function PortalPage({ onRunGame }) {
                        whileInView="visible"
                        viewport={{ once: false, amount: 0.1 }}
                        variants={scrollVariants}
+                       onClick={() => setSelectedTrashBin({
+                         title: 'Sampah B3',
+                         image: '/assets/images/Sampah B3.png',
+                         bgColor: 'bg-red-500',
+                         tagColor: 'bg-red-600',
+                         tag: 'B3',
+                         description: 'Sampah B3 (Bahan Berbahaya dan Beracun) adalah jenis sampah yang karena sifat, konsentrasi, maupun jumlahnya dapat mencemarkan, merusak lingkungan hidup, dan membahayakan kesehatan serta kelangsungan hidup manusia dan makhluk hidup lainnya. Contohnya adalah baterai bekas, lampu neon, kemasan pestisida, dan sisa bahan kimia.'
+                       })}
                        className="flex gap-3 cursor-pointer group">
                       <div className="w-[100px] h-[100px] bg-red-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
                          <div className="absolute top-0 left-0 bg-red-600 text-[9px] font-bold px-1.5 py-0.5 text-white">B3</div>
@@ -712,8 +738,21 @@ export default function PortalPage({ onRunGame }) {
         )}
       </AnimatePresence>
 
-      <ReviewsModal isOpen={showReviewsModal} onClose={() => setShowReviewsModal(false)} />
+      {/* Reviews Modal */}
+      <ReviewsModal 
+        isOpen={showReviewsModal} 
+        onClose={() => setShowReviewsModal(false)} 
+      />
 
+      {/* Trash Bin Info Modal */}
+      <AnimatePresence>
+        {selectedTrashBin && (
+          <TrashBinModal 
+            bin={selectedTrashBin} 
+            onClose={() => setSelectedTrashBin(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
