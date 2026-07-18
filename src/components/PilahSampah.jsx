@@ -81,9 +81,11 @@ function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
     // Object locking: reject if already owned by another pointer
     if (isDraggingRef.current) return;
 
-    // Prevent browser scroll/zoom on touch
-    e.preventDefault();
+    // Stop propagation to prevent parent handlers from interfering
     e.stopPropagation();
+    // Note: touch-action:'none' on the element handles scroll/zoom prevention.
+    // We avoid e.preventDefault() here because React may register pointer events
+    // as passive listeners, which would cause a warning or silent failure.
 
     // Capture on the container div (not e.target which may be an SVG child)
     const el = containerRef.current;
@@ -113,7 +115,7 @@ function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
     const session = sessionRef.current;
     if (!session || session.pointerId !== e.pointerId) return;
 
-    e.preventDefault();
+    // No e.preventDefault() needed — touch-action:'none' handles scrolling
 
     const dx = e.clientX - session.startX;
     const dy = e.clientY - session.startY;
@@ -129,7 +131,7 @@ function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
     const session = sessionRef.current;
     if (!session || session.pointerId !== e.pointerId) return;
 
-    e.preventDefault();
+    // No e.preventDefault() needed — touch-action:'none' handles scrolling
 
     // Release capture
     const el = containerRef.current;
@@ -193,7 +195,8 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
   const [scatteredTrash, setScatteredTrash] = useState([]);
   const [dropAnimations, setDropAnimations] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-  const [shakingBin, setShakingBin] = useState(null);
+  // Set<string> — multiple bins can shake simultaneously during multi-touch
+  const [shakingBins, setShakingBins] = useState(new Set());
   const [combo, setCombo] = useState(1);
   const [floatingScores, setFloatingScores] = useState([]);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -438,8 +441,15 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
       // Salah tong
       setCombo(1);
       playRejectSound();
-      setShakingBin(droppedBin);
-      setTimeout(() => setShakingBin(null), 500);
+      // Add this bin to the shaking set (supports multiple bins shaking at once)
+      setShakingBins(prev => new Set(prev).add(droppedBin));
+      setTimeout(() => {
+        setShakingBins(prev => {
+          const next = new Set(prev);
+          next.delete(droppedBin);
+          return next;
+        });
+      }, 500);
 
       // Force snap back by re-mounting the item (resets motion values)
       setScatteredTrash(prev => {
@@ -467,6 +477,7 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
   const handleGameReset = useCallback(() => {
     activeDragHoversRef.current.clear();
     setHoveredBins(new Set());
+    setShakingBins(new Set());
     hasSavedRef.current = false;
     setScore(0);
     setLives(5);
@@ -573,8 +584,8 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
           <motion.div 
             ref={organikRef} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
-            transition={{ duration: shakingBin === 'Organik' ? 0.4 : 0.2 }}
+            animate={shakingBins.has('Organik') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            transition={{ duration: shakingBins.has('Organik') ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah Organik.png" alt="Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
             <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Organik</span>
@@ -583,8 +594,8 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
           <motion.div 
             ref={nonOrganikRef} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'Non Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Non Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
-            transition={{ duration: shakingBin === 'Non Organik' ? 0.4 : 0.2 }}
+            animate={shakingBins.has('Non Organik') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Non Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            transition={{ duration: shakingBins.has('Non Organik') ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah Non Organik.png" alt="Non Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
             <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Non Organik</span>
@@ -593,8 +604,8 @@ export default function PilahSampah({ currentGroupName, onSaveSessionScore, onCl
           <motion.div 
             ref={b3Ref} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'B3' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('B3') ? { scale: 1.15 } : { x: 0, scale: 1 }}
-            transition={{ duration: shakingBin === 'B3' ? 0.4 : 0.2 }}
+            animate={shakingBins.has('B3') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('B3') ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            transition={{ duration: shakingBins.has('B3') ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah B3.png" alt="B3" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
             <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">B3</span>
