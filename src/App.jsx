@@ -141,7 +141,7 @@ function App() {
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0, scale: 1.05 }} 
             transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="absolute inset-0 z-50 bg-[#f4f4f4]"
+            className="absolute inset-0 z-50 bg-[#202020]"
           >
             <PortalPage onRunGame={() => setGameState('START')} />
           </motion.div>
