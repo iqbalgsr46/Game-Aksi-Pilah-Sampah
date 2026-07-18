@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function PortalPage({ onRunGame }) {
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
+
+  const handleScroll = (e) => {
+    if (e.target.scrollTop > 280) {
+      setShowStickyHeader(true);
+    } else {
+      setShowStickyHeader(false);
+    }
+  };
+
   const handleRunGame = () => {
     try {
       if (document.documentElement.requestFullscreen) {
@@ -56,7 +66,7 @@ export default function PortalPage({ onRunGame }) {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#202020]">
+      <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#202020] relative">
         {/* Topbar */}
         <header className="h-[48px] flex items-center justify-between px-4 flex-shrink-0 z-30 bg-[#202020] gap-4">
            <div className="flex items-center gap-3 md:w-1/4 flex-shrink-0">
@@ -77,8 +87,26 @@ export default function PortalPage({ onRunGame }) {
            </div>
         </header>
 
+        {/* Sticky Header Overlay */}
+        <div className={`absolute top-[48px] left-0 right-0 z-40 bg-[#282828] border-b border-[#333] shadow-md transition-all duration-300 ${showStickyHeader ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+           <div className="px-6 md:px-14 h-[64px] flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-md overflow-hidden bg-[#2a2a2a] flex-shrink-0 border border-[#444]">
+                  <img src="/assets/images/pp-game.png" alt="Game Icon" className="w-full h-full object-cover" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-[16px] font-bold text-white leading-tight">Game Aksi Pilah Sampah</div>
+                  <div className="text-[12px] text-gray-400 font-medium leading-tight mt-0.5">Wulan Corporation</div>
+                </div>
+              </div>
+              <button onClick={handleRunGame} className="bg-[#4CC2FF] hover:bg-[#3baeea] text-black font-semibold py-1.5 px-8 rounded text-[13px] shadow-sm transition-colors">
+                Run Game
+              </button>
+           </div>
+        </div>
+
         {/* Scrollable Area */}
-        <main className="flex-1 overflow-y-auto scrollbar-hide">
+        <main className="flex-1 overflow-y-auto scrollbar-hide" onScroll={handleScroll}>
            {/* Banner / Hero */}
            <div className="relative w-full h-[400px]">
               {/* Background Image & Gradient */}
