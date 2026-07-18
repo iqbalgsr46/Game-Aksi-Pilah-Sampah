@@ -12,6 +12,20 @@ export default function PortalPage({ onRunGame }) {
     setShowShareMenu(false);
   };
 
+  const handleNativeShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Game Aksi Pilah Sampah',
+        text: 'Ayo mainkan Game Aksi Pilah Sampah, game edukasi seru untuk belajar peduli lingkungan!',
+        url: 'https://game-aksi-pilah-sampah.vercel.app',
+      })
+      .catch((error) => console.log('Error sharing', error));
+    } else {
+      alert("Fitur share langsung tidak didukung di peramban ini. Silakan gunakan Copy Link.");
+    }
+    setShowShareMenu(false);
+  };
+
   const handleScroll = (e) => {
     if (e.target.scrollTop > 280) {
       setShowStickyHeader(true);
@@ -176,6 +190,7 @@ export default function PortalPage({ onRunGame }) {
                             Copy link
                           </button>
                           <button 
+                            onClick={handleNativeShare}
                             className="flex items-center gap-3 px-4 py-2 hover:bg-white/10 text-white text-[13px] text-left transition-colors"
                           >
                             <span className="material-symbols-outlined text-[18px]">shortcut</span>
