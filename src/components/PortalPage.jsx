@@ -320,6 +320,120 @@ export default function PortalPage({ onRunGame }) {
                    </div>
                 </section>
 
+                {/* Additional Information Card */}
+                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                   <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
+                     <h2 className="text-[15px] font-bold text-white">Additional information</h2>
+                   </div>
+                   <div className="p-6 bg-[#202020]">
+                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 text-[13px]">
+                        
+                        {/* Published by */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">domain</span>
+                              Published by
+                           </div>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation</span>
+                           <div className="text-gray-400">© Wulan Corporation</div>
+                        </div>
+
+                        {/* Release date */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">calendar_today</span>
+                              Release date
+                           </div>
+                           <div className="text-gray-400">18/07/2026</div>
+                        </div>
+
+                        {/* Genres */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">category</span>
+                              Genres
+                           </div>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Education</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Family & kids</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer mt-1">Show more</span>
+                        </div>
+
+                        {/* Approximate size */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">straighten</span>
+                              Approximate size
+                           </div>
+                           <div className="text-gray-400">45.2 MB</div>
+                        </div>
+
+                        {/* Installation */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">download</span>
+                              Installation
+                           </div>
+                           <div className="text-gray-400 leading-relaxed">
+                              Play directly on your web browser or install as a Progressive Web App (PWA) on compatible devices.
+                           </div>
+                        </div>
+
+                        {/* This app can */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">verified_user</span>
+                              This app can
+                           </div>
+                           <div className="text-gray-400 leading-relaxed">
+                              Access your internet connection<br/>
+                              Play audio and video
+                           </div>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer mt-1">Permissions info</span>
+                        </div>
+
+                        {/* Supported languages */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">language</span>
+                              Supported languages
+                           </div>
+                           <div className="text-gray-400">Indonesian (Indonesia)</div>
+                        </div>
+
+                        {/* Publisher Info */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">info</span>
+                              Publisher Info
+                           </div>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation support</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation website</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer mt-1">Show more</span>
+                        </div>
+
+                        {/* Additional terms */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">description</span>
+                              Additional terms
+                           </div>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation privacy policy</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Terms of transaction</span>
+                        </div>
+
+                        {/* Report this product */}
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-gray-300 font-semibold mb-1">
+                              <span className="material-symbols-outlined text-[18px]">flag</span>
+                              Report this product
+                           </div>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Report this product for violating rules</span>
+                        </div>
+
+                     </div>
+                   </div>
+                </section>
+
               </div>
 
               {/* Right Column - Discover More */}
