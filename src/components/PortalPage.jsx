@@ -86,8 +86,16 @@ export default function PortalPage({ onRunGame }) {
            <div className="relative w-full h-[400px]">
               {/* Background Image & Gradient */}
               <div className="absolute inset-0 bg-[#202020]">
-                {/* Simulated background image on the right */}
-                <div className="absolute top-0 right-0 w-3/4 h-full bg-[url('/assets/images/Sampah%20Organik.png')] bg-cover bg-center bg-no-repeat opacity-60"></div>
+                {/* Background video on the right */}
+                <video 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline 
+                  className="absolute top-0 right-0 w-3/4 h-full object-cover opacity-60 pointer-events-none"
+                >
+                  <source src="/assets/videos/Lake_with_purple_mountains_twilight_202607181509.mp4" type="video/mp4" />
+                </video>
                 {/* Gradient Fade */}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#202020] via-[#202020] to-transparent w-[65%] z-0"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#202020] to-transparent h-24 bottom-0 z-0"></div>
