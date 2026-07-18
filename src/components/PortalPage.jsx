@@ -437,7 +437,7 @@ export default function PortalPage({ onRunGame }) {
               </div>
 
               {/* Right Column - Discover More */}
-              <div className="flex-none w-full lg:w-[280px] xl:w-[300px] flex flex-col flex-shrink-0">
+              <div className="flex-none w-full lg:w-[280px] xl:w-[300px] flex flex-col flex-shrink-0 sticky top-4 self-start">
                  <div className="flex items-center gap-1 mb-4 cursor-pointer hover:underline w-fit">
                    <h2 className="text-[17px] font-semibold text-white">Discover more</h2>
                    <span className="material-symbols-outlined text-white text-[18px]">chevron_right</span>
