@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const scrollVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+};
+
 export default function PortalPage({ onRunGame }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
@@ -240,7 +245,12 @@ export default function PortalPage({ onRunGame }) {
                  </div>
                 
                  {/* Screenshots Card */}
-                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                <motion.section 
+                   initial="hidden"
+                   whileInView="visible"
+                   viewport={{ once: false, amount: 0.1 }}
+                   variants={scrollVariants}
+                   className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
                    <div className="flex items-center justify-between px-5 py-3 border-b border-[#333] bg-[#2d2d30] hover:bg-[#333] cursor-pointer transition-colors">
                      <h2 className="text-[15px] font-bold text-white">Screenshots</h2>
                      <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
@@ -256,10 +266,15 @@ export default function PortalPage({ onRunGame }) {
                        </div>
                      ))}
                    </div>
-                </section>
+                </motion.section>
 
                 {/* Description Card */}
-                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                <motion.section 
+                   initial="hidden"
+                   whileInView="visible"
+                   viewport={{ once: false, amount: 0.1 }}
+                   variants={scrollVariants}
+                   className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
                    <div className="flex items-center justify-between px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
                      <h2 className="text-[15px] font-bold text-white">Description</h2>
                    </div>
@@ -273,10 +288,15 @@ export default function PortalPage({ onRunGame }) {
                          <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">Show more</span>
                       </div>
                    </div>
-                </section>
+                </motion.section>
 
                 {/* Ratings and reviews Card */}
-                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                <motion.section 
+                   initial="hidden"
+                   whileInView="visible"
+                   viewport={{ once: false, amount: 0.1 }}
+                   variants={scrollVariants}
+                   className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
                    <div className="flex items-center justify-between px-5 py-3 border-b border-[#333] bg-[#2d2d30] hover:bg-[#333] cursor-pointer transition-colors">
                      <h2 className="text-[15px] font-bold text-white">Ratings and reviews</h2>
                      <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
@@ -336,10 +356,15 @@ export default function PortalPage({ onRunGame }) {
                          <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">See all</span>
                       </div>
                    </div>
-                </section>
+                </motion.section>
 
                 {/* Features Card */}
-                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                <motion.section 
+                   initial="hidden"
+                   whileInView="visible"
+                   viewport={{ once: false, amount: 0.1 }}
+                   variants={scrollVariants}
+                   className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
                    <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
                      <h2 className="text-[15px] font-bold text-white">Features</h2>
                    </div>
@@ -349,20 +374,30 @@ export default function PortalPage({ onRunGame }) {
                       <div>KENALI BERBAGAI JENIS SAMPAH</div>
                       <div>PAPAN PERINGKAT KOMPETITIF</div>
                    </div>
-                </section>
+                </motion.section>
 
                 {/* What's new in this version Card */}
-                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                <motion.section 
+                   initial="hidden"
+                   whileInView="visible"
+                   viewport={{ once: false, amount: 0.1 }}
+                   variants={scrollVariants}
+                   className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
                    <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
                      <h2 className="text-[15px] font-bold text-white">What's new in this version</h2>
                    </div>
                    <div className="p-5 text-[13px] text-gray-200 bg-[#202020]">
                       Pembaruan terbaru untuk Game Aksi Pilah Sampah membawa antarmuka portal baru yang elegan, penambahan foto tangkapan layar asli, dan perbaikan performa untuk memastikan pengalaman bermain edukatif yang lebih lancar.
                    </div>
-                </section>
+                </motion.section>
 
                 {/* System Requirements Card */}
-                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                <motion.section 
+                   initial="hidden"
+                   whileInView="visible"
+                   viewport={{ once: false, amount: 0.1 }}
+                   variants={scrollVariants}
+                   className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
                    <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
                      <h2 className="text-[15px] font-bold text-white">System Requirements</h2>
                    </div>
@@ -377,10 +412,15 @@ export default function PortalPage({ onRunGame }) {
                       </div>
                       <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">Show more</span>
                    </div>
-                </section>
+                </motion.section>
 
                 {/* Additional Information Card */}
-                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                <motion.section 
+                   initial="hidden"
+                   whileInView="visible"
+                   viewport={{ once: false, amount: 0.1 }}
+                   variants={scrollVariants}
+                   className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
                    <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
                      <h2 className="text-[15px] font-bold text-white">Additional information</h2>
                    </div>
@@ -491,7 +531,7 @@ export default function PortalPage({ onRunGame }) {
 
                      </div>
                    </div>
-                </section>
+                </motion.section>
 
               </div>
 
@@ -504,7 +544,12 @@ export default function PortalPage({ onRunGame }) {
                  
                  <div className="flex flex-col gap-5">
                     {/* Dummy Item 1 */}
-                    <div className="flex gap-3 cursor-pointer group">
+                    <motion.div 
+                       initial="hidden"
+                       whileInView="visible"
+                       viewport={{ once: false, amount: 0.1 }}
+                       variants={scrollVariants}
+                       className="flex gap-3 cursor-pointer group">
                       <div className="w-[100px] h-[100px] bg-green-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
                          <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
                          <div className="w-full h-full flex items-center justify-center">
@@ -517,10 +562,15 @@ export default function PortalPage({ onRunGame }) {
                             <span className="bg-[#333] text-gray-300 text-[11px] px-2 py-0.5 rounded-sm">Owned</span>
                          </div>
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* Dummy Item 2 */}
-                    <div className="flex gap-3 cursor-pointer group">
+                    <motion.div 
+                       initial="hidden"
+                       whileInView="visible"
+                       viewport={{ once: false, amount: 0.1 }}
+                       variants={scrollVariants}
+                       className="flex gap-3 cursor-pointer group">
                       <div className="w-[100px] h-[100px] bg-gradient-to-br from-blue-400 to-green-300 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
                          <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
                          <div className="w-full h-full flex items-center justify-center">
@@ -533,10 +583,15 @@ export default function PortalPage({ onRunGame }) {
                             <span className="text-gray-300 text-[12px]">Rp199.000</span>
                          </div>
                       </div>
-                    </div>
+                    </motion.div>
                     
                     {/* Dummy Item 3 */}
-                    <div className="flex gap-3 cursor-pointer group">
+                    <motion.div 
+                       initial="hidden"
+                       whileInView="visible"
+                       viewport={{ once: false, amount: 0.1 }}
+                       variants={scrollVariants}
+                       className="flex gap-3 cursor-pointer group">
                       <div className="w-[100px] h-[100px] bg-gray-800 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
                          <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
                          <div className="w-full h-full flex items-center justify-center">
@@ -549,7 +604,7 @@ export default function PortalPage({ onRunGame }) {
                             <span className="text-gray-300 text-[12px]">Free</span>
                          </div>
                       </div>
-                    </div>
+                    </motion.div>
 
                  </div>
               </div>
