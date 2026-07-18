@@ -149,7 +149,7 @@ export default function PortalPage({ onRunGame }) {
                       <div className="flex items-center">
                          <span className="font-bold text-white mr-1 text-sm">5.0</span>
                          <span className="material-symbols-outlined text-[13px] text-white">star</span>
-                         <span className="ml-2">Jutaan download</span>
+                         <span className="ml-2">290k rating</span>
                       </div>
                       <div className="text-gray-400">Action & adventure + 5</div>
                     </div>
@@ -305,7 +305,7 @@ export default function PortalPage({ onRunGame }) {
                       <div className="flex flex-col md:flex-row gap-8 mb-8">
                          <div className="flex flex-col justify-center items-center md:items-start">
                             <div className="text-[52px] font-bold text-white leading-none mb-2">5.0</div>
-                            <div className="text-[11px] text-gray-400 font-semibold tracking-wide">JUTAAN DOWNLOAD</div>
+                            <div className="text-[11px] text-gray-400 font-semibold tracking-wide">290K RATINGS</div>
                          </div>
                          <div className="flex flex-col gap-2 flex-1 max-w-[280px]">
                             {/* Bars */}
