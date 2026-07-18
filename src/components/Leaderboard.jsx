@@ -5,16 +5,22 @@ import { getLeaderboard, clearLeaderboard } from '../utils/leaderboard';
 export default function Leaderboard({ onClose, playClickSound }) {
   const [scores, setScores] = useState([]);
 
+  const [showConfirmReset, setShowConfirmReset] = useState(false);
+
   useEffect(() => {
     setScores(getLeaderboard());
   }, []);
 
   const handleClear = () => {
-    if (window.confirm("Apakah Anda yakin ingin mereset papan peringkat?")) {
-      clearLeaderboard();
-      setScores([]);
-      if (playClickSound) playClickSound();
-    }
+    if (playClickSound) playClickSound();
+    setShowConfirmReset(true);
+  };
+
+  const confirmClear = () => {
+    clearLeaderboard();
+    setScores([]);
+    setShowConfirmReset(false);
+    if (playClickSound) playClickSound();
   };
 
   return (
@@ -154,6 +160,45 @@ export default function Leaderboard({ onClose, playClickSound }) {
           </svg>
         </motion.button>
       </div>
+
+    {/* Custom Confirm Modal */}
+      {showConfirmReset && (
+        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center px-4">
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white/10 backdrop-blur-xl border-2 border-white/20 rounded-[2rem] p-8 md:p-12 shadow-2xl flex flex-col items-center max-w-lg w-full text-center"
+          >
+            <h3 className="text-3xl md:text-4xl text-white font-bubbly mb-6" style={{ WebkitTextStroke: '1px #000' }}>
+              Reset Data
+            </h3>
+            <p className="text-xl md:text-2xl text-white font-bold mb-8 drop-shadow-md">
+              Apakah Anda yakin ingin menghapus semua data papan peringkat?
+            </p>
+            <div className="flex gap-4 w-full justify-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={confirmClear}
+                className="px-6 py-3 bg-gradient-to-b from-red-500 to-red-700 text-white rounded-xl font-bold text-xl border-2 border-white/50 shadow-lg"
+              >
+                Hapus
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  if (playClickSound) playClickSound();
+                  setShowConfirmReset(false);
+                }}
+                className="px-6 py-3 bg-gradient-to-b from-slate-500 to-slate-700 text-white rounded-xl font-bold text-xl border-2 border-white/50 shadow-lg"
+              >
+                Batal
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
     </main>
   );

@@ -18,8 +18,31 @@ function App() {
   const [currentGroupName, setCurrentGroupName] = useState('');
   const [sessionGroups, setSessionGroups] = useState([]); // { name, hasPlayed, score }
   const [isMuted, setIsMuted] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const bgmRef = useRef(null);
   const audioCtxRef = useRef(null);
+
+  // Track fullscreen state changes (e.g. if user presses ESC)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    playClickSound();
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
 
   // Menangani pemutaran audio
   useEffect(() => {
@@ -233,6 +256,33 @@ function App() {
           <button onClick={() => { playClickSound(); setGameState('START'); }} className="absolute top-10 left-10 p-4 bg-red-500 rounded-xl">Ke Menu Utama</button>
         </div>
       )}
+
+      {/* Global Fullscreen Toggle Button - Pojok Kiri Bawah */}
+      <div className="absolute bottom-6 left-6 short:bottom-3 short:left-3 z-[100]">
+        <button
+          onClick={toggleFullscreen}
+          title={isFullscreen ? "Keluar Layar Penuh" : "Layar Penuh"}
+          className="relative overflow-hidden w-12 h-12 md:w-14 md:h-14 short:w-10 short:h-10 bg-gradient-to-b from-green-400/50 to-green-600/60 backdrop-blur-md rounded-2xl border-[3px] border-white/70 flex items-center justify-center shadow-[0_4px_0_rgba(22,101,52,0.4),inset_0_4px_8px_rgba(255,255,255,0.4)] cursor-pointer group hover:scale-105 active:scale-95 transition-all"
+        >
+          <div className="absolute top-1 left-2 w-2 h-2 md:w-3 md:h-3 short:w-1.5 short:h-1.5 bg-white/80 rounded-full blur-[0.5px]"></div>
+          {isFullscreen ? (
+            <svg className="w-6 h-6 md:w-7 md:h-7 short:w-5 short:h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="8 3 8 8 3 8"></polyline>
+              <polyline points="16 3 16 8 21 8"></polyline>
+              <polyline points="8 21 8 16 3 16"></polyline>
+              <polyline points="16 21 16 16 21 16"></polyline>
+            </svg>
+          ) : (
+            <svg className="w-6 h-6 md:w-7 md:h-7 short:w-5 short:h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          )}
+        </button>
+      </div>
+
     </div>
   );
 }
