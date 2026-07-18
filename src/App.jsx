@@ -47,7 +47,7 @@ function App() {
   // Menangani pemutaran audio
   useEffect(() => {
     if (bgmRef.current) {
-      bgmRef.current.volume = 0.4; // Volume tidak terlalu keras
+      bgmRef.current.volume = 1.0; // Volume maksimal
       if (isMuted || gameState === 'INTRO_CUTSCENE' || gameState === 'PORTAL') {
         bgmRef.current.pause();
       } else {
