@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function PortalPage({ onRunGame }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const [selectedScreenshot, setSelectedScreenshot] = useState(null);
+  const screenshots = [1, 2, 3, 4, 5, 6];
 
   const handleScroll = (e) => {
     if (e.target.scrollTop > 280) {
@@ -191,8 +193,12 @@ export default function PortalPage({ onRunGame }) {
                      <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
                    </div>
                    <div className="p-5 flex gap-4 overflow-x-auto scrollbar-hide snap-x bg-[#202020]">
-                     {[1, 2, 3, 4, 5, 6].map((num) => (
-                       <div key={num} className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                     {screenshots.map((num) => (
+                       <div 
+                         key={num} 
+                         onClick={() => setSelectedScreenshot(num)}
+                         className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group"
+                       >
                          <img src={`/assets/images/image-${num}.png`} alt={`Screenshot ${num}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                        </div>
                      ))}
@@ -507,6 +513,50 @@ export default function PortalPage({ onRunGame }) {
             scrollbar-width: none;
         }
       `}} />
+
+      {/* Screenshot Modal */}
+      <AnimatePresence>
+        {selectedScreenshot !== null && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 md:p-10"
+            onClick={() => setSelectedScreenshot(null)}
+          >
+            <button 
+              className="absolute top-6 right-6 text-white hover:bg-white/20 p-2 rounded-full transition-colors flex items-center justify-center cursor-pointer"
+              onClick={(e) => { e.stopPropagation(); setSelectedScreenshot(null); }}
+            >
+              <span className="material-symbols-outlined text-[24px]">close</span>
+            </button>
+            
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative max-w-6xl w-full flex-1 flex flex-col justify-center items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="bg-[#1a1a1a] p-2 md:p-4 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-[#333]">
+                <img 
+                  src={`/assets/images/image-${selectedScreenshot}.png`} 
+                  alt={`Screenshot ${selectedScreenshot}`} 
+                  className="w-auto h-auto max-w-full max-h-[75vh] object-contain rounded-lg" 
+                />
+              </div>
+              <div className="text-center mt-6">
+                <div className="text-white font-semibold text-[15px] mb-2">Screenshot {selectedScreenshot}</div>
+                <div className="inline-flex items-center justify-center bg-[#2a2a2a] text-gray-400 text-[12px] px-4 py-1.5 rounded-full border border-[#444]">
+                  <span className="text-white font-bold mr-1">{selectedScreenshot}</span> / {screenshots.length}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }
