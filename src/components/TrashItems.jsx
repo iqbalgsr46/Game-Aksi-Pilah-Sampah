@@ -154,18 +154,18 @@ export const ChemicalBottle = () => (
 
 export const TRASH_TYPES = [
   // Organik
-  { id: 'organik-apple', category: 'Organik', Component: AppleCore, name: 'Sisa Apel' },
-  { id: 'organik-banana', category: 'Organik', Component: BananaPeel, name: 'Kulit Pisang' },
-  { id: 'organik-leaf', category: 'Organik', Component: DryLeaf, name: 'Daun Kering' },
-  { id: 'organik-fish', category: 'Organik', Component: FishBone, name: 'Tulang Ikan' },
+  { id: 'organik-apple', category: 'Organik', Component: AppleCore, name: 'Sisa Apel', description: 'Sisa apel bekas gigitan yang cepat membusuk dan sangat baik untuk dijadikan pupuk kompos penyubur tanaman.' },
+  { id: 'organik-banana', category: 'Organik', Component: BananaPeel, name: 'Kulit Pisang', description: 'Kulit pisang yang dibuang dapat terurai secara alami dengan cepat di tanah dan kaya akan nutrisi.' },
+  { id: 'organik-leaf', category: 'Organik', Component: DryLeaf, name: 'Daun Kering', description: 'Guguran daun kering dari pohon yang mudah hancur dan menjadi humus alami di ekosistem.' },
+  { id: 'organik-fish', category: 'Organik', Component: FishBone, name: 'Tulang Ikan', description: 'Sisa tulang dari konsumsi ikan yang termasuk material organik dan dapat diurai oleh mikroorganisme.' },
   // Non-Organik
-  { id: 'nonorganik-bottle', category: 'Non Organik', Component: PlasticBottle, name: 'Botol Plastik' },
-  { id: 'nonorganik-can', category: 'Non Organik', Component: SodaCan, name: 'Kaleng Minuman' },
-  { id: 'nonorganik-bag', category: 'Non Organik', Component: PlasticBag, name: 'Kantong Plastik' },
-  { id: 'nonorganik-cup', category: 'Non Organik', Component: CoffeeCup, name: 'Gelas Kertas' },
+  { id: 'nonorganik-bottle', category: 'Non Organik', Component: PlasticBottle, name: 'Botol Plastik', description: 'Botol minuman berbahan dasar plastik PET yang membutuhkan waktu ratusan tahun untuk terurai. Sebaiknya didaur ulang.' },
+  { id: 'nonorganik-can', category: 'Non Organik', Component: SodaCan, name: 'Kaleng Minuman', description: 'Kaleng bekas minuman bersoda yang terbuat dari aluminium. Sangat bernilai untuk dilebur dan didaur ulang kembali.' },
+  { id: 'nonorganik-bag', category: 'Non Organik', Component: PlasticBag, name: 'Kantong Plastik', description: 'Kantong kresek sekali pakai yang sering menyumbat saluran air dan membahayakan hewan laut jika terbuang sembarangan.' },
+  { id: 'nonorganik-cup', category: 'Non Organik', Component: CoffeeCup, name: 'Gelas Kertas', description: 'Gelas kopi sekali pakai yang berlapis plastik kedap air di dalamnya, sehingga sulit terurai dan butuh penanganan khusus.' },
   // B3
-  { id: 'b3-battery', category: 'B3', Component: UsedBattery, name: 'Baterai Bekas' },
-  { id: 'b3-bulb', category: 'B3', Component: BrokenBulb, name: 'Lampu Pecah' },
-  { id: 'b3-spray', category: 'B3', Component: Insecticide, name: 'Racun Serangga' },
-  { id: 'b3-chemical', category: 'B3', Component: ChemicalBottle, name: 'Cairan Kimia' },
+  { id: 'b3-battery', category: 'B3', Component: UsedBattery, name: 'Baterai Bekas', description: 'Baterai bekas pakai mengandung logam berat berbahaya seperti timbal dan merkuri yang bisa sangat meracuni tanah.' },
+  { id: 'b3-bulb', category: 'B3', Component: BrokenBulb, name: 'Lampu Pecah', description: 'Lampu bohlam atau neon bekas dapat melepaskan gas dan serbuk kimia beracun yang membahayakan jika terhirup.' },
+  { id: 'b3-spray', category: 'B3', Component: Insecticide, name: 'Racun Serangga', description: 'Kaleng bekas pestisida yang sisa cairan racunnya sangat mematikan bagi keseimbangan ekosistem dan satwa liar.' },
+  { id: 'b3-chemical', category: 'B3', Component: ChemicalBottle, name: 'Cairan Kimia', description: 'Botol cairan kimia pembersih yang korosif dan bisa mencemari sumber mata air bersih jika dibuang ke selokan.' },
 ];

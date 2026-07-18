@@ -653,10 +653,7 @@ export default function PortalPage({ onRunGame }) {
                   <div className="flex flex-col gap-3">
                      {TRASH_TYPES.map((trash, index) => {
                         const Icon = trash.Component;
-                        let desc = '';
-                        if (trash.category === 'Organik') desc = 'Sampah mudah membusuk';
-                        else if (trash.category === 'Non Organik') desc = 'Sampah sulit terurai';
-                        else desc = 'Bahan berbahaya & beracun';
+                        let desc = trash.description;
 
                         return (
                            <motion.div 
