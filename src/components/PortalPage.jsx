@@ -103,8 +103,8 @@ export default function PortalPage({ onRunGame }) {
               {/* Hero Content */}
               <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-14 z-10 w-full lg:w-[70%]">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 mb-5 mt-4 sm:mt-0">
-                  <div className="w-20 h-20 md:w-[120px] md:h-[120px] rounded-xl shadow-lg bg-emerald-600 flex items-center justify-center flex-shrink-0 overflow-hidden border border-[#333]">
-                     <span className="material-symbols-outlined text-white text-[48px] md:text-[70px]">recycling</span>
+                  <div className="w-20 h-20 md:w-[120px] md:h-[120px] rounded-xl shadow-lg flex-shrink-0 overflow-hidden border border-[#333] bg-[#2a2a2a]">
+                     <img src="/assets/images/pp-game.png" alt="Game Icon" className="w-full h-full object-cover" />
                   </div>
                   
                   <div className="flex flex-col pt-1">
