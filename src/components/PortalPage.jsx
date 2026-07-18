@@ -250,6 +250,47 @@ export default function PortalPage({ onRunGame }) {
                    </div>
                 </section>
 
+                {/* Features Card */}
+                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                   <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
+                     <h2 className="text-[15px] font-bold text-white">Features</h2>
+                   </div>
+                   <div className="p-5 flex flex-col gap-4 text-[13px] text-gray-200 bg-[#202020] uppercase tracking-wide">
+                      <div>MILLIONS OF EXPERIENCES</div>
+                      <div>EXPLORE TOGETHER ANYTIME, ANYWHERE</div>
+                      <div>BE ANYTHING YOU CAN IMAGINE</div>
+                      <div>CHAT WITH FRIENDS</div>
+                   </div>
+                </section>
+
+                {/* What's new in this version Card */}
+                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                   <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
+                     <h2 className="text-[15px] font-bold text-white">What's new in this version</h2>
+                   </div>
+                   <div className="p-5 text-[13px] text-gray-200 bg-[#202020]">
+                      To make Game Aksi Pilah Sampah work better for you, we deliver updates regularly. These updates include bug fixes and improvements for speed and reliability.
+                   </div>
+                </section>
+
+                {/* System Requirements Card */}
+                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                   <div className="flex items-center px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
+                     <h2 className="text-[15px] font-bold text-white">System Requirements</h2>
+                   </div>
+                   <div className="p-5 text-[13px] text-gray-200 bg-[#202020]">
+                      <div className="flex items-start gap-3 mb-5">
+                         <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                            <span className="material-symbols-outlined text-white text-[16px] font-bold">check</span>
+                         </div>
+                         <div className="leading-relaxed">
+                            This product should work on your device. Items with a checkmark meet the developer's system requirements.
+                         </div>
+                      </div>
+                      <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">Show more</span>
+                   </div>
+                </section>
+
               </div>
 
               {/* Right Column - Discover More */}
