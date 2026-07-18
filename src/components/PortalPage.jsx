@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReviewsModal from './ReviewsModal';
 
 const scrollVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] } }
 };
 
 export default function PortalPage({ onRunGame }) {
