@@ -641,7 +641,7 @@ export default function PortalPage({ onRunGame }) {
                               variants={scrollVariants}
                               className="flex gap-3 cursor-pointer group items-center bg-[#2a2a2a] p-2 rounded-lg border border-[#333] hover:bg-[#333] transition-colors">
                              <div className="w-[60px] h-[60px] bg-[#1a1a1a] rounded-md overflow-hidden relative flex-shrink-0 flex items-center justify-center shadow-inner">
-                                <div className="transform scale-[0.5] origin-center flex items-center justify-center w-[100px] h-[100px]">
+                                <div className="transform scale-[0.8] origin-center flex items-center justify-center w-[100px] h-[100px]">
                                    <Icon />
                                 </div>
                              </div>
