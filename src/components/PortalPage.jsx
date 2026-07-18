@@ -146,10 +146,10 @@ export default function PortalPage({ onRunGame }) {
            </div>
 
            {/* Content Grid */}
-           <div className="px-6 md:px-14 flex flex-col xl:flex-row gap-8 pb-12 mt-2">
+           <div className="px-6 md:px-14 flex flex-col lg:flex-row gap-8 pb-12 mt-2">
               
               {/* Left Column - Main Details */}
-              <div className="flex-[3] flex flex-col gap-6">
+              <div className="flex-1 lg:flex-[3] flex flex-col gap-6 min-w-0">
                 
                 {/* Screenshots Card */}
                 <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
@@ -186,7 +186,7 @@ export default function PortalPage({ onRunGame }) {
               </div>
 
               {/* Right Column - Discover More */}
-              <div className="flex-1 flex flex-col w-full xl:w-[300px] flex-shrink-0">
+              <div className="flex-none w-full lg:w-[280px] xl:w-[300px] flex flex-col flex-shrink-0">
                  <div className="flex items-center gap-1 mb-4 cursor-pointer hover:underline w-fit">
                    <h2 className="text-[17px] font-semibold text-white">Discover more</h2>
                    <span className="material-symbols-outlined text-white text-[18px]">chevron_right</span>
