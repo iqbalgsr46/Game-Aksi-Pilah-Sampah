@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 
 export default function PortalPage({ onRunGame }) {
   const handleRunGame = () => {
-    // 1. Request Fullscreen first (harus sinkron dengan click event)
     try {
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch((err) => {
@@ -13,205 +12,241 @@ export default function PortalPage({ onRunGame }) {
     } catch (error) {
       console.log("Fullscreen tidak didukung:", error);
     }
-
-    // 2. Langsung masuk ke game
     onRunGame();
   };
 
   return (
-    <div className="flex h-screen w-screen bg-gradient-to-br from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f] text-white font-sans overflow-hidden">
+    <div className="flex h-screen w-screen bg-[#202020] text-gray-100 font-sans overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-16 flex flex-col items-center py-4 bg-white/5 backdrop-blur-2xl border-r border-white/10 flex-shrink-0 z-20 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
-        <div className="mb-8">
-          <span className="material-symbols-outlined text-gray-400 cursor-pointer hover:text-white transition-colors text-2xl">home</span>
-        </div>
-        <div className="flex flex-col gap-6 w-full items-center flex-grow">
-          <div className="p-2 bg-gray-800 rounded-lg cursor-pointer">
-             <span className="material-symbols-outlined text-[#4CC2FF] text-2xl">grid_view</span>
-          </div>
-          <div className="p-2 cursor-pointer group relative">
-             <span className="material-symbols-outlined text-gray-400 group-hover:text-white transition-colors text-2xl">sports_esports</span>
-             <div className="absolute left-1/2 -translate-x-1/2 -left-3 top-1/2 -translate-y-1/2 w-1 h-4 bg-transparent rounded-r-md"></div>
-          </div>
-          <div className="p-2 cursor-pointer group">
-             <span className="material-symbols-outlined text-gray-400 group-hover:text-white transition-colors text-2xl">library_books</span>
+      <aside className="w-[72px] flex flex-col items-center py-2 bg-[#202020] border-r border-[#333] flex-shrink-0 z-20">
+        <div className="mb-4 w-full flex justify-center">
+          <div className="p-2 bg-[#303030] rounded-l-md w-full ml-2 flex flex-col items-center border-l-[3px] border-[#4CC2FF] cursor-pointer">
+             <span className="material-symbols-outlined text-[#4CC2FF] text-[22px]">home</span>
           </div>
         </div>
-        <div className="flex flex-col gap-6 items-center mt-auto">
-          <span className="material-symbols-outlined text-gray-400 cursor-pointer hover:text-white transition-colors text-2xl">download</span>
-          <span className="material-symbols-outlined text-gray-400 cursor-pointer hover:text-white transition-colors text-2xl">settings</span>
+        <div className="flex flex-col gap-6 w-full items-center flex-grow mt-2">
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
+             <span className="material-symbols-outlined text-[22px]">grid_view</span>
+             <span className="text-[10px] mt-1 font-medium">Apps</span>
+          </div>
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
+             <span className="material-symbols-outlined text-[22px]">sports_esports</span>
+             <span className="text-[10px] mt-1 font-medium">Gaming</span>
+          </div>
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
+             <span className="material-symbols-outlined text-[22px]">format_paint</span>
+             <span className="text-[10px] mt-1 font-medium">Themes</span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-6 w-full items-center mb-4">
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
+             <span className="material-symbols-outlined text-[22px]">notifications</span>
+             <span className="text-[10px] mt-1 font-medium text-center leading-tight">What's New</span>
+          </div>
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
+             <span className="material-symbols-outlined text-[22px]">download</span>
+             <span className="text-[10px] mt-1 font-medium">Downloads</span>
+          </div>
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
+             <span className="material-symbols-outlined text-[22px]">library_books</span>
+             <span className="text-[10px] mt-1 font-medium">Library</span>
+          </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+      <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#202020]">
         {/* Topbar */}
-        <header className="h-14 flex items-center justify-between px-6 flex-shrink-0 z-30 absolute top-0 w-full bg-[#1a1a1a]/40 backdrop-blur-3xl border-b border-white/10 shadow-lg">
-           <div className="flex-1 flex items-center gap-4">
-              <span className="material-symbols-outlined text-gray-400 text-xl cursor-pointer hover:text-white transition-colors">arrow_back</span>
+        <header className="h-[48px] flex items-center justify-between px-4 flex-shrink-0 z-30 bg-[#202020]">
+           <div className="flex items-center gap-3 w-1/4">
+              <div className="w-5 h-5 grid grid-cols-2 gap-[2px]">
+                 <div className="bg-[#f25022]"></div><div className="bg-[#7fba00]"></div>
+                 <div className="bg-[#00a4ef]"></div><div className="bg-[#ffb900]"></div>
+              </div>
+              <span className="text-xs font-semibold tracking-wide text-white">Microsoft Store</span>
            </div>
            
-           <div className="flex-[2] flex justify-center">
-             <div className="flex items-center bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 w-full max-w-md border border-white/10 focus-within:border-blue-400 focus-within:bg-white/20 transition-all duration-300 shadow-inner">
-               <span className="material-symbols-outlined text-gray-400 text-lg mr-2">search</span>
-               <input type="text" placeholder="Search apps, games, and more" className="bg-transparent border-none outline-none text-sm w-full text-white placeholder-gray-400" />
+           <div className="flex-1 flex justify-center">
+             <div className="flex items-center bg-[#303030] rounded-full px-3 py-1.5 w-full max-w-[500px] border border-[#444] focus-within:border-blue-500">
+               <input type="text" placeholder="Search apps, games, and more" className="bg-transparent border-none outline-none text-[13px] w-full text-white placeholder-gray-400 ml-1" />
+               <span className="material-symbols-outlined text-gray-400 text-[18px] ml-2">search</span>
              </div>
            </div>
 
-           <div className="flex-1 flex justify-end items-center pointer-events-auto">
-             <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-bold shadow-md cursor-pointer border border-gray-500 hover:border-white transition-colors">
-               W
+           <div className="w-1/4 flex justify-end items-center">
+             <div className="w-7 h-7 rounded-full bg-blue-600 border border-gray-600 flex items-center justify-center overflow-hidden cursor-pointer">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" className="w-full h-full object-cover" />
              </div>
            </div>
         </header>
 
         {/* Scrollable Area */}
-        <main className="flex-1 overflow-y-auto pb-20 scrollbar-hide">
+        <main className="flex-1 overflow-y-auto scrollbar-hide">
            {/* Banner / Hero */}
-           <div className="relative w-full h-[350px] md:h-[450px] overflow-hidden">
-              {/* Background gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#1b2a47] via-[#2d1b4e] to-[#4a1c40]">
-                <div className="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent mix-blend-overlay"></div>
-                {/* Glowing orbs for premium feel */}
-                <div className="absolute -top-32 -left-32 w-96 h-96 bg-purple-500/30 rounded-full blur-[100px]"></div>
-                <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-500/20 rounded-full blur-[100px]"></div>
+           <div className="relative w-full h-[400px]">
+              {/* Background Image & Gradient */}
+              <div className="absolute inset-0 bg-[#202020]">
+                {/* Simulated background image on the right */}
+                <div className="absolute top-0 right-0 w-3/4 h-full bg-[url('/assets/images/Sampah%20Organik.png')] bg-cover bg-center bg-no-repeat opacity-60"></div>
+                {/* Gradient Fade */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#202020] via-[#202020] to-transparent w-[65%] z-0"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#202020] to-transparent h-24 bottom-0 z-0"></div>
               </div>
               
               {/* Hero Content */}
-              <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/80 to-transparent flex flex-col md:flex-row items-end justify-between backdrop-blur-[2px]">
-                <div className="flex items-end gap-6 max-w-3xl w-full z-10">
-                  <div className="w-24 h-24 md:w-36 md:h-36 rounded-3xl shadow-[0_0_40px_rgba(52,211,153,0.3)] bg-gradient-to-br from-green-400 to-emerald-600 border border-white/30 flex items-center justify-center flex-shrink-0 backdrop-blur-xl relative overflow-hidden">
-                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-50"></div>
-                     <span className="material-symbols-outlined text-white text-[64px] relative z-10 drop-shadow-lg">recycling</span>
+              <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-14 z-10 w-[70%]">
+                <div className="flex items-start gap-5 mb-5">
+                  <div className="w-[120px] h-[120px] rounded-xl shadow-lg bg-emerald-600 flex items-center justify-center flex-shrink-0 overflow-hidden border border-[#333]">
+                     <span className="material-symbols-outlined text-white text-[70px]">recycling</span>
                   </div>
                   
-                  <div className="flex flex-col mb-1 bg-[#1a1a1a]/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-5 shadow-2xl">
-                    <h1 className="text-3xl md:text-5xl font-extrabold mb-2 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 drop-shadow-md">Game Aksi Pilah Sampah</h1>
-                    <div className="text-[#4CC2FF] text-sm font-semibold mb-3 hover:text-[#7dd3fc] transition-colors cursor-pointer drop-shadow">Wulan Corporation</div>
-                    <div className="flex items-center gap-4 text-xs text-gray-200 font-medium">
-                      <div className="flex items-center bg-white/10 px-2 py-1 rounded-full border border-white/10">
-                         <span className="font-bold text-white mr-1">4.8</span>
-                         <span className="material-symbols-outlined text-[14px] text-yellow-400 drop-shadow">star</span>
-                         <span className="ml-2 text-gray-300">12K ratings</span>
+                  <div className="flex flex-col pt-1">
+                    <h1 className="text-[34px] font-bold mb-1 tracking-wide leading-tight text-white">Game Aksi Pilah Sampah</h1>
+                    <div className="text-[#4CC2FF] text-[13px] font-semibold mb-2 hover:underline cursor-pointer">Wulan Corporation</div>
+                    <div className="flex items-center gap-3 text-[13px] text-gray-300 font-medium">
+                      <div className="flex items-center">
+                         <span className="font-bold text-white mr-1 text-sm">4.8</span>
+                         <span className="material-symbols-outlined text-[13px] text-white">star</span>
+                         <span className="ml-2">12K ratings</span>
                       </div>
-                      <div className="h-4 w-px bg-white/20"></div>
-                      <div className="bg-white/10 px-3 py-1 rounded-full border border-white/10">Education & Action • 10+</div>
+                      <div className="text-gray-400">Action & adventure + 5</div>
                     </div>
+                  </div>
+                </div>
+
+                <div className="mb-5 text-[13px] text-gray-200 max-w-2xl leading-relaxed uppercase tracking-wide">
+                   GAME AKSI PILAH SAMPAH - GREAT GAMES ACROSS EVERY GENRE. PLAY FREE <br/>
+                   <span className="normal-case text-gray-300 tracking-normal mt-1 block">The range of modes on this game is unmatched. Relax with sorting, catching, and finding...</span>
+                </div>
+
+                <div className="flex items-center gap-3 mb-6">
+                  <motion.button 
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleRunGame}
+                    className="bg-[#4CC2FF] hover:bg-[#3baeea] text-black font-semibold py-1.5 px-10 rounded text-[14px] shadow-sm transition-colors"
+                  >
+                    Get
+                  </motion.button>
+                  <button className="w-8 h-8 rounded flex items-center justify-center hover:bg-white/10 transition-colors">
+                    <span className="material-symbols-outlined text-[18px] text-gray-200">ios_share</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-3 border-t border-[#444] pt-4 w-fit pr-10">
+                  <div className="w-8 h-8 bg-yellow-500 rounded-sm flex items-center justify-center text-black font-bold text-lg flex-shrink-0">
+                    <span className="material-symbols-outlined text-black text-xl">family_home</span>
+                  </div>
+                  <div>
+                    <div className="font-bold text-[11px] text-white tracking-wide">PARENTAL GUIDANCE RECOMMENDED</div>
+                    <div className="text-[10px] text-gray-400">Parental Guidance Recommended</div>
+                    <div className="text-[9px] text-gray-500">In-Game Purchases (Includes Random Items), Users Interact</div>
                   </div>
                 </div>
               </div>
            </div>
 
            {/* Content Grid */}
-           <div className="px-8 md:px-12 flex flex-col lg:flex-row gap-8 mt-6">
+           <div className="px-10 md:px-14 flex flex-col lg:flex-row gap-8 pb-12 mt-2">
               
               {/* Left Column - Main Details */}
-              <div className="flex-[3] flex flex-col gap-8">
+              <div className="flex-[3] flex flex-col gap-6">
                 
-                {/* Action Bar */}
-                <div className="flex items-center gap-4 mt-2">
-                  <motion.button 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleRunGame}
-                    className="bg-gradient-to-r from-[#00A4EF] to-[#2dbbff] hover:from-[#11b5ff] hover:to-[#4cc8ff] text-white font-bold py-2.5 px-12 rounded-xl shadow-[0_0_20px_rgba(0,164,239,0.4)] border border-white/20 transition-all flex items-center gap-2 relative overflow-hidden"
-                  >
-                    <div className="absolute inset-0 bg-white/20 blur-[2px] opacity-0 hover:opacity-100 transition-opacity"></div>
-                    <span className="relative z-10">Mainkan</span>
-                  </motion.button>
-                  <button className="w-11 h-11 rounded-xl bg-white/5 backdrop-blur-lg hover:bg-white/10 flex items-center justify-center border border-white/10 shadow-lg transition-all">
-                    <span className="material-symbols-outlined text-lg text-white/80">share</span>
-                  </button>
-                </div>
-
-                <div className="bg-white/5 backdrop-blur-xl p-4 rounded-2xl flex items-center gap-4 border border-white/10 shadow-xl">
-                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center text-black font-extrabold text-2xl shadow-inner border border-white/20 flex-shrink-0">
-                    E
-                  </div>
-                  <div>
-                    <div className="font-bold text-sm text-white tracking-wide">EVERYONE</div>
-                    <div className="text-xs text-gray-300 mt-1">Educational, Action, Environmental</div>
-                  </div>
-                </div>
-
-                {/* Screenshots */}
-                <section>
-                   <div className="flex items-center justify-between mb-5">
-                     <h2 className="text-2xl font-bold tracking-tight text-white/90">Screenshots</h2>
-                     <span className="material-symbols-outlined text-white/50 cursor-pointer hover:text-white transition-colors bg-white/5 p-1 rounded-full border border-white/10">chevron_right</span>
+                {/* Screenshots Card */}
+                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                   <div className="flex items-center justify-between px-5 py-3 border-b border-[#333] bg-[#2d2d30] hover:bg-[#333] cursor-pointer transition-colors">
+                     <h2 className="text-[15px] font-bold text-white">Screenshots</h2>
+                     <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
                    </div>
-                   <div className="flex gap-5 overflow-x-auto pb-6 scrollbar-hide snap-x">
-                     <div className="h-48 md:h-60 w-80 md:w-96 flex-shrink-0 bg-white/5 backdrop-blur-xl rounded-2xl snap-center border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-6 hover:border-white/30 hover:bg-white/10 transition-all cursor-pointer flex items-center justify-center relative overflow-hidden group">
-                       <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                       <img src="/assets/images/Sampah B3.png" alt="Screenshot 1" className="h-full w-auto object-contain drop-shadow-2xl relative z-10" />
+                   <div className="p-5 flex gap-4 overflow-x-auto scrollbar-hide snap-x bg-[#202020]">
+                     <div className="h-[220px] w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                       <img src="/assets/images/Sampah B3.png" alt="Screenshot 1" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
                      </div>
-                     <div className="h-48 md:h-60 w-80 md:w-96 flex-shrink-0 bg-white/5 backdrop-blur-xl rounded-2xl snap-center border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-6 hover:border-white/30 hover:bg-white/10 transition-all cursor-pointer flex items-center justify-center relative overflow-hidden group">
-                       <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                       <img src="/assets/images/Sampah Organik.png" alt="Screenshot 2" className="h-full w-auto object-contain drop-shadow-2xl relative z-10" />
+                     <div className="h-[220px] w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                       <img src="/assets/images/Sampah Organik.png" alt="Screenshot 2" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
                      </div>
-                     <div className="h-48 md:h-60 w-80 md:w-96 flex-shrink-0 bg-white/5 backdrop-blur-xl rounded-2xl snap-center border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-6 hover:border-white/30 hover:bg-white/10 transition-all cursor-pointer flex items-center justify-center relative overflow-hidden group">
-                       <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                       <img src="/assets/images/Sampah Non Organik.png" alt="Screenshot 3" className="h-full w-auto object-contain drop-shadow-2xl relative z-10" />
+                     <div className="h-[220px] w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                       <img src="/assets/images/Sampah Non Organik.png" alt="Screenshot 3" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
                      </div>
                    </div>
                 </section>
 
-                {/* Description */}
-                <section className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 shadow-xl mb-12">
-                   <h2 className="text-2xl font-bold mb-4 tracking-tight text-white/90">Description</h2>
-                   <p className="text-[15px] text-gray-300 leading-relaxed">
+                {/* Description Card */}
+                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                   <div className="flex items-center justify-between px-5 py-3 border-b border-[#333] bg-[#2d2d30]">
+                     <h2 className="text-[15px] font-bold text-white">Description</h2>
+                   </div>
+                   <div className="p-5 text-[13px] text-gray-300 leading-relaxed bg-[#202020]">
+                      <p className="uppercase tracking-wide mb-2 text-gray-200">GAME AKSI PILAH SAMPAH - GREAT GAMES ACROSS EVERY GENRE. PLAY FREE</p>
                       Permainan Edukasi Pilah Sampah ini adalah permainan edukasi tentang pemilahan dan pengolahan sampah.
                       Permainan board game bertema lingkungan ini bertujuan untuk mengedukasi pemainnya agar lebih cinta dan peduli lingkungan. <br/><br/>
                       Terdapat beberapa mode permainan seru yang bisa Anda nikmati. Tantang dirimu untuk memisahkan sampah dengan benar dan selamatkan bumi kita!
-                   </p>
+                   </div>
                 </section>
 
               </div>
 
               {/* Right Column - Discover More */}
-              <div className="flex-1 flex flex-col pl-0 lg:pl-4">
-                 <div className="flex items-center justify-between mb-5">
-                   <h2 className="text-xl font-bold tracking-tight text-white/90">Discover more</h2>
+              <div className="flex-1 flex flex-col w-[300px] flex-shrink-0">
+                 <div className="flex items-center gap-1 mb-4 cursor-pointer hover:underline w-fit">
+                   <h2 className="text-[17px] font-semibold text-white">Discover more</h2>
+                   <span className="material-symbols-outlined text-white text-[18px]">chevron_right</span>
                  </div>
                  
                  <div className="flex flex-col gap-5">
                     {/* Dummy Item 1 */}
-                    <div className="bg-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-white/10 shadow-lg group">
-                      <div className="h-28 bg-gradient-to-br from-blue-600 to-cyan-500 relative flex items-center justify-center overflow-hidden">
-                         <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                         <span className="material-symbols-outlined text-white/70 text-5xl drop-shadow-lg relative z-10">sports_esports</span>
-                         <div className="absolute top-3 left-3 bg-gradient-to-r from-green-500 to-emerald-600 text-[10px] font-extrabold px-2.5 py-1 rounded-md text-white shadow-md z-20 border border-white/20">Game Pass</div>
+                    <div className="flex gap-3 cursor-pointer group">
+                      <div className="w-[100px] h-[100px] bg-green-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
+                         <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
+                         <div className="w-full h-full flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[50px] text-black">smart_toy</span>
+                         </div>
                       </div>
-                      <div className="p-4">
-                         <div className="font-bold text-[15px] truncate text-white/90 group-hover:text-white">Eco Builder</div>
-                         <div className="text-xs text-gray-400 mt-1.5 flex justify-between items-center">
-                            <span className="font-medium">GreenTech Games</span>
-                            <span className="bg-white/10 px-2.5 py-1 rounded-md text-white border border-white/10">Owned</span>
+                      <div className="flex flex-col pt-1 flex-1">
+                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline">Minecraft Launcher</div>
+                         <div className="mt-auto flex justify-end">
+                            <span className="bg-[#333] text-gray-300 text-[11px] px-2 py-0.5 rounded-sm">Owned</span>
                          </div>
                       </div>
                     </div>
 
                     {/* Dummy Item 2 */}
-                    <div className="bg-white/5 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-white/10 shadow-lg group">
-                      <div className="h-28 bg-gradient-to-br from-orange-600 to-red-500 relative flex items-center justify-center overflow-hidden">
-                         <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                         <span className="material-symbols-outlined text-white/70 text-5xl drop-shadow-lg relative z-10">forest</span>
+                    <div className="flex gap-3 cursor-pointer group">
+                      <div className="w-[100px] h-[100px] bg-gradient-to-br from-blue-400 to-green-300 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
+                         <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
+                         <div className="w-full h-full flex items-center justify-center">
+                            <img src="/assets/images/Sampah Organik.png" className="w-[80%] h-[80%] object-contain opacity-80" />
+                         </div>
                       </div>
-                      <div className="p-4">
-                         <div className="font-bold text-[15px] truncate text-white/90 group-hover:text-white">Save The Forest</div>
-                         <div className="text-xs text-gray-400 mt-1.5 flex justify-between items-center">
-                            <span className="font-medium">Nature Studio</span>
-                            <span className="text-gray-300 font-semibold bg-white/5 px-2.5 py-1 rounded-md border border-white/5">Free</span>
+                      <div className="flex flex-col pt-1 flex-1">
+                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline leading-snug">Minecraft: Java & Bedrock Edition for PC</div>
+                         <div className="mt-auto flex justify-end">
+                            <span className="text-gray-300 text-[12px]">Rp199.000</span>
                          </div>
                       </div>
                     </div>
+                    
+                    {/* Dummy Item 3 */}
+                    <div className="flex gap-3 cursor-pointer group">
+                      <div className="w-[100px] h-[100px] bg-gray-800 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
+                         <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
+                         <div className="w-full h-full flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[40px] text-gray-500">sports_esports</span>
+                         </div>
+                      </div>
+                      <div className="flex flex-col pt-1 flex-1">
+                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline leading-snug">Call of Duty®: Warzone™</div>
+                         <div className="mt-auto flex justify-end">
+                            <span className="text-gray-300 text-[12px]">Free</span>
+                         </div>
+                      </div>
+                    </div>
+
                  </div>
               </div>
            </div>
         </main>
       </div>
       
-      {/* Custom Scrollbar styling */}
       <style dangerouslySetInnerHTML={{__html: `
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
