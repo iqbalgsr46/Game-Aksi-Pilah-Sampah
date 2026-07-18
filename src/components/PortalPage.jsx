@@ -557,15 +557,16 @@ export default function PortalPage({ onRunGame }) {
                        variants={scrollVariants}
                        className="flex gap-3 cursor-pointer group">
                       <div className="w-[100px] h-[100px] bg-green-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
-                         <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
-                         <div className="w-full h-full flex items-center justify-center">
-                            <span className="material-symbols-outlined text-[50px] text-black">smart_toy</span>
+                         <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Organik</div>
+                         <div className="w-full h-full flex items-center justify-center p-2">
+                            <img src="/assets/images/Sampah Organik.png" className="w-full h-full object-contain drop-shadow-md" alt="Organik" />
                          </div>
                       </div>
                       <div className="flex flex-col pt-1 flex-1">
-                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline">Minecraft Launcher</div>
+                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline">Sampah Organik</div>
+                         <div className="text-[11px] text-gray-400 mt-1 leading-snug">Sampah yang mudah membusuk seperti sisa makanan dan daun.</div>
                          <div className="mt-auto flex justify-end">
-                            <span className="bg-[#333] text-gray-300 text-[11px] px-2 py-0.5 rounded-sm">Owned</span>
+                            <span className="bg-[#333] text-gray-300 text-[11px] px-2 py-0.5 rounded-sm">Pelajari</span>
                          </div>
                       </div>
                     </motion.div>
@@ -577,16 +578,17 @@ export default function PortalPage({ onRunGame }) {
                        viewport={{ once: false, amount: 0.1 }}
                        variants={scrollVariants}
                        className="flex gap-3 cursor-pointer group">
-                      <div className="w-[100px] h-[100px] bg-gradient-to-br from-blue-400 to-green-300 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
-                         <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
-                         <div className="w-full h-full flex items-center justify-center">
-                            <img src="/assets/images/Sampah Organik.png" className="w-[80%] h-[80%] object-contain opacity-80" />
+                      <div className="w-[100px] h-[100px] bg-yellow-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
+                         <div className="absolute top-0 left-0 bg-yellow-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Anorganik</div>
+                         <div className="w-full h-full flex items-center justify-center p-2">
+                            <img src="/assets/images/Sampah Non Organik.png" className="w-full h-full object-contain drop-shadow-md" alt="Anorganik" />
                          </div>
                       </div>
                       <div className="flex flex-col pt-1 flex-1">
-                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline leading-snug">Minecraft: Java & Bedrock Edition for PC</div>
+                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline leading-snug">Sampah Anorganik</div>
+                         <div className="text-[11px] text-gray-400 mt-1 leading-snug">Sulit terurai, seperti plastik, kaca, dan kaleng.</div>
                          <div className="mt-auto flex justify-end">
-                            <span className="text-gray-300 text-[12px]">Rp199.000</span>
+                            <span className="bg-[#333] text-gray-300 text-[11px] px-2 py-0.5 rounded-sm">Pelajari</span>
                          </div>
                       </div>
                     </motion.div>
@@ -598,16 +600,17 @@ export default function PortalPage({ onRunGame }) {
                        viewport={{ once: false, amount: 0.1 }}
                        variants={scrollVariants}
                        className="flex gap-3 cursor-pointer group">
-                      <div className="w-[100px] h-[100px] bg-gray-800 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
-                         <div className="absolute top-0 left-0 bg-green-600 text-[9px] font-bold px-1.5 py-0.5 text-white">Game Pass</div>
-                         <div className="w-full h-full flex items-center justify-center">
-                            <span className="material-symbols-outlined text-[40px] text-gray-500">sports_esports</span>
+                      <div className="w-[100px] h-[100px] bg-red-500 rounded-md overflow-hidden relative flex-shrink-0 shadow-md">
+                         <div className="absolute top-0 left-0 bg-red-600 text-[9px] font-bold px-1.5 py-0.5 text-white">B3</div>
+                         <div className="w-full h-full flex items-center justify-center p-2">
+                            <img src="/assets/images/Sampah B3.png" className="w-full h-full object-contain drop-shadow-md" alt="B3" />
                          </div>
                       </div>
                       <div className="flex flex-col pt-1 flex-1">
-                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline leading-snug">Call of Duty®: Warzone™</div>
+                         <div className="font-semibold text-[13px] text-gray-100 group-hover:underline leading-snug">Sampah B3</div>
+                         <div className="text-[11px] text-gray-400 mt-1 leading-snug">Bahan Berbahaya & Beracun seperti baterai dan obat.</div>
                          <div className="mt-auto flex justify-end">
-                            <span className="text-gray-300 text-[12px]">Free</span>
+                            <span className="bg-[#333] text-gray-300 text-[11px] px-2 py-0.5 rounded-sm">Pelajari</span>
                          </div>
                       </div>
                     </motion.div>
