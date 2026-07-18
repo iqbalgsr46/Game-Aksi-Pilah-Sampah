@@ -117,7 +117,7 @@ export default function PortalPage({ onRunGame }) {
                   
                   <div className="flex flex-col pt-1">
                     <h1 className="text-2xl md:text-[34px] font-bold mb-1 tracking-wide leading-tight text-white">Game Aksi Pilah Sampah</h1>
-                    <div className="text-[#4CC2FF] text-[13px] font-semibold mb-2 hover:underline cursor-pointer">Wulan Corporation</div>
+                    <div className="text-[#4CC2FF] text-[13px] font-semibold mb-2 hover:underline cursor-pointer">balsdev Corporation</div>
                     <div className="flex items-center gap-3 text-[13px] text-gray-300 font-medium">
                       <div className="flex items-center">
                          <span className="font-bold text-white mr-1 text-sm">4.8</span>
@@ -175,7 +175,7 @@ export default function PortalPage({ onRunGame }) {
                        </div>
                        <div className="flex flex-col">
                          <div className="text-[17px] font-bold text-white leading-tight">Game Aksi Pilah Sampah</div>
-                         <div className="text-[13px] text-gray-400 font-medium mt-0.5 leading-tight">Wulan Corporation</div>
+                         <div className="text-[13px] text-gray-400 font-medium mt-0.5 leading-tight">balsdev Corporation</div>
                        </div>
                      </div>
                      <button onClick={handleRunGame} className="bg-[#4CC2FF] hover:bg-[#3baeea] text-black font-semibold py-1.5 px-8 rounded text-[13px] shadow-sm transition-colors">
@@ -334,8 +334,8 @@ export default function PortalPage({ onRunGame }) {
                               <span className="material-symbols-outlined text-[18px]">domain</span>
                               Published by
                            </div>
-                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation</span>
-                           <div className="text-gray-400">© Wulan Corporation</div>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">balsdev Corporation</span>
+                           <div className="text-gray-400">© balsdev Corporation</div>
                         </div>
 
                         {/* Release date */}
@@ -406,8 +406,8 @@ export default function PortalPage({ onRunGame }) {
                               <span className="material-symbols-outlined text-[18px]">info</span>
                               Publisher Info
                            </div>
-                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation support</span>
-                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation website</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">balsdev Corporation support</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">balsdev Corporation website</span>
                            <span className="text-[#4CC2FF] hover:underline cursor-pointer mt-1">Show more</span>
                         </div>
 
@@ -417,7 +417,7 @@ export default function PortalPage({ onRunGame }) {
                               <span className="material-symbols-outlined text-[18px]">description</span>
                               Additional terms
                            </div>
-                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">Wulan Corporation privacy policy</span>
+                           <span className="text-[#4CC2FF] hover:underline cursor-pointer">balsdev Corporation privacy policy</span>
                            <span className="text-[#4CC2FF] hover:underline cursor-pointer">Terms of transaction</span>
                         </div>
 
