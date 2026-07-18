@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReviewsModal from './ReviewsModal';
+import { TRASH_TYPES } from './TrashItems';
 
 const scrollVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -613,11 +614,48 @@ export default function PortalPage({ onRunGame }) {
                             <span className="bg-[#333] text-gray-300 text-[11px] px-2 py-0.5 rounded-sm">Pelajari</span>
                          </div>
                       </div>
-                    </motion.div>
+                     </motion.div>
 
-                 </div>
-              </div>
-           </div>
+                  </div>
+                  
+                  {/* Macam-macam Sampah Section */}
+                  <div className="flex items-center gap-1 mt-8 mb-4 cursor-pointer hover:underline w-fit">
+                    <h2 className="text-[17px] font-semibold text-white">Macam-macam Sampah</h2>
+                    <span className="material-symbols-outlined text-white text-[18px]">chevron_right</span>
+                  </div>
+                  
+                  <div className="flex flex-col gap-3">
+                     {TRASH_TYPES.map((trash, index) => {
+                        const Icon = trash.Component;
+                        let desc = '';
+                        if (trash.category === 'Organik') desc = 'Sampah mudah membusuk';
+                        else if (trash.category === 'Non Organik') desc = 'Sampah sulit terurai';
+                        else desc = 'Bahan berbahaya & beracun';
+
+                        return (
+                           <motion.div 
+                              key={index}
+                              initial="hidden"
+                              whileInView="visible"
+                              viewport={{ once: false, amount: 0.1 }}
+                              variants={scrollVariants}
+                              className="flex gap-3 cursor-pointer group items-center bg-[#2a2a2a] p-2 rounded-lg border border-[#333] hover:bg-[#333] transition-colors">
+                             <div className="w-[60px] h-[60px] bg-[#1a1a1a] rounded-md overflow-hidden relative flex-shrink-0 flex items-center justify-center shadow-inner">
+                                <div className="transform scale-[0.5] origin-center flex items-center justify-center w-[100px] h-[100px]">
+                                   <Icon />
+                                </div>
+                             </div>
+                             <div className="flex flex-col flex-1">
+                                <div className="font-semibold text-[13px] text-gray-100 group-hover:text-[#4CC2FF] transition-colors">{trash.name}</div>
+                                <div className="text-[11px] text-gray-400 mt-0.5">{desc}</div>
+                             </div>
+                           </motion.div>
+                        )
+                     })}
+                  </div>
+
+               </div>
+            </div>
         </main>
       </div>
       
