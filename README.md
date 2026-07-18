@@ -1,5 +1,7 @@
 # 🌍 Game Aksi Pilah Sampah
 
+![Tampilan Game](public/assets/images/image-radmeMD.png)
+
 Sebuah permainan edukasi *(educational web-based game)* interaktif yang dirancang khusus untuk mengajarkan pemilahan dan pengolahan sampah demi menjaga kelestarian lingkungan. Game ini dibangun menggunakan teknologi web modern dan didesain agar sangat responsif, imersif, serta mudah dimainkan baik di PC, Laptop, maupun perangkat layar sentuh besar (*Interactive Flat Panel* / Monitor Sentuh).
 
 ---
