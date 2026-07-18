@@ -180,6 +180,73 @@ export default function PortalPage({ onRunGame }) {
                       Permainan Edukasi Pilah Sampah ini adalah permainan edukasi tentang pemilahan dan pengolahan sampah.
                       Permainan board game bertema lingkungan ini bertujuan untuk mengedukasi pemainnya agar lebih cinta dan peduli lingkungan. <br/><br/>
                       Terdapat beberapa mode permainan seru yang bisa Anda nikmati. Tantang dirimu untuk memisahkan sampah dengan benar dan selamatkan bumi kita!
+                      
+                      <div className="mt-6">
+                         <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">Show more</span>
+                      </div>
+                   </div>
+                </section>
+
+                {/* Ratings and reviews Card */}
+                <section className="bg-[#2a2a2a] rounded-lg border border-[#333] overflow-hidden">
+                   <div className="flex items-center justify-between px-5 py-3 border-b border-[#333] bg-[#2d2d30] hover:bg-[#333] cursor-pointer transition-colors">
+                     <h2 className="text-[15px] font-bold text-white">Ratings and reviews</h2>
+                     <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
+                   </div>
+                   <div className="p-6 bg-[#202020]">
+                      <div className="flex flex-col md:flex-row gap-8 mb-8">
+                         <div className="flex flex-col justify-center items-center md:items-start">
+                            <div className="text-[52px] font-bold text-white leading-none mb-2">4.2</div>
+                            <div className="text-[11px] text-gray-400 font-semibold tracking-wide">287 RATINGS</div>
+                         </div>
+                         <div className="flex flex-col gap-2 flex-1 max-w-[280px]">
+                            {/* Bars */}
+                            {[
+                               { star: 5, percent: '65%' },
+                               { star: 4, percent: '15%' },
+                               { star: 3, percent: '8%' },
+                               { star: 2, percent: '4%' },
+                               { star: 1, percent: '8%' },
+                            ].map((item) => (
+                               <div key={item.star} className="flex items-center gap-2 text-[11px] text-gray-300 font-medium">
+                                  <span className="w-1.5 text-right">{item.star}</span>
+                                  <span className="material-symbols-outlined text-[10px] text-[#e65100]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                                  <div className="flex-1 h-1.5 bg-[#444] rounded-full overflow-hidden ml-1">
+                                     <div className="h-full bg-[#e65100] rounded-full" style={{ width: item.percent }}></div>
+                                  </div>
+                               </div>
+                            ))}
+                         </div>
+                      </div>
+
+                      <div className="flex flex-col gap-3">
+                         <h3 className="text-[17px] font-bold text-white">good</h3>
+                         <div className="flex items-center gap-4">
+                            <div className="flex items-center text-[#e65100]">
+                               {[1,2,3,4,5].map(i => (
+                                 <span key={i} className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                               ))}
+                            </div>
+                            <div className="flex items-center gap-1.5 text-[#4CC2FF] text-[10px] font-bold uppercase tracking-wide">
+                               <span className="material-symbols-outlined text-[14px]">emoji_events</span>
+                               MOST HELPFUL FAVORABLE REVIEW
+                            </div>
+                         </div>
+                         <p className="text-[13px] text-gray-300 leading-relaxed mb-3">
+                           this game platform is so fun theres variants of simple and fun games but i only can talk to the people tht have the same age group soo its okay..
+                         </p>
+                         <div className="flex justify-between items-center text-[12px] text-gray-400 mt-2">
+                            <div><span className="text-gray-200 font-medium">lusiana</span> <span className="ml-2">2 months ago</span></div>
+                            <div className="flex items-center gap-3">
+                               <span>4 people found this helpful</span>
+                               <span className="material-symbols-outlined text-[18px] cursor-pointer hover:text-white">outlined_flag</span>
+                            </div>
+                         </div>
+                      </div>
+                      
+                      <div className="mt-8">
+                         <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">See all</span>
+                      </div>
                    </div>
                 </section>
 
