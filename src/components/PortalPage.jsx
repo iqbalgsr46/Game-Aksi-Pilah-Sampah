@@ -665,6 +665,14 @@ export default function PortalPage({ onRunGame }) {
                               whileInView="visible"
                               viewport={{ once: false, amount: 0.1 }}
                               variants={scrollVariants}
+                              onClick={() => setSelectedTrashBin({
+                                title: trash.name,
+                                IconComponent: Icon,
+                                bgColor: 'bg-[#1a1a1a]',
+                                tagColor: trash.category === 'Organik' ? 'bg-green-600' : trash.category === 'Non Organik' ? 'bg-yellow-600' : 'bg-red-600',
+                                tag: trash.category,
+                                description: desc
+                              })}
                               className="flex gap-3 cursor-pointer group items-center bg-[#2a2a2a] p-2 rounded-lg border border-[#333] hover:bg-[#333] transition-colors">
                              <div className="w-[60px] h-[60px] bg-[#1a1a1a] rounded-md overflow-hidden relative flex-shrink-0 flex items-center justify-center shadow-inner">
                                 <div className="transform scale-[0.8] origin-center flex items-center justify-center w-[100px] h-[100px]">

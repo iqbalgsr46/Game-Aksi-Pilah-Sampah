@@ -22,8 +22,14 @@ export default function TrashBinModal({ bin, onClose }) {
           </button>
         </div>
 
-        <div className={`w-full h-48 flex items-center justify-center ${bin.bgColor}`}>
-          <img src={bin.image} alt={bin.title} className="h-40 object-contain drop-shadow-xl" />
+        <div className={`w-full h-48 flex items-center justify-center ${bin.bgColor || 'bg-[#1a1a1a]'}`}>
+          {bin.image ? (
+            <img src={bin.image} alt={bin.title} className="h-40 object-contain drop-shadow-xl" />
+          ) : bin.IconComponent ? (
+            <div className="transform scale-[1.2] origin-center flex items-center justify-center w-[100px] h-[100px]">
+              <bin.IconComponent />
+            </div>
+          ) : null}
         </div>
 
         <div className="p-6 flex flex-col">
