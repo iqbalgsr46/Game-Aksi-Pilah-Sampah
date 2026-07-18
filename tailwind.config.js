@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'short': { 'raw': '(max-height: 500px)' },
+      },
       fontFamily: {
         bubbly: ['"Blue Water"', 'cursive'],
       }
