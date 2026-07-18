@@ -64,8 +64,7 @@ Bagi Anda yang mencoba mengakses *game* ini menggunakan *smartphone*:
 
 ## 🎓 Penghargaan & Ucapan Terima Kasih
 
-- **Created by:** Setyo Bagus Fristanto
-- **Instansi:** SMK Negeri 9 Malang
-- **Special Thanks:** Gamelab
+- **Created by:** Tubagus Iqbal Husaeni
+- **Instansi:** Universitas Pelita Bangsa
 
 *Terima kasih telah berkontribusi dalam mengedukasi generasi peduli lingkungan melalui game ini! Mari bersama wujudkan Bumi yang bebas dari sampah berbahaya.* 🌿♻️
