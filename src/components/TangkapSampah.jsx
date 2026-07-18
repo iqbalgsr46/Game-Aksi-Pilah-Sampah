@@ -98,7 +98,7 @@ export default function TangkapSampah({ currentGroupName, onSaveSessionScore, on
       osc.frequency.setValueAtTime(300, now);
       osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.6, now + 0.02);
+      gain.gain.linearRampToValueAtTime(2.0, now + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
       osc.start(now);
       osc.stop(now + 0.2);
@@ -118,7 +118,7 @@ export default function TangkapSampah({ currentGroupName, onSaveSessionScore, on
       oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
       oscillator.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.3);
       gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.05);
+      gainNode.gain.linearRampToValueAtTime(2.5, audioCtx.currentTime + 0.05);
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
       oscillator.start(audioCtx.currentTime);
       oscillator.stop(audioCtx.currentTime + 0.3);

@@ -84,7 +84,7 @@ function App() {
       osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.05);
       
       // Durasi sangat singkat (0.08 detik) agar responsif
-      gainNode.gain.setValueAtTime(1.0, ctx.currentTime);
+      gainNode.gain.setValueAtTime(2.5, ctx.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
       
       osc.start(ctx.currentTime);
@@ -128,7 +128,7 @@ function App() {
       {/* Global Audio Elements */}
       <audio 
         ref={bgmRef} 
-        src={gameState === 'PLAYING' ? "/assets/audio/Sundial_on_the_Terrace.mp3" : "/assets/audio/Inventory_Management.mp3"} 
+        src={gameState === 'PLAYING' ? "/assets/audio/The_Cleanest_Sweep (1).mp3" : "/assets/audio/Sundial_on_the_Terrace.mp3"} 
         loop 
       />
 

@@ -37,7 +37,7 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
       osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
 
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(0.6, now + 0.02);
+      gain.gain.linearRampToValueAtTime(2.0, now + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
 
       osc.start(now);
@@ -65,7 +65,7 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
 
       // Volume: mulai cepat, lalu memudar (volume diperbesar menjadi 0.8)
       gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.05);
+      gainNode.gain.linearRampToValueAtTime(2.5, audioCtx.currentTime + 0.05);
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
 
       oscillator.start(audioCtx.currentTime);
