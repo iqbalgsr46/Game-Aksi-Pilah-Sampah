@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReviewsModal from './ReviewsModal';
 
 const scrollVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -10,6 +11,7 @@ export default function PortalPage({ onRunGame }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
   const screenshots = [1, 2, 3, 4, 5, 6];
 
   const handleCopyLink = () => {
@@ -353,7 +355,7 @@ export default function PortalPage({ onRunGame }) {
                       </div>
                       
                       <div className="mt-8">
-                         <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">See all</span>
+                         <span onClick={() => setShowReviewsModal(true)} className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">See all</span>
                       </div>
                    </div>
                 </motion.section>
@@ -664,6 +666,8 @@ export default function PortalPage({ onRunGame }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ReviewsModal isOpen={showReviewsModal} onClose={() => setShowReviewsModal(false)} />
 
     </div>
   );
