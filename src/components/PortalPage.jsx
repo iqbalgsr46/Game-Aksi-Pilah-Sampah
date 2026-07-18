@@ -17,8 +17,8 @@ export default function PortalPage({ onRunGame }) {
 
   return (
     <div className="flex h-screen w-screen bg-[#202020] text-gray-100 font-sans overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-[72px] flex flex-col items-center py-2 bg-[#202020] border-r border-[#333] flex-shrink-0 z-20">
+      {/* Sidebar - Hidden on mobile, visible on medium+ */}
+      <aside className="hidden md:flex w-[72px] flex-col items-center py-2 bg-[#202020] border-r border-[#333] flex-shrink-0 z-20">
         <div className="mb-4 w-full flex justify-center">
           <div className="p-2 bg-[#303030] rounded-l-md w-full ml-2 flex flex-col items-center border-l-[3px] border-[#4CC2FF] cursor-pointer">
              <span className="material-symbols-outlined text-[#4CC2FF] text-[22px]">home</span>
@@ -57,13 +57,13 @@ export default function PortalPage({ onRunGame }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#202020]">
         {/* Topbar */}
-        <header className="h-[48px] flex items-center justify-between px-4 flex-shrink-0 z-30 bg-[#202020]">
-           <div className="flex items-center gap-3 w-1/4">
+        <header className="h-[48px] flex items-center justify-between px-4 flex-shrink-0 z-30 bg-[#202020] gap-4">
+           <div className="flex items-center gap-3 md:w-1/4 flex-shrink-0">
               <div className="w-5 h-5 grid grid-cols-2 gap-[2px]">
                  <div className="bg-[#f25022]"></div><div className="bg-[#7fba00]"></div>
                  <div className="bg-[#00a4ef]"></div><div className="bg-[#ffb900]"></div>
               </div>
-              <span className="text-xs font-semibold tracking-wide text-white">Microsoft Store</span>
+              <span className="hidden sm:inline text-xs font-semibold tracking-wide text-white">Microsoft Store</span>
            </div>
            
            <div className="flex-1 flex justify-center">
@@ -73,7 +73,7 @@ export default function PortalPage({ onRunGame }) {
              </div>
            </div>
 
-           <div className="w-1/4 flex justify-end items-center">
+           <div className="md:w-1/4 flex justify-end items-center flex-shrink-0">
              <div className="w-7 h-7 rounded-full bg-blue-600 border border-gray-600 flex items-center justify-center overflow-hidden cursor-pointer">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" className="w-full h-full object-cover" />
              </div>
@@ -94,14 +94,14 @@ export default function PortalPage({ onRunGame }) {
               </div>
               
               {/* Hero Content */}
-              <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-14 z-10 w-[70%]">
-                <div className="flex items-start gap-5 mb-5">
-                  <div className="w-[120px] h-[120px] rounded-xl shadow-lg bg-emerald-600 flex items-center justify-center flex-shrink-0 overflow-hidden border border-[#333]">
-                     <span className="material-symbols-outlined text-white text-[70px]">recycling</span>
+              <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-14 z-10 w-full lg:w-[70%]">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 mb-5 mt-4 sm:mt-0">
+                  <div className="w-20 h-20 md:w-[120px] md:h-[120px] rounded-xl shadow-lg bg-emerald-600 flex items-center justify-center flex-shrink-0 overflow-hidden border border-[#333]">
+                     <span className="material-symbols-outlined text-white text-[48px] md:text-[70px]">recycling</span>
                   </div>
                   
                   <div className="flex flex-col pt-1">
-                    <h1 className="text-[34px] font-bold mb-1 tracking-wide leading-tight text-white">Game Aksi Pilah Sampah</h1>
+                    <h1 className="text-2xl md:text-[34px] font-bold mb-1 tracking-wide leading-tight text-white">Game Aksi Pilah Sampah</h1>
                     <div className="text-[#4CC2FF] text-[13px] font-semibold mb-2 hover:underline cursor-pointer">Wulan Corporation</div>
                     <div className="flex items-center gap-3 text-[13px] text-gray-300 font-medium">
                       <div className="flex items-center">
@@ -146,7 +146,7 @@ export default function PortalPage({ onRunGame }) {
            </div>
 
            {/* Content Grid */}
-           <div className="px-10 md:px-14 flex flex-col lg:flex-row gap-8 pb-12 mt-2">
+           <div className="px-6 md:px-14 flex flex-col xl:flex-row gap-8 pb-12 mt-2">
               
               {/* Left Column - Main Details */}
               <div className="flex-[3] flex flex-col gap-6">
@@ -158,13 +158,13 @@ export default function PortalPage({ onRunGame }) {
                      <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
                    </div>
                    <div className="p-5 flex gap-4 overflow-x-auto scrollbar-hide snap-x bg-[#202020]">
-                     <div className="h-[220px] w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                     <div className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
                        <img src="/assets/images/Sampah B3.png" alt="Screenshot 1" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
                      </div>
-                     <div className="h-[220px] w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                     <div className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
                        <img src="/assets/images/Sampah Organik.png" alt="Screenshot 2" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
                      </div>
-                     <div className="h-[220px] w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                     <div className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
                        <img src="/assets/images/Sampah Non Organik.png" alt="Screenshot 3" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
                      </div>
                    </div>
@@ -186,7 +186,7 @@ export default function PortalPage({ onRunGame }) {
               </div>
 
               {/* Right Column - Discover More */}
-              <div className="flex-1 flex flex-col w-[300px] flex-shrink-0">
+              <div className="flex-1 flex flex-col w-full xl:w-[300px] flex-shrink-0">
                  <div className="flex items-center gap-1 mb-4 cursor-pointer hover:underline w-fit">
                    <h2 className="text-[17px] font-semibold text-white">Discover more</h2>
                    <span className="material-symbols-outlined text-white text-[18px]">chevron_right</span>
