@@ -104,7 +104,7 @@ export default function PortalPage({ onRunGame }) {
                  <div className="bg-[#f25022]"></div><div className="bg-[#7fba00]"></div>
                  <div className="bg-[#00a4ef]"></div><div className="bg-[#ffb900]"></div>
               </div>
-              <span className="hidden sm:inline text-xs font-semibold tracking-wide text-white">Microsoft Store</span>
+              <span className="hidden sm:inline text-xs font-semibold tracking-wide text-white">Microsoft Store KW</span>
            </div>
            
            <div className="flex-1 flex justify-center">
