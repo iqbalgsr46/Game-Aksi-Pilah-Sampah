@@ -98,7 +98,6 @@ export default function PortalPage({ onRunGame }) {
                 </video>
                 {/* Gradient Fade */}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#202020] via-[#202020] to-transparent w-[65%] z-0"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#202020] to-transparent h-24 bottom-0 z-0"></div>
               </div>
               
               {/* Hero Content */}
