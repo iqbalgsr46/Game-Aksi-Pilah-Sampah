@@ -59,11 +59,7 @@ export default function PortalPage({ onRunGame }) {
         {/* Topbar */}
         <header className="h-[48px] flex items-center justify-between px-4 flex-shrink-0 z-30 bg-[#202020] gap-4">
            <div className="flex items-center gap-3 md:w-1/4 flex-shrink-0">
-              <div className="w-5 h-5 grid grid-cols-2 gap-[2px]">
-                 <div className="bg-[#f25022]"></div><div className="bg-[#7fba00]"></div>
-                 <div className="bg-[#00a4ef]"></div><div className="bg-[#ffb900]"></div>
-              </div>
-              <span className="hidden sm:inline text-xs font-semibold tracking-wide text-white">Microsoft Store</span>
+              <img src="/assets/images/github+logo+social+icon-1320193974176554630.png" alt="Github Logo" className="w-6 h-6 object-contain" />
            </div>
            
            <div className="flex-1 flex justify-center">
