@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Go Green - Pilah Sampah</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "shadow-green": "#166534",
+                        "tertiary": "#ffd6a3",
+                        "outline-variant": "#3c494c",
+                        "on-secondary-container": "#003e1c",
+                        "primary-fixed": "#a2eeff",
+                        "on-primary-fixed-variant": "#004e5a",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#003919",
+                        "surface-dim": "#0e1416",
+                        "action-cyan": "#06b6d4",
+                        "on-tertiary-container": "#6e4600",
+                        "secondary-fixed-dim": "#4de082",
+                        "on-background": "#dde4e5",
+                        "tertiary-fixed": "#ffddb5",
+                        "on-error": "#690005",
+                        "primary-container": "#22d3ee",
+                        "on-secondary-fixed-variant": "#005227",
+                        "inverse-primary": "#006877",
+                        "surface-bright": "#343a3c",
+                        "on-primary": "#00363e",
+                        "surface-container-low": "#161d1e",
+                        "on-tertiary-fixed-variant": "#643f00",
+                        "surface": "#0e1416",
+                        "surface-variant": "#2f3638",
+                        "shadow-red": "#991b1b",
+                        "on-tertiary-fixed": "#2a1800",
+                        "tertiary-fixed-dim": "#ffb957",
+                        "secondary": "#4de082",
+                        "shadow-amber": "#92400e",
+                        "action-red": "#f87171",
+                        "shadow-blue": "#1e3a8a",
+                        "on-primary-fixed": "#001f25",
+                        "primary": "#8aebff",
+                        "on-primary-container": "#005763",
+                        "on-tertiary": "#462b00",
+                        "on-secondary-fixed": "#00210c",
+                        "outline": "#859397",
+                        "surface-container-highest": "#2f3638",
+                        "on-surface-variant": "#bbc9cd",
+                        "inverse-on-surface": "#2b3233",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "shadow-cyan": "#0284c7",
+                        "action-yellow": "#facc15",
+                        "on-surface": "#dde4e5",
+                        "action-blue": "#3b82f6",
+                        "surface-container-high": "#242b2d",
+                        "surface-container-lowest": "#090f11",
+                        "secondary-fixed": "#6dfe9c",
+                        "surface-tint": "#2fd9f4",
+                        "inverse-surface": "#dde4e5",
+                        "primary-fixed-dim": "#2fd9f4",
+                        "background": "#0e1416",
+                        "surface-container": "#1a2122",
+                        "tertiary-container": "#ffb13b",
+                        "secondary-container": "#00b55d"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "gutter": "1rem",
+                        "safe-margin": "1.5rem",
+                        "button-extrude": "6px",
+                        "play-button-extrude": "12px"
+                    },
+                    fontFamily: {
+                        "title-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    fontSize: {
+                        "title-md": ["24px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "display-lg": ["60px", { "lineHeight": "1.1", "letterSpacing": "0.02em", "fontWeight": "800" }],
+                        "display-xl": ["72px", { "lineHeight": "1.1", "letterSpacing": "0.02em", "fontWeight": "800" }],
+                        "display-lg-mobile": ["36px", { "lineHeight": "1.1", "fontWeight": "800" }],
+                        "display-xl-mobile": ["48px", { "lineHeight": "1.1", "fontWeight": "800" }],
+                        "body-sm": ["14px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.5", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .jelly-btn {
+            border-bottom-width: theme('spacing.button-extrude');
+            position: relative;
+            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .jelly-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+            border-radius: inherit;
+            pointer-events: none;
+        }
+        .jelly-btn:active {
+            transform: translateY(theme('spacing.button-extrude')) scale(0.98);
+            border-bottom-width: 0px;
+            margin-bottom: theme('spacing.button-extrude');
+        }
+        
+        .floating-header {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body class="bg-background text-on-surface h-screen w-screen overflow-hidden font-body-sm relative selection:bg-primary-container selection:text-on-primary-container">
+<!-- Background Layer -->
+<div class="absolute inset-0 z-0">
+<div class="bg-cover bg-center w-full h-full object-cover" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLuE2nG0Estx9WF1vejMkNmBPkEnP4XR3DzF_ZDd6G5NEBzR_CaK2Bz4uUuaR5O3iQJvJwL9Noq-0vgH6j3S7tAosUN5_a3aVASSiy24OqB484atoVTIOtdXOKJ5tbhTot4KJc0BOnD1V1sYnzgesG4XfUIYBVXbbbDtr5p3vcCEWVAaVh0gcHS6TrnT9zNOdowB3CVw_wsjXOVg23Q70MObJnyV1QxlCwpfNdh2Zfd9j3q3pSkOJlhE2lUx')"></div>
+</div>
+<!-- UI Overlay Layer -->
+<div class="relative z-10 w-full h-full flex flex-col pointer-events-none">
+<!-- TopAppBar -->
+<header class="w-full pt-safe-margin px-safe-margin bg-transparent flex justify-between items-start w-full pointer-events-auto">
+<!-- Left: Brand / Score -->
+<div class="flex items-center gap-4 bg-tertiary-container border-b-[6px] border-shadow-amber rounded-xl px-6 py-3 border-4 border-white shadow-xl">
+<span class="material-symbols-outlined text-on-tertiary-container" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-title-md text-title-md text-on-tertiary-container drop-shadow-sm">Score: 0</span>
+</div>
+<!-- Right: Trailing Actions -->
+<div class="flex gap-gutter">
+<button aria-label="Audio" class="bg-secondary border-b-[6px] border-shadow-green border-2 border-white rounded-full p-3 jelly-btn text-on-secondary shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</button>
+<button aria-label="Leaderboard" class="bg-tertiary-container border-b-[6px] border-shadow-amber border-2 border-white rounded-full p-3 jelly-btn text-on-tertiary-container shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+</button>
+<button aria-label="Exit" class="bg-error border-b-[6px] border-shadow-red border-2 border-white rounded-full p-3 jelly-btn text-on-error shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">exit_to_app</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full flex items-center justify-between px-16 lg:px-32 pointer-events-none mt-12 relative">
+<!-- Left Side: Character & Bins -->
+<div class="w-1/2 h-full relative pointer-events-auto flex items-end justify-center pb-24">
+<!-- 3D Character Animation Embedded Placeholder -->
+<div class="absolute bottom-24 right-48 w-[400px] h-[500px] z-20 transform scale-125 origin-bottom" id="threejs-container">
+</div>
+<!-- Bins Illustration -->
+<div class="absolute bottom-24 right-10 flex gap-4 z-10"><!-- Organic Bin -->
+<div class="w-32 h-44 bg-secondary rounded-xl border-4 border-white shadow-[0_10px_0_rgba(22,101,52,1)] flex flex-col items-center relative group transition-transform hover:scale-105">
+<!-- Lid -->
+<div class="w-full h-8 bg-shadow-green rounded-t-lg border-b-4 border-white/20"></div>
+<!-- Body Content -->
+<div class="flex-1 flex flex-col items-center justify-center gap-2 p-2">
+<span class="material-symbols-outlined text-white text-[40px] drop-shadow-sm">recycling</span>
+<span class="font-black text-body-lg text-on-secondary tracking-tight">ORGANIK</span>
+</div>
+<!-- Highlight -->
+<div class="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent pointer-events-none rounded-xl"></div>
+</div>
+<!-- Anorganic Bin -->
+<div class="w-32 h-44 bg-action-yellow rounded-xl border-4 border-white shadow-[0_10px_0_rgba(146,64,14,1)] flex flex-col items-center relative group transition-transform hover:scale-105">
+<!-- Lid -->
+<div class="w-full h-8 bg-shadow-amber rounded-t-lg border-b-4 border-white/20"></div>
+<!-- Body Content -->
+<div class="flex-1 flex flex-col items-center justify-center gap-2 p-2">
+<span class="material-symbols-outlined text-on-tertiary-container text-[40px] drop-shadow-sm">recycling</span>
+<span class="font-black text-body-lg text-on-tertiary-container tracking-tight">ANORGANIK</span>
+</div>
+<!-- Highlight -->
+<div class="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent pointer-events-none rounded-xl"></div>
+</div></div>
+</div>
+<!-- Right Side: Menu Buttons -->
+<div class="w-1/2 max-w-md flex flex-col gap-6 items-center pointer-events-auto">
+<h1 class="font-display-lg text-display-lg text-white drop-shadow-[0_6px_0_rgba(22,101,52,1)] floating-header mb-8 text-center stroke-shadow-green stroke-2">
+                    Go Green
+                </h1>
+<button class="w-full bg-gradient-to-b from-secondary to-shadow-green border-4 border-white rounded-2xl py-6 px-8 jelly-btn shadow-[0_8px_15px_rgba(0,0,0,0.3)] flex items-center justify-center gap-4 group">
+<span class="font-display-lg-mobile text-display-lg-mobile text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.3)] tracking-wide group-hover:scale-105 transition-transform">
+                        Pilah Sampah
+                    </span>
+</button>
+<button class="w-full bg-gradient-to-b from-action-yellow to-shadow-amber border-4 border-white rounded-2xl py-6 px-8 jelly-btn shadow-[0_8px_15px_rgba(0,0,0,0.3)] flex items-center justify-center gap-4 group">
+<span class="font-display-lg-mobile text-display-lg-mobile text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.3)] tracking-wide group-hover:scale-105 transition-transform">
+                        Cari Sampah
+                    </span>
+</button>
+<button class="w-full bg-gradient-to-b from-action-red to-shadow-red border-4 border-white rounded-2xl py-6 px-8 jelly-btn shadow-[0_8px_15px_rgba(0,0,0,0.3)] flex items-center justify-center gap-4 group">
+<span class="font-display-lg-mobile text-display-lg-mobile text-white drop-shadow-[0_4px_0_rgba(0,0,0,0.3)] tracking-wide group-hover:scale-105 transition-transform">
+                        Tangkap Sampah
+                    </span>
+</button>
+</div>
+<!-- Bottom Right Wooden Sign -->
+<div class="absolute bottom-32 right-16 pointer-events-auto transform rotate-[-5deg]">
+<div class="bg-tertiary-container border-4 border-white shadow-[0_8px_0_rgba(146,64,14,1)] rounded-lg px-6 py-4 relative">
+<div class="absolute -top-12 left-1/2 w-4 h-16 bg-tertiary-container border-2 border-white z-[-1] -translate-x-1/2 shadow-inner"></div>
+<span class="font-title-md text-title-md text-on-tertiary-container font-black">JAGALAH<br/>KEBERSIHAN</span>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full pb-safe-margin bg-transparent flex flex-col items-center justify-center text-center px-gutter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] pointer-events-none">
+<p class="font-body-sm text-body-sm text-white font-bold max-w-2xl bg-black/40 px-6 py-2 rounded-full backdrop-blur-sm pointer-events-auto">
+                Ayo Jaga Kebersihan! Pilah sampahmu sekarang untuk masa depan bumi.
+            </p>
+</footer>
+</div>
+<script>
+    const container = document.getElementById('threejs-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.set(0, 2, 8);
+    camera.lookAt(0, 1.5, 0);
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 10, 5);
+    scene.add(dirLight);
+
+    // Character Group
+    const character = new THREE.Group();
+    scene.add(character);
+
+    // Body
+    const bodyGeo = new THREE.CapsuleGeometry(0.8, 1, 4, 16);
+    const bodyMat = new THREE.MeshPhongMaterial({ color: 0x8aebff, shininess: 30 });
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.position.y = 1.5;
+    character.add(body);
+
+    // Head
+    const headGeo = new THREE.SphereGeometry(0.6, 16, 16);
+    const headMat = new THREE.MeshPhongMaterial({ color: 0x8aebff, shininess: 30 });
+    const head = new THREE.Mesh(headGeo, headMat);
+    head.position.y = 2.8;
+    character.add(head);
+
+    // Arms
+    const armGeo = new THREE.CapsuleGeometry(0.2, 0.8, 4, 16);
+    const armMat = new THREE.MeshPhongMaterial({ color: 0x8aebff });
+    
+    const rightArmGroup = new THREE.Group();
+    rightArmGroup.position.set(1.0, 2.0, 0);
+    const rightArm = new THREE.Mesh(armGeo, armMat);
+    rightArm.position.set(0, -0.4, 0);
+    rightArmGroup.add(rightArm);
+    character.add(rightArmGroup);
+    
+    const leftArmGroup = new THREE.Group();
+    leftArmGroup.position.set(-1.0, 2.0, 0);
+    const leftArm = new THREE.Mesh(armGeo, armMat);
+    leftArm.position.set(0, -0.4, 0);
+    leftArmGroup.rotation.z = Math.PI / 8;
+    leftArmGroup.add(leftArm);
+    character.add(leftArmGroup);
+
+    // Eyes
+    const eyeGeo = new THREE.SphereGeometry(0.1, 16, 16);
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0x001f25 });
+    const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+    rightEye.position.set(0.25, 2.9, 0.55);
+    character.add(rightEye);
+    const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+    leftEye.position.set(-0.25, 2.9, 0.55);
+    character.add(leftEye);
+
+    // Bottle
+    const bottleGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.4, 16);
+    const bottleMat = new THREE.MeshPhongMaterial({ color: 0x4de082, transparent: true, opacity: 0.9 });
+    const bottle = new THREE.Mesh(bottleGeo, bottleMat);
+    scene.add(bottle);
+
+    // Animation Loop Variables
+    const clock = new THREE.Clock();
+    let time = 0;
+    const CYCLE_DURATION = 3.0;
+
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        const delta = clock.getDelta();
+        time = (time + delta) % CYCLE_DURATION;
+        
+        // Jelly Breathing
+        const breathScale = 1 + Math.sin(time * Math.PI * 2) * 0.03;
+        character.scale.set(1, breathScale, 1);
+        character.position.y = Math.sin(time * Math.PI * 2) * 0.05;
+
+        // Phases
+        if (time < 0.3) {
+            // Phase 1: Preparation (0.0 - 0.3s)
+            const progress = time / 0.3;
+            rightArmGroup.rotation.x = -Math.PI * 0.5 * progress;
+            rightArmGroup.rotation.z = -Math.PI / 8;
+            
+            // Bottle follows hand
+            const handPos = new THREE.Vector3(0, -0.8, 0);
+            handPos.applyMatrix4(rightArmGroup.matrixWorld);
+            bottle.position.copy(handPos);
+            bottle.rotation.x = rightArmGroup.rotation.x;
+            bottle.visible = true;
+        } else if (time < 0.6) {
+            // Phase 2: Throwing (0.3 - 0.6s)
+            const progress = (time - 0.3) / 0.3;
+            rightArmGroup.rotation.x = -Math.PI * 0.5 + (Math.PI * 0.8 * progress);
+            
+            // Parabolic trajectory for bottle
+            const startX = 1.0;
+            const startY = 2.0;
+            const targetX = 3.5;
+            const targetY = 0.5;
+            
+            bottle.position.x = startX + (targetX - startX) * progress;
+            bottle.position.y = startY + Math.sin(progress * Math.PI) * 1.5 - (startY - targetY) * progress;
+            bottle.position.z = -progress * 1.0;
+            bottle.rotation.x += 0.2;
+            
+            if (progress > 0.9) bottle.visible = false;
+        } else {
+            // Phase 3: Recovery (0.6 - 3.0s)
+            const progress = Math.min((time - 0.6) / 0.4, 1.0);
+            rightArmGroup.rotation.x = (Math.PI * 0.3) * (1 - progress);
+            rightArmGroup.rotation.z = -Math.PI / 8;
+            bottle.visible = false;
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle window resize for container
+    window.addEventListener('resize', () => {
+        if (container.clientWidth && container.clientHeight) {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+    });
+</script>
+</body></html>
