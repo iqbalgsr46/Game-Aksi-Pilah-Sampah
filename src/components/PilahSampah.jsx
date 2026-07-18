@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, useMotionValue, animate } from 'framer-motion';
 import { TRASH_TYPES } from './TrashItems';
 import { saveScore } from '../utils/leaderboard';
 
@@ -49,14 +49,47 @@ const DropAnimation = ({ animation }) => {
 // Scattered Trash Component
 function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
   const [isDragging, setIsDragging] = useState(false);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const controls = useAnimation();
 
-  const handleDragStart = () => {
+  const handlePointerDown = (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    
+    e.target.setPointerCapture(e.pointerId);
     setIsDragging(true);
+    e.target.dataset.startX = e.clientX;
+    e.target.dataset.startY = e.clientY;
+    e.target.dataset.initialX = x.get();
+    e.target.dataset.initialY = y.get();
+    
+    controls.start({ scale: 1.35, transition: { duration: 0.15 } });
+    
+    if (onDrag) onDrag(e, { point: { x: e.clientX, y: e.clientY } });
   };
 
-  const handleDragEnd = (e, info) => {
+  const handlePointerMove = (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - parseFloat(e.target.dataset.startX);
+    const dy = e.clientY - parseFloat(e.target.dataset.startY);
+    x.set(parseFloat(e.target.dataset.initialX) + dx);
+    y.set(parseFloat(e.target.dataset.initialY) + dy);
+    
+    if (onDrag) onDrag(e, { point: { x: e.clientX, y: e.clientY } });
+  };
+
+  const handlePointerUp = (e) => {
+    if (!isDragging) return;
     setIsDragging(false);
-    onDragEnd(e, info, trash.uid, trash.category);
+    e.target.releasePointerCapture(e.pointerId);
+    
+    controls.start({ scale: 1, transition: { duration: 0.15 } });
+    
+    if (onDragEnd) onDragEnd(e, { point: { x: e.clientX, y: e.clientY } }, trash.uid, trash.category);
+    
+    // Snap back
+    animate(x, 0, { type: "spring", stiffness: 300, damping: 20 });
+    animate(y, 0, { type: "spring", stiffness: 300, damping: 20 });
   };
 
   return (
@@ -69,16 +102,16 @@ function ScatteredTrashItem({ trash, onDrag, onDragEnd }) {
       }}
     >
       <motion.div
-        drag
-        dragMomentum={false}
-        dragElastic={0.05}
-        onDragStart={handleDragStart}
-        onDrag={onDrag}
-        onDragEnd={handleDragEnd}
-        whileDrag={{ scale: 1.35 }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        animate={controls}
         style={{
+          x,
+          y,
           touchAction: 'none',
-          cursor: 'grab',
+          cursor: isDragging ? 'grabbing' : 'grab',
           pointerEvents: 'auto',
           position: 'relative',
         }}
