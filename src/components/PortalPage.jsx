@@ -165,15 +165,11 @@ export default function PortalPage({ onRunGame }) {
                      <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
                    </div>
                    <div className="p-5 flex gap-4 overflow-x-auto scrollbar-hide snap-x bg-[#202020]">
-                     <div className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
-                       <img src="/assets/images/Sampah B3.png" alt="Screenshot 1" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
-                     </div>
-                     <div className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
-                       <img src="/assets/images/Sampah Organik.png" alt="Screenshot 2" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
-                     </div>
-                     <div className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
-                       <img src="/assets/images/Sampah Non Organik.png" alt="Screenshot 3" className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300" />
-                     </div>
+                     {[1, 2, 3, 4, 5, 6].map((num) => (
+                       <div key={num} className="h-[160px] md:h-[220px] w-[280px] md:w-[390px] flex-shrink-0 bg-[#1a1a1a] rounded-md snap-center overflow-hidden relative cursor-pointer group">
+                         <img src={`/assets/images/image-${num}.png`} alt={`Screenshot ${num}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                       </div>
+                     ))}
                    </div>
                 </section>
 
