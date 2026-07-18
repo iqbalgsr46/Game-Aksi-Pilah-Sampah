@@ -4,7 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function PortalPage({ onRunGame }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const screenshots = [1, 2, 3, 4, 5, 6];
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText("https://game-aksi-pilah-sampah.vercel.app");
+    setShowShareMenu(false);
+  };
 
   const handleScroll = (e) => {
     if (e.target.scrollTop > 280) {
@@ -136,7 +142,7 @@ export default function PortalPage({ onRunGame }) {
                    <span className="normal-case text-gray-300 tracking-normal mt-1 block">The range of modes on this game is unmatched. Relax with sorting, catching, and finding...</span>
                 </div>
 
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-3 mb-6 relative">
                   <motion.button 
                     whileTap={{ scale: 0.98 }}
                     onClick={handleRunGame}
@@ -144,9 +150,41 @@ export default function PortalPage({ onRunGame }) {
                   >
                     Run Game
                   </motion.button>
-                  <button className="w-8 h-8 rounded flex items-center justify-center hover:bg-white/10 transition-colors">
-                    <span className="material-symbols-outlined text-[18px] text-gray-200">ios_share</span>
-                  </button>
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowShareMenu(!showShareMenu)}
+                      onBlur={() => setTimeout(() => setShowShareMenu(false), 200)}
+                      className="w-9 h-9 rounded flex items-center justify-center hover:bg-white/10 transition-colors focus:bg-white/10"
+                    >
+                      <span className="material-symbols-outlined text-[20px] text-gray-200">shortcut</span>
+                    </button>
+
+                    <AnimatePresence>
+                      {showShareMenu && (
+                        <motion.div 
+                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute left-0 top-full mt-2 w-48 bg-[#2a2a2a] rounded-lg shadow-xl border border-[#444] overflow-hidden z-50 flex flex-col py-1"
+                        >
+                          <button 
+                            onClick={handleCopyLink}
+                            className="flex items-center gap-3 px-4 py-2 hover:bg-white/10 text-white text-[13px] text-left transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">content_copy</span>
+                            Copy link
+                          </button>
+                          <button 
+                            className="flex items-center gap-3 px-4 py-2 hover:bg-white/10 text-white text-[13px] text-left transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">shortcut</span>
+                            Share
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 border-t border-[#444] pt-4 w-fit pr-10">
