@@ -19,23 +19,24 @@ export default function PortalPage({ onRunGame }) {
     <div className="flex h-screen w-screen bg-[#202020] text-gray-100 font-sans overflow-hidden">
       {/* Sidebar - Hidden on mobile, visible on medium+ */}
       <aside className="hidden md:flex w-[72px] flex-col items-center py-2 bg-[#202020] border-r border-[#333] flex-shrink-0 z-20">
-        <div className="mb-4 w-full flex justify-center">
-          <div className="p-2 bg-[#303030] rounded-l-md w-full ml-2 flex flex-col items-center border-l-[3px] border-[#4CC2FF] cursor-pointer">
-             <span className="material-symbols-outlined text-[#4CC2FF] text-[22px]">home</span>
+        <div className="mb-6 w-full flex justify-center mt-3">
+          <div className="relative flex items-center justify-center w-[52px] h-[52px] bg-[#333] rounded-lg cursor-pointer">
+             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-[22px] bg-[#4CC2FF] rounded-r-md"></div>
+             <span className="material-symbols-outlined text-[#4CC2FF] text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
           </div>
         </div>
-        <div className="flex flex-col gap-6 w-full items-center flex-grow mt-2">
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
-             <span className="material-symbols-outlined text-[22px]">grid_view</span>
-             <span className="text-[10px] mt-1 font-medium">Apps</span>
+        <div className="flex flex-col gap-7 w-full items-center flex-grow mt-2">
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-200">
+             <span className="material-symbols-outlined text-[26px]">dashboard_customize</span>
+             <span className="text-[12px] mt-1 font-semibold tracking-wide">Apps</span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
-             <span className="material-symbols-outlined text-[22px]">sports_esports</span>
-             <span className="text-[10px] mt-1 font-medium">Gaming</span>
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300">
+             <span className="material-symbols-outlined text-[26px]">sports_esports</span>
+             <span className="text-[12px] mt-1 font-semibold tracking-wide">Gaming</span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
-             <span className="material-symbols-outlined text-[22px]">format_paint</span>
-             <span className="text-[10px] mt-1 font-medium">Themes</span>
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300">
+             <span className="material-symbols-outlined text-[26px] -rotate-45">brush</span>
+             <span className="text-[12px] mt-1 font-semibold tracking-wide">Themes</span>
           </div>
         </div>
         <div className="flex flex-col gap-6 w-full items-center mb-4">
