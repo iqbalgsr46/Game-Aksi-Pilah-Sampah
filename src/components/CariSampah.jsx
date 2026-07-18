@@ -291,65 +291,65 @@ export default function CariSampah({ onClose, playClickSound }) {
       <div className="relative z-20 w-full h-full flex flex-col pointer-events-none">
         
         {/* Scoreboard & Timer */}
-        <div className="absolute top-6 left-6 flex flex-wrap items-center gap-4 pointer-events-auto">
+        <div className="absolute top-6 left-6 short:top-2 short:left-2 flex flex-wrap items-center gap-4 short:gap-2 pointer-events-auto">
           
           {/* Timer */}
-          <motion.div className="bg-gradient-to-b from-blue-500/90 to-blue-700/95 backdrop-blur-md border-[4px] border-blue-300/60 shadow-[0_6px_0_rgba(30,58,138,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 flex items-center justify-center">
-            <span className={`text-3xl font-bubbly tracking-wide drop-shadow-md ${timeLeft <= 10 ? 'text-red-400 animate-pulse' : 'text-white'}`} style={{ WebkitTextStroke: timeLeft <= 10 ? '1.5px #7f1d1d' : '1.5px #1e3a8a' }}>
+          <motion.div className="bg-gradient-to-b from-blue-500/90 to-blue-700/95 backdrop-blur-md border-[4px] short:border-2 border-blue-300/60 shadow-[0_6px_0_rgba(30,58,138,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 short:px-3 short:py-1 flex items-center justify-center">
+            <span className={`text-3xl short:text-xl font-bubbly tracking-wide drop-shadow-md ${timeLeft <= 10 ? 'text-red-400 animate-pulse' : 'text-white'}`} style={{ WebkitTextStroke: timeLeft <= 10 ? '1.5px #7f1d1d' : '1.5px #1e3a8a' }}>
               Waktu : {timeLeft}s
             </span>
           </motion.div>
 
-          <motion.div className="bg-gradient-to-b from-amber-500/90 to-amber-700/95 backdrop-blur-md border-[4px] border-amber-300/60 shadow-[0_6px_0_rgba(120,53,15,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 flex flex-col items-center justify-center">
-            <span className="text-3xl text-white font-bubbly tracking-wide drop-shadow-md" style={{ WebkitTextStroke: '1.5px #78350f' }}>
+          <motion.div className="bg-gradient-to-b from-amber-500/90 to-amber-700/95 backdrop-blur-md border-[4px] short:border-2 border-amber-300/60 shadow-[0_6px_0_rgba(120,53,15,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 short:px-3 short:py-1 flex flex-col items-center justify-center">
+            <span className="text-3xl short:text-xl text-white font-bubbly tracking-wide drop-shadow-md" style={{ WebkitTextStroke: '1.5px #78350f' }}>
               Score : {score}
             </span>
             {combo > 1 && (
               <motion.span 
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="text-lg text-yellow-300 font-bubbly tracking-wider mt-1 drop-shadow-md"
+                className="text-lg short:text-sm text-yellow-300 font-bubbly tracking-wider mt-1 drop-shadow-md"
               >
                 Combo x{combo}
               </motion.span>
             )}
           </motion.div>
 
-          <motion.div className="bg-gradient-to-b from-amber-500/90 to-amber-700/95 backdrop-blur-md border-[4px] border-amber-300/60 shadow-[0_6px_0_rgba(120,53,15,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 flex items-center justify-center gap-2">
+          <motion.div className="bg-gradient-to-b from-amber-500/90 to-amber-700/95 backdrop-blur-md border-[4px] short:border-2 border-amber-300/60 shadow-[0_6px_0_rgba(120,53,15,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 short:px-3 short:py-1 flex items-center justify-center gap-2 short:gap-1">
             {Array.from({ length: lives }).map((_, i) => (
               <svg 
                 key={i}
                 viewBox="0 0 24 24" fill="currentColor" 
-                className="text-red-500 w-6 h-6 md:w-8 md:h-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
+                className="text-red-500 w-6 h-6 md:w-8 md:h-8 short:w-4 short:h-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
               >
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
             ))}
           </motion.div>
 
-          <motion.div className="bg-gradient-to-b from-amber-500/90 to-amber-700/95 backdrop-blur-md border-[4px] border-amber-300/60 shadow-[0_6px_0_rgba(120,53,15,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 flex items-center justify-center">
-            <span className="text-3xl text-yellow-300 font-bubbly tracking-wide drop-shadow-md" style={{ WebkitTextStroke: '1.5px #78350f' }}>
+          <motion.div className="bg-gradient-to-b from-amber-500/90 to-amber-700/95 backdrop-blur-md border-[4px] short:border-2 border-amber-300/60 shadow-[0_6px_0_rgba(120,53,15,0.7),inset_0_4px_6px_rgba(255,255,255,0.3)] rounded-2xl px-6 py-3 short:px-3 short:py-1 flex items-center justify-center">
+            <span className="text-3xl short:text-xl text-yellow-300 font-bubbly tracking-wide drop-shadow-md" style={{ WebkitTextStroke: '1.5px #78350f' }}>
               Lolos : {missed}x
             </span>
           </motion.div>
         </div>
 
         {/* Back Button */}
-        <div className="absolute top-6 right-6 pointer-events-auto">
+        <div className="absolute top-6 right-6 short:top-2 short:right-2 pointer-events-auto">
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.9, y: 4 }}
-            className="relative overflow-hidden w-16 h-16 md:w-20 md:h-20 bg-gradient-to-b from-red-400/80 to-red-600/90 backdrop-blur-md rounded-2xl border-[4px] border-white/70 shadow-[0_6px_0_rgba(153,27,27,0.4),inset_0_4px_8px_rgba(255,255,255,0.4)] flex items-center justify-center cursor-pointer group"
+            className="relative overflow-hidden w-16 h-16 md:w-20 md:h-20 short:w-10 short:h-10 bg-gradient-to-b from-red-400/80 to-red-600/90 backdrop-blur-md rounded-2xl border-[4px] short:border-2 border-white/70 shadow-[0_6px_0_rgba(153,27,27,0.4),inset_0_4px_8px_rgba(255,255,255,0.4)] flex items-center justify-center cursor-pointer group"
             onClick={() => { if(playClickSound) playClickSound(); onClose(); }}
           >
-            <svg className="w-8 h-8 md:w-10 md:h-10 text-white/90 drop-shadow-md group-hover:scale-105 transition-transform" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-8 h-8 md:w-10 md:h-10 short:w-6 short:h-6 text-white/90 drop-shadow-md group-hover:scale-105 transition-transform" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </motion.button>
         </div>
 
         {/* Trash Bins (Drop Targets) */}
-        <div className="absolute bottom-[20%] md:bottom-[35%] left-0 w-full flex justify-center items-end gap-12 md:gap-32 pointer-events-auto">
+        <div className="absolute bottom-[20%] md:bottom-[35%] short:bottom-[10%] left-0 w-full flex justify-center items-end gap-12 md:gap-32 short:gap-6 pointer-events-auto">
           {/* Organik Bin */}
           <motion.div 
             ref={organikRef} 
@@ -357,8 +357,8 @@ export default function CariSampah({ onClose, playClickSound }) {
             animate={shakingBin === 'Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'Organik' ? { scale: 1.15 } : { x: 0, scale: 1 }}
             transition={{ duration: shakingBin === 'Organik' ? 0.4 : 0.2 }}
           >
-            <img src="/assets/images/Sampah Organik.png" alt="Organik" className="w-32 h-40 md:w-48 md:h-60 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
-            <span className="mt-4 px-4 py-2 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Organik</span>
+            <img src="/assets/images/Sampah Organik.png" alt="Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
+            <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Organik</span>
           </motion.div>
           {/* Non Organik Bin */}
           <motion.div 
@@ -367,8 +367,8 @@ export default function CariSampah({ onClose, playClickSound }) {
             animate={shakingBin === 'Non Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'Non Organik' ? { scale: 1.15 } : { x: 0, scale: 1 }}
             transition={{ duration: shakingBin === 'Non Organik' ? 0.4 : 0.2 }}
           >
-            <img src="/assets/images/Sampah Non Organik.png" alt="Non Organik" className="w-32 h-40 md:w-48 md:h-60 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
-            <span className="mt-4 px-4 py-2 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Non Organik</span>
+            <img src="/assets/images/Sampah Non Organik.png" alt="Non Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
+            <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Non Organik</span>
           </motion.div>
           {/* B3 Bin */}
           <motion.div 
@@ -377,8 +377,8 @@ export default function CariSampah({ onClose, playClickSound }) {
             animate={shakingBin === 'B3' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'B3' ? { scale: 1.15 } : { x: 0, scale: 1 }}
             transition={{ duration: shakingBin === 'B3' ? 0.4 : 0.2 }}
           >
-            <img src="/assets/images/Sampah B3.png" alt="B3" className="w-32 h-40 md:w-48 md:h-60 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
-            <span className="mt-4 px-4 py-2 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">B3</span>
+            <img src="/assets/images/Sampah B3.png" alt="B3" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
+            <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">B3</span>
           </motion.div>
         </div>
 
@@ -412,15 +412,15 @@ export default function CariSampah({ onClose, playClickSound }) {
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", damping: 12 }}
-            className={`text-6xl md:text-8xl font-bubbly mb-4 drop-shadow-[0_10px_20px_rgba(255,0,0,0.5)] ${lives <= 0 ? 'text-red-500' : 'text-blue-400'}`}
+            className={`text-6xl md:text-8xl short:text-4xl font-bubbly mb-4 drop-shadow-[0_10px_20px_rgba(255,0,0,0.5)] ${lives <= 0 ? 'text-red-500' : 'text-blue-400'}`}
             style={{ WebkitTextStroke: '3px white' }}
           >
             {lives <= 0 ? "GAME OVER" : "WAKTU HABIS!"}
           </motion.h2>
           {lives <= 0 && (
-            <p className="text-xl md:text-2xl text-red-300 font-bubbly mb-6">Nyawa kamu telah habis akibat membuang sampah sembarangan!</p>
+            <p className="text-xl md:text-2xl short:text-lg text-red-300 font-bubbly mb-6 short:mb-2 text-center px-4">Nyawa kamu telah habis akibat membuang sampah sembarangan!</p>
           )}
-          <p className="text-4xl text-white font-bubbly mb-12">Score Akhir: {score}</p>
+          <p className="text-4xl short:text-2xl text-white font-bubbly mb-12 short:mb-4">Score Akhir: {score}</p>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -434,7 +434,7 @@ export default function CariSampah({ onClose, playClickSound }) {
               setCombo(1); // Reset kombo kembali ke x1
               setGameOver(false);
             }}
-            className="px-8 py-4 bg-gradient-to-b from-emerald-400 to-emerald-600 rounded-2xl border-4 border-white/50 text-white font-bubbly text-3xl shadow-[0_6px_0_rgba(6,78,59,0.8)]"
+            className="px-8 py-4 short:px-4 short:py-2 bg-gradient-to-b from-emerald-400 to-emerald-600 rounded-2xl border-4 short:border-2 border-white/50 text-white font-bubbly text-3xl short:text-xl shadow-[0_6px_0_rgba(6,78,59,0.8)]"
           >
             Main Lagi
           </motion.button>
