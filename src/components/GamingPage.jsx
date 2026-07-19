@@ -3,15 +3,52 @@ import { motion } from 'framer-motion';
 
 export default function GamingPage({ onClose, onRunGame }) {
   const [time, setTime] = useState("");
+  const [battery, setBattery] = useState({ level: 100, charging: false, supported: true });
+  const [wifi, setWifi] = useState({ online: navigator.onLine });
   
   useEffect(() => {
+    // Time Logic
     const updateTime = () => {
       const now = new Date();
       setTime(now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }));
     };
     updateTime();
-    const interval = setInterval(updateTime, 60000);
-    return () => clearInterval(interval);
+    const timeInterval = setInterval(updateTime, 60000);
+
+    // Battery Logic
+    let batteryManager;
+    const updateBattery = (b) => {
+      setBattery({ level: Math.floor(b.level * 100), charging: b.charging, supported: true });
+    };
+    if ('getBattery' in navigator) {
+      navigator.getBattery().then((b) => {
+        batteryManager = b;
+        updateBattery(b);
+        b.addEventListener('levelchange', () => updateBattery(b));
+        b.addEventListener('chargingchange', () => updateBattery(b));
+      }).catch(() => {
+        setBattery(prev => ({ ...prev, supported: false }));
+      });
+    } else {
+      setBattery(prev => ({ ...prev, supported: false }));
+    }
+
+    // WiFi Logic
+    const updateOnlineStatus = () => {
+      setWifi({ online: navigator.onLine });
+    };
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    return () => {
+      clearInterval(timeInterval);
+      if (batteryManager) {
+        batteryManager.removeEventListener('levelchange', () => updateBattery(batteryManager));
+        batteryManager.removeEventListener('chargingchange', () => updateBattery(batteryManager));
+      }
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
+    };
   }, []);
 
   return (
@@ -26,10 +63,20 @@ export default function GamingPage({ onClose, onRunGame }) {
       {/* Top Header Overlay */}
       <div className="absolute top-0 right-0 w-full p-6 flex justify-end items-center gap-6 z-30 bg-gradient-to-b from-black/80 via-black/40 to-transparent pointer-events-none">
         <span className="material-symbols-outlined text-[28px] cursor-pointer hover:text-white text-gray-200 pointer-events-auto">search</span>
-        <span className="material-symbols-outlined text-[28px] cursor-pointer hover:text-white text-gray-200 pointer-events-auto">wifi</span>
-        <div className="flex items-center gap-2 text-gray-200 pointer-events-auto">
-          <span className="material-symbols-outlined text-[28px]">battery_full</span>
-          <span className="text-xl font-medium tracking-wide">{time}</span>
+        <span className="material-symbols-outlined text-[28px] cursor-pointer hover:text-white text-gray-200 pointer-events-auto" title={wifi.online ? 'Connected' : 'Offline'}>
+          {wifi.online ? 'wifi' : 'wifi_off'}
+        </span>
+        <div className="flex items-center gap-3 text-gray-200 pointer-events-auto" title={battery.supported ? `${battery.level}%${battery.charging ? ' (Charging)' : ''}` : 'Battery'}>
+           {battery.supported ? (
+             <div className="relative w-4 h-6 border-[2px] border-gray-200 rounded-sm flex flex-col justify-end p-[1px]">
+               <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1 bg-gray-200 rounded-t-sm"></div>
+               <div className={`w-full rounded-[1px] transition-all duration-500 ${battery.charging ? 'bg-green-400' : battery.level <= 20 ? 'bg-red-500' : 'bg-gray-200'}`} style={{ height: `${battery.level}%` }}></div>
+               {battery.charging && <span className="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[12px] text-black">bolt</span>}
+             </div>
+           ) : (
+             <span className="material-symbols-outlined text-[28px]">battery_full</span>
+           )}
+           <span className="text-[22px] font-medium tracking-wide leading-none">{time}</span>
         </div>
         <div className="w-9 h-9 rounded-full bg-[#333]/80 border border-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-600 transition-colors pointer-events-auto">
           <span className="material-symbols-outlined text-[24px]">help</span>
