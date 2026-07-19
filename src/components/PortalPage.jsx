@@ -177,17 +177,9 @@ export default function PortalPage({ onRunGame, onOpenGaming, playClickSound }) 
           </div>
         </div>
         <div className="flex flex-col gap-7 w-full items-center flex-grow mt-2">
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-200">
-             <span className="material-symbols-outlined text-[26px]">dashboard_customize</span>
-             <span className="text-[12px] mt-1 font-semibold tracking-wide">Apps</span>
-          </div>
           <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300" onClick={handleOpenGamingClick}>
              <span className="material-symbols-outlined text-[26px]">sports_esports</span>
              <span className="text-[12px] mt-1 font-semibold tracking-wide">Gaming</span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300">
-             <span className="material-symbols-outlined text-[26px] -rotate-45">brush</span>
-             <span className="text-[12px] mt-1 font-semibold tracking-wide">Themes</span>
           </div>
         </div>
         <div className="flex flex-col gap-6 w-full items-center mb-6">
