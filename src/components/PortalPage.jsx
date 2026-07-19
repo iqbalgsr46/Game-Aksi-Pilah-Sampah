@@ -425,17 +425,17 @@ export default function PortalPage({ onRunGame }) {
                    <div className="p-6 bg-[#202020]">
                       <div className="flex flex-col md:flex-row gap-8 mb-8 items-center md:items-start">
                          <div className="flex flex-col justify-center items-center md:items-start w-[140px]">
-                            <div className="text-[72px] font-normal text-white leading-none mb-2 tracking-tight">4.2</div>
+                            <div className="text-[72px] font-normal text-white leading-none mb-2 tracking-tight">4.9</div>
                             <div className="text-[12px] text-gray-400 font-medium tracking-wide">288 RATINGS</div>
                          </div>
                          <div className="flex flex-col gap-2.5 flex-1 w-full max-w-[280px]">
                             {/* Bars */}
                             {[
-                               { star: 5, percent: '68%' },
-                               { star: 4, percent: '10%' },
-                               { star: 3, percent: '12%' },
-                               { star: 2, percent: '4%' },
-                               { star: 1, percent: '18%' },
+                               { star: 5, percent: '95%' },
+                               { star: 4, percent: '5%' },
+                               { star: 3, percent: '0%' },
+                               { star: 2, percent: '0%' },
+                               { star: 1, percent: '0%' },
                             ].map((item) => (
                                <div key={item.star} className="flex items-center gap-2 text-[12px] text-gray-300 font-medium">
                                   <span className="w-2 text-right">{item.star}</span>
