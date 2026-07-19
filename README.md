@@ -64,7 +64,7 @@ Bagi Anda yang mencoba mengakses *game* ini menggunakan *smartphone*:
 
 ---
 
-## 🎓 Penghargaan & Ucapan Terima Kasih
+## 👨‍💻 Tentang Pengembang
 
 - **Created by:** Tubagus Iqbal Husaeni
 - **Instansi:** Universitas Pelita Bangsa
