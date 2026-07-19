@@ -14,6 +14,7 @@ export default function GamingPage({ onClose, onRunGame }) {
   const [wifi, setWifi] = useState({ online: navigator.onLine });
   const [playStats, setPlayStats] = useState({ lastPlayed: 'Belum pernah', playTimeStr: '0 jam' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('Aktivitas');
   
   useEffect(() => {
     // Load Play Stats
@@ -174,18 +175,65 @@ export default function GamingPage({ onClose, onRunGame }) {
 
          {/* Navigation Tabs */}
          <div className="px-12 flex flex-wrap items-center justify-center gap-8 mt-4">
-            <button className="bg-[#484d56] text-white px-5 py-2 rounded-full text-sm font-bold tracking-[0.15em] uppercase shadow-sm">Aktivitas</button>
-            <button className="text-gray-400 hover:text-white px-3 py-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">Milikmu</button>
-            <button className="text-gray-400 hover:text-white px-3 py-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">Komunitas</button>
-            <button className="text-gray-400 hover:text-white px-3 py-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">Info Game</button>
+            {['Aktivitas', 'Milikmu', 'Komunitas', 'Info Game'].map((tab) => (
+               <button 
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-5 py-2 rounded-full text-sm font-bold tracking-[0.15em] uppercase transition-colors shadow-sm ${
+                     activeTab === tab 
+                     ? 'bg-[#484d56] text-white' 
+                     : 'text-gray-400 hover:text-white bg-transparent'
+                  }`}
+               >
+                  {tab}
+               </button>
+            ))}
          </div>
 
          {/* Content Area */}
          <div className="flex-1 flex flex-col px-12 mt-8 pb-8">
-            <h2 className="text-[22px] font-bold text-gray-100 mb-4 tracking-wide flex-shrink-0">Aktivitas</h2>
+            <h2 className="text-[22px] font-bold text-gray-100 mb-4 tracking-wide flex-shrink-0">{activeTab}</h2>
             
-            <div className="w-full flex-1 min-h-[100px] max-h-[220px] border-[2px] border-dashed border-[#3a3f4a] rounded flex items-center justify-center bg-[#21242a]">
-               <span className="text-[#686f78] font-medium text-[17px] tracking-wide text-center px-4">Tidak ada aktivitas terkini dari pengembang.</span>
+            <div className="w-full flex-1 min-h-[100px] max-h-[220px] border-[2px] border-dashed border-[#3a3f4a] rounded flex items-center justify-center bg-[#21242a] p-6 overflow-y-auto premium-scrollbar">
+               
+               {activeTab === 'Aktivitas' && (
+                  <span className="text-[#686f78] font-medium text-[17px] tracking-wide text-center">
+                     Tidak ada aktivitas terkini dari pengembang.
+                  </span>
+               )}
+
+               {activeTab === 'Milikmu' && (
+                  <div className="flex flex-col items-center justify-center gap-2 text-[#686f78] h-full">
+                     <span className="material-symbols-outlined text-[40px] mb-1">sports_esports</span>
+                     <p className="font-medium text-[17px] tracking-wide text-center text-gray-300">Waktu Bermain: <span className="text-white">{playStats.playTimeStr}</span></p>
+                     <p className="font-medium text-[15px] tracking-wide text-center">Terakhir Dimainkan: {playStats.lastPlayed}</p>
+                     <p className="font-medium text-[14px] tracking-wide text-center mt-2 italic text-[#5cba46]">Mainkan game untuk meningkatkan statistikmu!</p>
+                  </div>
+               )}
+
+               {activeTab === 'Komunitas' && (
+                  <div className="flex flex-col items-center justify-center gap-2 text-[#686f78] h-full">
+                     <span className="material-symbols-outlined text-[40px] mb-1">forum</span>
+                     <span className="font-medium text-[17px] tracking-wide text-center">Belum ada diskusi komunitas untuk Game Aksi Pilah Sampah.</span>
+                     <span className="text-sm">Jadilah yang pertama memulai diskusi!</span>
+                  </div>
+               )}
+
+               {activeTab === 'Info Game' && (
+                  <div className="flex flex-col justify-center h-full text-[#dcdedf] w-full max-w-4xl mx-auto">
+                     <h3 className="text-xl font-bold mb-3 text-white">Game Aksi Pilah Sampah</h3>
+                     <p className="text-[16px] leading-relaxed mb-4 text-[#8a919e]">
+                        Game edukasi interaktif yang dirancang untuk meningkatkan kesadaran lingkungan. 
+                        Pemain ditantang untuk memilah sampah dengan cepat dan tepat ke dalam kategori yang benar demi menyelamatkan bumi.
+                     </p>
+                     <ul className="list-disc pl-5 text-[15px] text-[#8a919e] space-y-1">
+                        <li><strong className="text-gray-300">Organik:</strong> Sisa makanan, daun, sayur, dll.</li>
+                        <li><strong className="text-gray-300">Anorganik:</strong> Plastik, kaca, kertas, kardus, dll.</li>
+                        <li><strong className="text-gray-300">B3:</strong> Baterai, lampu, obat-obatan, elektronik, dll.</li>
+                     </ul>
+                  </div>
+               )}
+               
             </div>
          </div>
       </div>
