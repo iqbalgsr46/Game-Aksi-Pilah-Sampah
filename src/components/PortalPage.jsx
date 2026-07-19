@@ -116,8 +116,17 @@ export default function PortalPage({ onRunGame, onOpenGaming }) {
   };
 
   const handleOpenGamingClick = () => {
+    const startAudio = new Audio('/assets/audio/gaming_start.wav');
+    startAudio.volume = 0.7;
+    startAudio.play().catch(e => console.log('Audio play failed:', e));
+
     setIsTransitioningToGaming(true);
+    
     setTimeout(() => {
+      const endAudio = new Audio('/assets/audio/gaming_end.wav');
+      endAudio.volume = 0.8;
+      endAudio.play().catch(e => console.log('Audio play failed:', e));
+      
       onOpenGaming();
     }, 2500);
   };
