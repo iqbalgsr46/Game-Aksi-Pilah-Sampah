@@ -40,7 +40,7 @@ const GamepadLoadingOverlay = () => (
   </motion.div>
 );
 
-export default function PortalPage({ onRunGame, onOpenGaming }) {
+export default function PortalPage({ onRunGame, onOpenGaming, playClickSound }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [isTransitioningToGaming, setIsTransitioningToGaming] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
@@ -50,6 +50,17 @@ export default function PortalPage({ onRunGame, onOpenGaming }) {
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [isSysReqExpanded, setIsSysReqExpanded] = useState(false);
   const screenshots = [1, 2, 3, 4, 5, 6];
+
+  React.useEffect(() => {
+    const handleGlobalClick = (e) => {
+      const isClickable = e.target.closest('button') || e.target.closest('a') || e.target.closest('.cursor-pointer');
+      if (isClickable && playClickSound) {
+        playClickSound();
+      }
+    };
+    document.addEventListener('click', handleGlobalClick, true);
+    return () => document.removeEventListener('click', handleGlobalClick, true);
+  }, [playClickSound]);
 
   const mainScrollRef = React.useRef(null);
   const contentRef = React.useRef(null);

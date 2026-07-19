@@ -8,13 +8,24 @@ const MenuItem = ({ icon, label }) => (
   </div>
 );
 
-export default function GamingPage({ onClose, onRunGame }) {
+export default function GamingPage({ onClose, onRunGame, playClickSound }) {
   const [time, setTime] = useState("");
   const [battery, setBattery] = useState({ level: 100, charging: false, supported: true });
   const [wifi, setWifi] = useState({ online: navigator.onLine });
   const [playStats, setPlayStats] = useState({ lastPlayed: 'Belum pernah', playTimeStr: '0 jam' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Aktivitas');
+
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      const isClickable = e.target.closest('button') || e.target.closest('.cursor-pointer');
+      if (isClickable && playClickSound) {
+        playClickSound();
+      }
+    };
+    document.addEventListener('click', handleGlobalClick, true);
+    return () => document.removeEventListener('click', handleGlobalClick, true);
+  }, [playClickSound]);
   
   useEffect(() => {
     // Load Play Stats

@@ -22,6 +22,8 @@ function App() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [returnState, setReturnState] = useState('PORTAL');
   const bgmRef = useRef(null);
+  const clickSoundRef = useRef(null);
+  const steamClickRef = useRef(null);
   const audioCtxRef = useRef(null);
   const [playStartTime, setPlayStartTime] = useState(null);
 
@@ -110,18 +112,23 @@ function App() {
       gainNode.connect(ctx.destination);
       
       osc.type = 'sine';
-      // Nada pop (menggelembung) yang naik cepat
       osc.frequency.setValueAtTime(300, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.05);
       
-      // Durasi sangat singkat (0.08 detik) agar responsif
       gainNode.gain.setValueAtTime(2.5, ctx.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
       
       osc.start(ctx.currentTime);
       osc.stop(ctx.currentTime + 0.1);
     } catch (e) {
-      console.log("Audio API Error:", e);
+      console.log('Audio API not supported', e);
+    }
+  };
+
+  const playSteamClick = () => {
+    if (!isMuted && steamClickRef.current) {
+      steamClickRef.current.currentTime = 0;
+      steamClickRef.current.play().catch(e => console.log(e));
     }
   };
 
@@ -163,6 +170,8 @@ function App() {
         src={gameState === 'PLAYING' ? "/assets/audio/The_Cleanest_Sweep (1).mp3" : "/assets/audio/Sundial_on_the_Terrace.mp3"} 
         loop 
       />
+      <audio ref={clickSoundRef} src="/assets/audio/click.wav" preload="auto" />
+      <audio ref={steamClickRef} src="/assets/audio/steam_click.wav" preload="auto" />
 
       {/* Area Transisi Mulus Portal <-> Main Menu */}
       <AnimatePresence mode="wait">
@@ -178,6 +187,7 @@ function App() {
             <PortalPage 
               onRunGame={() => { setReturnState('PORTAL'); setGameState('START'); }} 
               onOpenGaming={() => setGameState('GAMING')} 
+              playClickSound={playSteamClick}
             />
           </motion.div>
         )}
@@ -221,6 +231,7 @@ function App() {
             <GamingPage 
               onClose={() => setGameState('PORTAL')} 
               onRunGame={() => { setReturnState('GAMING'); setGameState('START'); }} 
+              playClickSound={playSteamClick}
             />
           </motion.div>
         )}
