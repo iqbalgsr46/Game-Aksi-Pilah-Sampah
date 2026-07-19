@@ -127,7 +127,7 @@ export default function GamingPage({ onClose, onRunGame }) {
       </div>
 
       {/* Hero Banner Section */}
-      <div className="relative w-full h-[45%] min-h-[280px] flex-shrink-0">
+      <div className="relative w-full h-[55%] min-h-[400px] flex-shrink-0">
         <div className="absolute inset-0 bg-gradient-to-r from-[#1b1d22]/90 via-transparent to-transparent z-10 pointer-events-none"></div>
         <div className="absolute bottom-0 w-full h-[200px] bg-gradient-to-t from-[#1b1d22] via-[#1b1d22]/80 to-transparent z-10 pointer-events-none"></div>
         
@@ -136,9 +136,9 @@ export default function GamingPage({ onClose, onRunGame }) {
       </div>
 
       {/* Main Container for the rest */}
-      <div className="flex-1 relative z-20 -mt-10 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto premium-scrollbar relative z-20 -mt-10 flex flex-col">
          {/* Action Bar */}
-         <div className="px-12 py-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 flex-shrink-0">
+         <div className="px-12 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="flex flex-col md:flex-row md:items-center gap-10">
               {/* Play Button */}
               <button 
@@ -191,10 +191,10 @@ export default function GamingPage({ onClose, onRunGame }) {
          </div>
 
          {/* Content Area */}
-         <div className="flex-1 flex flex-col px-12 mt-4 pb-4 overflow-hidden">
-            <h2 className="text-[22px] font-bold text-gray-100 mb-3 tracking-wide flex-shrink-0">{activeTab}</h2>
+         <div className="flex-1 flex flex-col px-12 mt-8 pb-8">
+            <h2 className="text-[22px] font-bold text-gray-100 mb-4 tracking-wide flex-shrink-0">{activeTab}</h2>
             
-            <div className="w-full flex-1 min-h-[80px] max-h-[200px] border-[2px] border-dashed border-[#3a3f4a] rounded flex items-center justify-center bg-[#21242a] p-6 overflow-y-auto premium-scrollbar">
+            <div className="w-full flex-1 min-h-[100px] max-h-[220px] border-[2px] border-dashed border-[#3a3f4a] rounded flex items-center justify-center bg-[#21242a] p-6 overflow-y-auto premium-scrollbar">
                
                {activeTab === 'Aktivitas' && (
                   <span className="text-[#686f78] font-medium text-[17px] tracking-wide text-center">
