@@ -135,7 +135,7 @@ export default function GamingPage({ onClose, onRunGame }) {
         <img src="/assets/images/banner-gaming-mode.png" alt="Game Banner" className="w-full h-full object-cover object-center brightness-90" />
 
         {/* Game Info Overlay */}
-        <div className="absolute bottom-32 left-12 z-20 flex flex-col gap-5 max-w-3xl">
+        <div className="absolute bottom-40 left-12 z-20 flex flex-col gap-5 max-w-3xl">
           <div className="flex items-center gap-6">
             <img src="/assets/images/logo.png" alt="Logo" className="w-32 h-32 rounded-2xl shadow-xl object-cover border-[1px] border-white/10" />
             <div className="flex flex-col">
