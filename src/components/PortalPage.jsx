@@ -17,7 +17,7 @@ const GamepadLoadingOverlay = () => (
     transition={{ duration: 0.3 }}
     className="fixed inset-0 z-[9999] bg-[radial-gradient(ellipse_at_center,_#1c202a_0%,_#090a0d_100%)] flex items-center justify-center"
   >
-    <svg width="160" height="160" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="320" height="320" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <motion.path
         d="M22 42 C 22 28, 32 24, 50 24 C 68 24, 78 28, 78 42 L 82 62 C 84 70, 78 74, 72 72 C 67 70, 65 65, 62 62 L 58 58 C 55 55, 45 55, 42 58 L 38 62 C 35 65, 33 70, 28 72 C 22 74, 16 70, 18 62 Z"
         stroke="white"
