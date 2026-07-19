@@ -158,8 +158,8 @@ function App() {
         source.buffer = steamAudioBufferRef.current;
         
         const gainNode = ctx.createGain();
-        // Boost volume by 4.0x using Web Audio API!
-        gainNode.gain.value = 4.0; 
+        // Turunkan sedikit volume dari 4.0 menjadi 2.5 agar tidak terlalu kencang
+        gainNode.gain.value = 2.5; 
         
         source.connect(gainNode);
         gainNode.connect(ctx.destination);
