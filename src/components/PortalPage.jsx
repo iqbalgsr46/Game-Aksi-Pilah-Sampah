@@ -13,7 +13,6 @@ const GamepadLoadingOverlay = () => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0 }}
     transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
     className="fixed inset-0 z-[9999] bg-[radial-gradient(ellipse_at_center,_#1c202a_0%,_#090a0d_100%)] flex items-center justify-center"
   >
@@ -157,15 +156,10 @@ export default function PortalPage({ onRunGame, onOpenGaming, playClickSound }) 
     setIsTransitioningToGaming(true);
     
     setTimeout(() => {
-      setIsTransitioningToGaming(false); // Trigger exit animation
       const endAudio = new Audio('/assets/audio/gaming_end.wav');
       endAudio.volume = 1.0;
       endAudio.play().catch(e => console.log('Audio play failed:', e));
-      
-      // Wait for zoom animation to finish before unmounting page
-      setTimeout(() => {
-        onOpenGaming();
-      }, 700);
+      onOpenGaming();
     }, 2500);
   };
 
