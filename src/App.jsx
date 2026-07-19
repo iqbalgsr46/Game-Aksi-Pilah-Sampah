@@ -22,6 +22,24 @@ function App() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const bgmRef = useRef(null);
   const audioCtxRef = useRef(null);
+  const [playStartTime, setPlayStartTime] = useState(null);
+
+  // Track Play Time
+  useEffect(() => {
+    if (gameState !== 'PORTAL' && gameState !== 'GAMING') {
+      if (!playStartTime) {
+        setPlayStartTime(Date.now());
+      }
+    } else {
+      if (playStartTime) {
+        const playedMs = Date.now() - playStartTime;
+        const currentTotal = parseInt(localStorage.getItem('totalPlayTimeMs') || '0', 10);
+        localStorage.setItem('totalPlayTimeMs', currentTotal + playedMs);
+        localStorage.setItem('lastPlayedDate', Date.now());
+        setPlayStartTime(null);
+      }
+    }
+  }, [gameState, playStartTime]);
 
   // Track fullscreen state changes (e.g. if user presses ESC)
   useEffect(() => {

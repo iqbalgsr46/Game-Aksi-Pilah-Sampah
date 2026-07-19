@@ -5,8 +5,45 @@ export default function GamingPage({ onClose, onRunGame }) {
   const [time, setTime] = useState("");
   const [battery, setBattery] = useState({ level: 100, charging: false, supported: true });
   const [wifi, setWifi] = useState({ online: navigator.onLine });
+  const [playStats, setPlayStats] = useState({ lastPlayed: 'Belum pernah', playTimeStr: '0 jam' });
   
   useEffect(() => {
+    // Load Play Stats
+    const loadStats = () => {
+      const totalMs = parseInt(localStorage.getItem('totalPlayTimeMs') || '0', 10);
+      const lastPlayedMs = parseInt(localStorage.getItem('lastPlayedDate') || '0', 10);
+
+      let playTimeStr = '0 jam';
+      if (totalMs > 0) {
+        const totalMinutes = Math.floor(totalMs / 60000);
+        if (totalMinutes < 60) {
+          playTimeStr = `${totalMinutes} menit`;
+        } else {
+          const hours = (totalMinutes / 60).toFixed(1);
+          playTimeStr = `${hours.replace('.0', '')} jam`;
+        }
+      }
+
+      let lastPlayed = 'Belum pernah';
+      if (lastPlayedMs > 0) {
+        const date = new Date(lastPlayedMs);
+        const today = new Date();
+        if (date.toDateString() === today.toDateString()) {
+          lastPlayed = 'Hari ini';
+        } else {
+          const yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+          if (date.toDateString() === yesterday.toDateString()) {
+            lastPlayed = 'Kemarin';
+          } else {
+            lastPlayed = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+          }
+        }
+      }
+      setPlayStats({ lastPlayed, playTimeStr });
+    };
+    loadStats();
+    
     // Time Logic
     const updateTime = () => {
       const now = new Date();
@@ -107,11 +144,11 @@ export default function GamingPage({ onClose, onRunGame }) {
               <div className="flex gap-14">
                  <div className="flex flex-col">
                     <span className="text-[12px] text-gray-400 font-bold tracking-widest uppercase mb-1">Terakhir Dimainkan</span>
-                    <span className="text-xl font-semibold text-gray-100">Hari ini</span>
+                    <span className="text-xl font-semibold text-gray-100">{playStats.lastPlayed}</span>
                  </div>
                  <div className="flex flex-col">
                     <span className="text-[12px] text-gray-400 font-bold tracking-widest uppercase mb-1">Waktu Bermain</span>
-                    <span className="text-xl font-semibold text-gray-100">0 jam</span>
+                    <span className="text-xl font-semibold text-gray-100">{playStats.playTimeStr}</span>
                  </div>
               </div>
             </div>
