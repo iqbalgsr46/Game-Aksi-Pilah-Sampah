@@ -78,9 +78,6 @@ export default function GamingPage({ onClose, onRunGame }) {
            )}
            <span className="text-[22px] font-medium tracking-wide leading-none">{time}</span>
         </div>
-        <div className="w-9 h-9 rounded-full bg-[#333]/80 border border-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-600 transition-colors pointer-events-auto">
-          <span className="material-symbols-outlined text-[24px]">help</span>
-        </div>
       </div>
 
       {/* Hero Banner Section */}
