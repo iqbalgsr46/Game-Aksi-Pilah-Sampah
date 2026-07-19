@@ -165,7 +165,7 @@ export default function GamingPage({ onClose, onRunGame }) {
          </div>
 
          {/* Navigation Tabs */}
-         <div className="px-12 flex flex-wrap items-center gap-8 mt-4">
+         <div className="px-12 flex flex-wrap items-center justify-center gap-8 mt-4">
             <button className="bg-[#484d56] text-white px-5 py-2 rounded-full text-sm font-bold tracking-[0.15em] uppercase shadow-sm">Aktivitas</button>
             <button className="text-gray-400 hover:text-white px-3 py-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">Milikmu</button>
             <button className="text-gray-400 hover:text-white px-3 py-2 text-sm font-bold tracking-[0.15em] uppercase transition-colors">Komunitas</button>
