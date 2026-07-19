@@ -189,11 +189,11 @@ export default function GamingPage({ onClose, onRunGame }) {
       {/* Bottom Footer */}
       <div className="h-[72px] bg-[#1a1c21] border-t border-[#2d313a] flex items-center justify-between px-12 flex-shrink-0 z-40 relative">
          <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: 'inset 0 10px 15px -3px rgba(0, 0, 0, 0.2)' }}></div>
-         <div className="flex items-center gap-4 cursor-pointer group relative z-10">
-            <div className="w-[34px] h-[34px] rounded-full bg-white flex items-center justify-center">
-              <span className="text-black font-bold text-[10px] uppercase tracking-tighter">Steam</span>
+         <div className="flex items-center gap-3 cursor-pointer group relative z-10">
+            <div className="bg-white rounded-full px-5 py-1.5 flex items-center justify-center">
+              <span className="text-[#1a1c21] font-black text-[13px] uppercase tracking-[0.1em]">Steam</span>
             </div>
-            <span className="text-white font-bold tracking-[0.2em] uppercase text-[13px] group-hover:text-gray-300">Menu</span>
+            <span className="text-white font-bold tracking-[0.15em] uppercase text-[15px] group-hover:text-gray-300">Menu</span>
          </div>
          
          <div className="flex items-center gap-12 relative z-10">
