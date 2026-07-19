@@ -43,17 +43,6 @@ export default function GamingPage({ onClose, onRunGame }) {
         
         {/* Banner Image */}
         <img src="/assets/images/image-1.png" alt="Game Banner" className="w-full h-full object-cover object-center brightness-90" />
-        
-        {/* Game Title Overlay */}
-        <div className="absolute bottom-[10%] left-12 z-20 flex flex-col items-start">
-           <h1 className="text-white text-[70px] font-black tracking-tighter leading-none italic uppercase drop-shadow-2xl" style={{ textShadow: '0 4px 16px rgba(0,0,0,0.9)' }}>
-             Game Aksi
-           </h1>
-           <h1 className="text-[#e22e23] text-[75px] font-black tracking-tighter leading-none uppercase drop-shadow-2xl -mt-2" style={{ textShadow: '0 4px 16px rgba(0,0,0,0.9)' }}>
-             Pilah Sampah
-           </h1>
-           <p className="text-gray-300 tracking-[0.25em] font-semibold text-sm mt-4 uppercase drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>A BALSDEV GAME</p>
-        </div>
       </div>
 
       {/* Main Container for the rest */}
