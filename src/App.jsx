@@ -20,6 +20,7 @@ function App() {
   const [sessionGroups, setSessionGroups] = useState([]); // { name, hasPlayed, score }
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [returnState, setReturnState] = useState('PORTAL');
   const bgmRef = useRef(null);
   const audioCtxRef = useRef(null);
   const [playStartTime, setPlayStartTime] = useState(null);
@@ -173,7 +174,10 @@ function App() {
             transition={{ duration: 0.6, ease: "easeInOut" }}
             className="absolute inset-0 z-50 bg-[#202020]"
           >
-            <PortalPage onRunGame={() => setGameState('START')} onOpenGaming={() => setGameState('GAMING')} />
+            <PortalPage 
+              onRunGame={() => { setReturnState('PORTAL'); setGameState('START'); }} 
+              onOpenGaming={() => setGameState('GAMING')} 
+            />
           </motion.div>
         )}
 
@@ -190,9 +194,9 @@ function App() {
               onStartGame={handleStartGame} 
               onOpenLeaderboard={handleOpenLeaderboard}
               onExit={() => {
-                setGameState('PORTAL');
+                setGameState(returnState);
                 try {
-                  if (document.fullscreenElement && document.exitFullscreen) {
+                  if (returnState === 'PORTAL' && document.fullscreenElement && document.exitFullscreen) {
                     document.exitFullscreen().catch(err => console.log(err));
                   }
                 } catch (e) {}
@@ -215,7 +219,7 @@ function App() {
           >
             <GamingPage 
               onClose={() => setGameState('PORTAL')} 
-              onRunGame={() => setGameState('START')} 
+              onRunGame={() => { setReturnState('GAMING'); setGameState('START'); }} 
             />
           </motion.div>
         )}
