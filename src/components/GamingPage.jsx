@@ -8,6 +8,37 @@ const MenuItem = ({ icon, label }) => (
   </div>
 );
 
+const GamepadLoadingOverlay = () => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 2.5 }}
+    transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+    className="fixed inset-0 z-[9999] bg-[radial-gradient(ellipse_at_center,_#1c202a_0%,_#090a0d_100%)] flex items-center justify-center"
+  >
+    <svg width="320" height="320" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <motion.path
+        d="M22 42 C 22 28, 32 24, 50 24 C 68 24, 78 28, 78 42 L 82 62 C 84 70, 78 74, 72 72 C 67 70, 65 65, 62 62 L 58 58 C 55 55, 45 55, 42 58 L 38 62 C 35 65, 33 70, 28 72 C 22 74, 16 70, 18 62 Z"
+        stroke="white"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0, opacity: 0.2 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+      />
+      <motion.circle
+        cx="50" cy="36" r="4"
+        stroke="white"
+        strokeWidth="2.5"
+        initial={{ opacity: 0.2, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1.1 }}
+        transition={{ duration: 0.8, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
+      />
+    </svg>
+  </motion.div>
+);
+
 export default function GamingPage({ onClose, onRunGame, playClickSound }) {
   const [time, setTime] = useState("");
   const [battery, setBattery] = useState({ level: 100, charging: false, supported: true });
@@ -15,6 +46,24 @@ export default function GamingPage({ onClose, onRunGame, playClickSound }) {
   const [playStats, setPlayStats] = useState({ lastPlayed: 'Belum pernah', playTimeStr: '0 jam' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('Aktivitas');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRunGameClick = () => {
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(err => console.log(err));
+    }
+    const startAudio = new Audio('/assets/audio/gaming_start.wav');
+    startAudio.volume = 1.0;
+    startAudio.play().catch(e => console.log(e));
+    
+    setIsLoading(true);
+    setTimeout(() => {
+      const endAudio = new Audio('/assets/audio/gaming_end.wav');
+      endAudio.volume = 1.0;
+      endAudio.play().catch(e => console.log(e));
+      onRunGame();
+    }, 2500);
+  };
 
   useEffect(() => {
     const handleGlobalClick = (e) => {
@@ -109,9 +158,14 @@ export default function GamingPage({ onClose, onRunGame, playClickSound }) {
   }, []);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <>
+      <AnimatePresence>
+        {isLoading && <GamepadLoadingOverlay />}
+      </AnimatePresence>
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
       className="w-full h-full bg-[#1b1d22] text-white flex flex-col font-sans overflow-hidden select-none relative"
@@ -174,7 +228,7 @@ export default function GamingPage({ onClose, onRunGame, playClickSound }) {
             <div className="flex flex-col md:flex-row md:items-center gap-10">
               {/* Play Button */}
               <button 
-                onClick={onRunGame}
+                onClick={handleRunGameClick}
                 className="bg-[#5cba46] hover:bg-[#6cda52] active:scale-95 transition-all text-white px-10 py-3.5 rounded-sm flex items-center justify-center gap-3 shadow-lg"
               >
                 <span className="material-symbols-outlined text-[32px]" style={{ fontVariationSettings: "'FILL' 1" }}>play_arrow</span>
@@ -273,7 +327,7 @@ export default function GamingPage({ onClose, onRunGame, playClickSound }) {
          </div>
          
          <div className="flex items-center gap-12 relative z-10">
-            <div className="flex items-center gap-3 cursor-pointer group" onClick={onRunGame}>
+            <div className="flex items-center gap-3 cursor-pointer group" onClick={handleRunGameClick}>
                <div className="w-[34px] h-[34px] rounded-full bg-white flex items-center justify-center text-black font-black text-[17px]">A</div>
                <span className="text-white font-bold tracking-[0.2em] uppercase text-[13px] group-hover:text-gray-300">Pilih</span>
             </div>
@@ -332,5 +386,6 @@ export default function GamingPage({ onClose, onRunGame, playClickSound }) {
       </AnimatePresence>
 
     </motion.div>
+    </>
   );
 }
