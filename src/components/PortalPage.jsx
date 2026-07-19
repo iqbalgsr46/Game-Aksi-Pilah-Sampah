@@ -873,37 +873,7 @@ export default function PortalPage({ onRunGame, onOpenGaming }) {
         </main>
       </div>
       
-      <style dangerouslySetInnerHTML={{__html: `
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        .premium-scrollbar::-webkit-scrollbar {
-            width: 13px;
-        }
-        .premium-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .premium-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #666;
-            border-radius: 10px;
-            border: 6px solid transparent;
-            background-clip: padding-box;
-        }
-        .premium-scrollbar::-webkit-scrollbar-thumb:hover {
-            background-color: #888;
-            border: 3px solid transparent;
-        }
-        /* For Firefox */
-        .premium-scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: #666 transparent;
-        }
-      `}} />
+
 
       {/* Screenshot Modal */}
       <AnimatePresence>
