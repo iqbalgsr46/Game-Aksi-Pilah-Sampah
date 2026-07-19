@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import TrashBinModal from './TrashBinModal';
 import { TRASH_TYPES } from './TrashItems';
-
+import Lenis from 'lenis';
+import { useDraggableScroll } from '../hooks/useDraggableScroll';
 const scrollVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] } }
@@ -17,6 +18,38 @@ export default function PortalPage({ onRunGame }) {
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [isSysReqExpanded, setIsSysReqExpanded] = useState(false);
   const screenshots = [1, 2, 3, 4, 5, 6];
+
+  const mainScrollRef = React.useRef(null);
+  const contentRef = React.useRef(null);
+  const carouselRef = useDraggableScroll();
+
+  React.useEffect(() => {
+    if (!mainScrollRef.current || !contentRef.current) return;
+    
+    const lenis = new Lenis({
+      wrapper: mainScrollRef.current,
+      content: contentRef.current,
+      lerp: 0.1,
+      smoothWheel: true,
+      wheelMultiplier: 1,
+    });
+
+    lenis.on('scroll', (e) => {
+      if (e.scroll > 280) {
+        setShowStickyHeader(true);
+      } else {
+        setShowStickyHeader(false);
+      }
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy();
+  }, []);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText("https://game-aksi-pilah-sampah.vercel.app");
@@ -35,14 +68,6 @@ export default function PortalPage({ onRunGame }) {
       alert("Fitur share langsung tidak didukung di peramban ini. Silakan gunakan Copy Link.");
     }
     setShowShareMenu(false);
-  };
-
-  const handleScroll = (e) => {
-    if (e.target.scrollTop > 280) {
-      setShowStickyHeader(true);
-    } else {
-      setShowStickyHeader(false);
-    }
   };
 
   const handleRunGame = () => {
@@ -126,8 +151,9 @@ export default function PortalPage({ onRunGame }) {
 
 
         {/* Scrollable Area */}
-        <main className="flex-1 overflow-y-auto scrollbar-hide" onScroll={handleScroll}>
-           {/* Banner / Hero */}
+        <main ref={mainScrollRef} className="flex-1 overflow-y-auto scrollbar-hide">
+           <div ref={contentRef}>
+             {/* Banner / Hero */}
            <div className="relative w-full h-[400px]">
               {/* Background Image & Video */}
               <div className="absolute inset-0 bg-[#202020]">
@@ -279,7 +305,7 @@ export default function PortalPage({ onRunGame }) {
                      <h2 className="text-[15px] font-bold text-white">Screenshots</h2>
                      <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
                    </div>
-                   <div className="p-5 flex gap-4 overflow-x-auto scrollbar-hide snap-x bg-[#202020]">
+                   <div ref={carouselRef} className="p-5 flex gap-4 overflow-x-auto scrollbar-hide snap-x bg-[#202020] select-none">
                      {screenshots.map((num) => (
                        <div 
                          key={num} 
@@ -849,6 +875,7 @@ export default function PortalPage({ onRunGame }) {
 
                </div>
             </div>
+           </div>
         </main>
       </div>
       
