@@ -184,10 +184,6 @@ export default function GamingPage({ onClose, onRunGame }) {
          <div className="flex-1 px-12 mt-12 pb-20">
             <h2 className="text-[22px] font-bold text-gray-100 mb-6 tracking-wide">Aktivitas</h2>
             
-            <div className="w-full h-14 bg-[#2b2f38] border border-[#3a3f4a] rounded flex items-center px-6 mb-8 cursor-text hover:border-gray-500 transition-colors">
-               <span className="text-[#7e8590] italic text-[17px] font-medium tracking-wide">Bagikan opinimu tentang game ini ke teman-temanmu...</span>
-            </div>
-            
             <div className="w-full h-[220px] border-[2px] border-dashed border-[#3a3f4a] rounded flex items-center justify-center bg-[#21242a]">
                <span className="text-[#686f78] font-medium text-[17px] tracking-wide">Tidak ada aktivitas terkini dari pengembang ataupun dari temanmu.</span>
             </div>
