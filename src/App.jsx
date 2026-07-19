@@ -308,7 +308,7 @@ function App() {
       )}
 
       {/* Global Fullscreen Toggle Button - Pojok Kiri Bawah */}
-      {gameState !== 'PORTAL' && (
+      {gameState !== 'PORTAL' && gameState !== 'GAMING' && (
         <div className="absolute bottom-6 left-6 short:bottom-3 short:left-3 z-[100]">
           <button
             onClick={toggleFullscreen}
