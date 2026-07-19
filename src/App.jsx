@@ -49,7 +49,7 @@ function App() {
   useEffect(() => {
     if (bgmRef.current) {
       bgmRef.current.volume = 1.0; // Volume maksimal
-      if (isMuted || gameState === 'INTRO_CUTSCENE' || gameState === 'PORTAL') {
+      if (isMuted || gameState === 'INTRO_CUTSCENE' || gameState === 'PORTAL' || gameState === 'GAMING') {
         bgmRef.current.pause();
       } else {
         const playPromise = bgmRef.current.play();
@@ -63,6 +63,17 @@ function App() {
   const toggleMute = () => {
     setIsMuted(!isMuted);
   };
+
+  // Otomatis fullscreen saat masuk ke halaman Gaming
+  useEffect(() => {
+    if (gameState === 'GAMING') {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.log("Auto-fullscreen diblokir oleh browser:", err);
+        });
+      }
+    }
+  }, [gameState]);
 
   // Suara klik tanpa delay menggunakan Web Audio API
   const playClickSound = () => {
@@ -122,7 +133,7 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-black" onClick={() => { if(!isMuted && bgmRef.current && gameState !== 'PORTAL' && gameState !== 'INTRO_CUTSCENE') bgmRef.current.play(); }}>
+    <div className="w-screen h-screen overflow-hidden bg-black" onClick={() => { if(!isMuted && bgmRef.current && gameState !== 'PORTAL' && gameState !== 'INTRO_CUTSCENE' && gameState !== 'GAMING') bgmRef.current.play(); }}>
       {/* Layar Peringatan Putar HP (Hanya muncul jika HP dalam posisi portrait) */}
       <OrientationOverlay />
 
