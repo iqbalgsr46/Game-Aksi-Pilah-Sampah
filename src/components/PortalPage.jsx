@@ -9,7 +9,7 @@ const scrollVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] } }
 };
 
-export default function PortalPage({ onRunGame }) {
+export default function PortalPage({ onRunGame, onOpenGaming }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -98,7 +98,7 @@ export default function PortalPage({ onRunGame }) {
              <span className="material-symbols-outlined text-[26px]">dashboard_customize</span>
              <span className="text-[12px] mt-1 font-semibold tracking-wide">Apps</span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300">
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300" onClick={onOpenGaming}>
              <span className="material-symbols-outlined text-[26px]">sports_esports</span>
              <span className="text-[12px] mt-1 font-semibold tracking-wide">Gaming</span>
           </div>

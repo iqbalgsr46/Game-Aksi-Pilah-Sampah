@@ -9,6 +9,7 @@ import TangkapSampah from './components/TangkapSampah';
 import Leaderboard from './components/Leaderboard';
 import GroupRegistration from './components/GroupRegistration';
 import PortalPage from './components/PortalPage';
+import GamingPage from './components/GamingPage';
 import OrientationOverlay from './components/OrientationOverlay';
 
 function App() {
@@ -143,7 +144,7 @@ function App() {
             transition={{ duration: 0.6, ease: "easeInOut" }}
             className="absolute inset-0 z-50 bg-[#202020]"
           >
-            <PortalPage onRunGame={() => setGameState('START')} />
+            <PortalPage onRunGame={() => setGameState('START')} onOpenGaming={() => setGameState('GAMING')} />
           </motion.div>
         )}
 
@@ -170,6 +171,22 @@ function App() {
               isMuted={isMuted}
               onToggleMute={toggleMute}
               playClickSound={playClickSound}
+            />
+          </motion.div>
+        )}
+        
+        {gameState === 'GAMING' && (
+          <motion.div 
+            key="gaming"
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 z-50 bg-[#1b1d22]"
+          >
+            <GamingPage 
+              onClose={() => setGameState('PORTAL')} 
+              onRunGame={() => setGameState('START')} 
             />
           </motion.div>
         )}
