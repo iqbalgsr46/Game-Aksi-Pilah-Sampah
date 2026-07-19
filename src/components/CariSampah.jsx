@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, useMotionValue, animate } from 'framer-motion';
 import { TRASH_TYPES } from './TrashItems';
 import { saveScore } from '../utils/leaderboard';
 
@@ -10,15 +10,20 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
   const [activeTrash, setActiveTrash] = useState([]);
   const [dropAnimations, setDropAnimations] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-  const [shakingBin, setShakingBin] = useState(null);
-  const [hoveredBin, setHoveredBin] = useState(null);
+  const [shakingBins, setShakingBins] = useState(new Set());
+  const [hoveredBins, setHoveredBins] = useState(new Set());
   const [combo, setCombo] = useState(1);
   const [floatingScores, setFloatingScores] = useState([]);
   const [timeLeft, setTimeLeft] = useState(60); // Waktu bermain 60 detik (1 menit)
   
   const scoreRef = useRef(score);
   const hasSavedRef = useRef(false);
+  const activeTrashRef = useRef(activeTrash);
+  const activeDragHoversRef = useRef(new Map());
+  const comboRef = useRef(combo);
   useEffect(() => { scoreRef.current = score; }, [score]);
+  useEffect(() => { activeTrashRef.current = activeTrash; }, [activeTrash]);
+  useEffect(() => { comboRef.current = combo; }, [combo]);
 
   const playSuccessSound = useCallback(() => {
     try {
@@ -149,7 +154,7 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
     return () => clearTimeout(timeoutId);
   }, [gameOver]);
 
-  const checkAnyBin = (x, y) => {
+  const checkAnyBin = useCallback((x, y) => {
     const checkIntersect = (ref) => {
       if (!ref.current) return false;
       const rect = ref.current.getBoundingClientRect();
@@ -166,91 +171,121 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
     if (checkIntersect(nonOrganikRef)) return 'Non Organik';
     if (checkIntersect(b3Ref)) return 'B3';
     return null;
-  };
+  }, []);
 
-  const handleDrag = (event, info) => {
-    const bin = checkAnyBin(info.point.x, info.point.y);
-    if (bin !== hoveredBin) {
-      setHoveredBin(bin);
+  const syncHoveredBins = useCallback(() => {
+    const allHovered = new Set();
+    for (const bin of activeDragHoversRef.current.values()) {
+      if (bin) allHovered.add(bin);
     }
-  };
+    setHoveredBins(allHovered);
+  }, []);
 
-  const handleDragEnd = (event, info, uid, category) => {
-    const dropX = info.point.x;
-    const dropY = info.point.y;
+  const handleDrag = useCallback((uid, x, y) => {
+    const bin = checkAnyBin(x, y);
+    const prevBin = activeDragHoversRef.current.get(uid);
 
+    if (bin !== prevBin) {
+      activeDragHoversRef.current.set(uid, bin);
+      syncHoveredBins();
+    }
+  }, [checkAnyBin, syncHoveredBins]);
+
+  const handleDragCancel = useCallback((uid) => {
+    activeDragHoversRef.current.delete(uid);
+    syncHoveredBins();
+  }, [syncHoveredBins]);
+
+  const handleDragEnd = useCallback((uid, category, dropX, dropY) => {
+    activeDragHoversRef.current.delete(uid);
+    syncHoveredBins();
     const droppedBin = checkAnyBin(dropX, dropY);
-    setHoveredBin(null); // Reset efek hover saat dilepas
+    const activeItem = activeTrashRef.current.find(t => t.uid === uid);
 
     if (droppedBin === category) {
+      if (!activeItem) return false;
+
       // Benar! Tambah animasi drop dan suara sukses
       playSuccessSound();
-      
-      const earnedScore = 10 * combo;
-      setScore(s => s + earnedScore);
-      
-      // Bonus nyawa jika mencapai combo kelipatan 10 (dan nyawa belum penuh)
-      if (combo % 10 === 0) {
-        setLives(l => {
-          if (l < 5) {
-            // Bisa mainkan suara 1-UP khusus di sini kalau ada
-            return l + 1;
-          }
-          return l;
-        });
-      }
-      
-      const newCombo = combo + 1;
+
+      const currentCombo = comboRef.current;
+      const earnedScore = 10 * currentCombo;
+      const newCombo = currentCombo + 1;
+      const floatingId = Date.now() + Math.random();
+      const nextTrash = activeTrashRef.current.filter(t => t.uid !== uid);
+
+      comboRef.current = newCombo;
+      activeTrashRef.current = nextTrash;
       setCombo(newCombo);
-      
-      // Munculkan teks skor melayang
+      setActiveTrash(nextTrash);
+      setScore(s => s + earnedScore);
+
+      if (currentCombo % 10 === 0) {
+        setLives(l => (l < 5 ? l + 1 : l));
+      }
+
       setFloatingScores(prev => [...prev, {
-        id: Date.now(),
+        id: floatingId,
         x: dropX,
-        y: dropY - 50, // Muncul sedikit di atas kursor
-        text: newCombo > 2 ? `+${earnedScore} COMBO x${combo}!` : `+${earnedScore}`,
+        y: dropY - 50,
+        text: newCombo > 2 ? `+${earnedScore} COMBO x${currentCombo}!` : `+${earnedScore}`,
         isCombo: newCombo > 2
       }]);
-
-      // Hilangkan teks melayang setelah 1 detik
       setTimeout(() => {
-        setFloatingScores(prev => prev.slice(1));
+        setFloatingScores(prev => prev.filter(fs => fs.id !== floatingId));
       }, 1000);
-      
-      const droppedItem = activeTrash.find(t => t.uid === uid);
-      if (droppedItem) {
-        setDropAnimations(prev => [...prev, {
-          id: uid,
-          Component: droppedItem.Component,
-          category: category,
-          x: dropX,
-          y: dropY
-        }]);
-        setTimeout(() => {
-          setDropAnimations(prev => prev.filter(anim => anim.id !== uid));
-        }, 1000);
-      }
-      
-      setActiveTrash(prev => prev.filter(t => t.uid !== uid));
+
+      setDropAnimations(animations => [...animations, {
+        id: uid,
+        Component: activeItem.Component,
+        category,
+        x: dropX,
+        y: dropY
+      }]);
+      setTimeout(() => {
+        setDropAnimations(animations => animations.filter(anim => anim.id !== uid));
+      }, 1000);
+
+      return false;
     } else if (droppedBin !== null) {
+      if (!activeItem) return false;
+
       // Salah tong! Reset combo, kurangi nyawa
+      comboRef.current = 1;
       setCombo(1);
       playRejectSound();
-      
-      setShakingBin(droppedBin);
-      setTimeout(() => setShakingBin(null), 500); // Getar selama 0.5s
 
-      setActiveTrash(prev => prev.filter(t => t.uid !== uid));
+      setShakingBins(prev => new Set(prev).add(droppedBin));
+      setTimeout(() => {
+        setShakingBins(prev => {
+          const next = new Set(prev);
+          next.delete(droppedBin);
+          return next;
+        });
+      }, 500); // Getar selama 0.5s
+
+      const nextTrash = activeTrashRef.current.filter(t => t.uid !== uid);
+      activeTrashRef.current = nextTrash;
+      setActiveTrash(nextTrash);
       setLives(l => {
         const newLives = l - 1;
         if (newLives <= 0) setGameOver(true);
         return newLives;
       });
+
+      return false;
     }
+
     // Jika dilepas di luar tong, sampah tetap ada & lanjut mengalir
-  };
+    if (!activeItem) return false;
+    return true;
+  }, [checkAnyBin, playRejectSound, playSuccessSound, syncHoveredBins]);
 
   const handleMissed = (uid) => {
+    const missedItem = activeTrashRef.current.find(t => t.uid === uid);
+    if (!missedItem) return;
+
+    comboRef.current = 1;
     setCombo(1); // Reset combo karena terlewat
     setMissed(m => m + 1);
     setLives(l => {
@@ -258,7 +293,9 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
       if (newLives <= 0) setGameOver(true);
       return newLives;
     });
-    setActiveTrash(prev => prev.filter(t => t.uid !== uid));
+    const nextTrash = activeTrashRef.current.filter(t => t.uid !== uid);
+    activeTrashRef.current = nextTrash;
+    setActiveTrash(nextTrash);
   };
 
   return (
@@ -294,6 +331,7 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
             trash={trash} 
             onDrag={handleDrag}
             onDragEnd={handleDragEnd} 
+            onDragCancel={handleDragCancel}
             onMissed={handleMissed}
           />
         ))}
@@ -380,8 +418,8 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
           <motion.div 
             ref={organikRef} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'Organik' ? { scale: 1.15 } : { x: 0, scale: 1 }}
-            transition={{ duration: shakingBin === 'Organik' ? 0.4 : 0.2 }}
+            animate={shakingBins.has('Organik') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            transition={{ duration: shakingBins.has('Organik') ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah Organik.png" alt="Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
             <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Organik</span>
@@ -390,8 +428,8 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
           <motion.div 
             ref={nonOrganikRef} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'Non Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'Non Organik' ? { scale: 1.15 } : { x: 0, scale: 1 }}
-            transition={{ duration: shakingBin === 'Non Organik' ? 0.4 : 0.2 }}
+            animate={shakingBins.has('Non Organik') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('Non Organik') ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            transition={{ duration: shakingBins.has('Non Organik') ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah Non Organik.png" alt="Non Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
             <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">Non Organik</span>
@@ -400,8 +438,8 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
           <motion.div 
             ref={b3Ref} 
             className="flex flex-col items-center"
-            animate={shakingBin === 'B3' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBin === 'B3' ? { scale: 1.15 } : { x: 0, scale: 1 }}
-            transition={{ duration: shakingBin === 'B3' ? 0.4 : 0.2 }}
+            animate={shakingBins.has('B3') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : hoveredBins.has('B3') ? { scale: 1.15 } : { x: 0, scale: 1 }}
+            transition={{ duration: shakingBins.has('B3') ? 0.4 : 0.2 }}
           >
             <img src="/assets/images/Sampah B3.png" alt="B3" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)]" />
             <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md">B3</span>
@@ -458,9 +496,14 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
                 setScore(0);
                 setLives(5); // Nyawa dipulihkan penuh ke 5
                 setMissed(0);
+                activeTrashRef.current = [];
                 setActiveTrash([]);
                 setTimeLeft(60); // Reset waktu kembali ke 60 detik (1 menit)
+                comboRef.current = 1;
                 setCombo(1); // Reset kombo kembali ke x1
+                activeDragHoversRef.current.clear();
+                setHoveredBins(new Set());
+                setShakingBins(new Set());
                 setGameOver(false);
               }}
               className="px-8 py-4 short:px-4 short:py-2 bg-gradient-to-b from-emerald-400 to-emerald-600 rounded-2xl border-4 short:border-2 border-white/50 text-white font-bubbly text-3xl short:text-xl shadow-[0_6px_0_rgba(6,78,59,0.8)]"
@@ -499,27 +542,38 @@ export default function CariSampah({ onClose, onGoHome, playClickSound, currentG
 }
 
 // Sub-component for individual trash items
-function FlowingTrashItem({ trash, onDrag, onDragEnd, onMissed }) {
+function FlowingTrashItem({ trash, onDrag, onDragEnd, onDragCancel, onMissed }) {
   const [isDragging, setIsDragging] = useState(false);
-  const [hasMissed, setHasMissed] = useState(false);
+  const dragRef = useRef(null);
+  const sessionRef = useRef(null);
+  const hasMissedRef = useRef(false);
+  const flowRunIdRef = useRef(0);
+  const dragX = useMotionValue(0);
+  const dragY = useMotionValue(0);
+  const dragScale = useMotionValue(1);
   
   const wrapperControls = useAnimation();
   const bobControls = useAnimation();
 
   const stopAnimation = () => {
+    flowRunIdRef.current += 1;
     wrapperControls.stop();
     bobControls.stop();
   };
 
   const resumeAnimation = () => {
+    const runId = flowRunIdRef.current + 1;
+    flowRunIdRef.current = runId;
+
     // Lanjutkan animasi dari posisi saat ini
     wrapperControls.start({
       x: "-140vw",
       transition: { duration: trash.speed, ease: "linear" }
     }).then(() => {
+      if (flowRunIdRef.current !== runId) return;
       // Jika animasi selesai (sampai ujung layar)
-      if (!hasMissed) {
-        setHasMissed(true);
+      if (!hasMissedRef.current) {
+        hasMissedRef.current = true;
         onMissed(trash.uid);
       }
     });
@@ -533,23 +587,96 @@ function FlowingTrashItem({ trash, onDrag, onDragEnd, onMissed }) {
 
   useEffect(() => {
     resumeAnimation();
+    return () => stopAnimation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handlePointerDown = () => {
-    stopAnimation();
-  };
-
-  const handleDragStart = () => {
-    setIsDragging(true);
-    stopAnimation();
-  };
-
-  const handleDragEnd = (e, info) => {
+  const resetDragVisuals = () => {
+    dragScale.set(1);
     setIsDragging(false);
-    onDragEnd(e, info, trash.uid, trash.category);
-    // Jika tidak dilempar ke tong dan masih ada, lanjutkan aliran
+  };
+
+  const handlePointerDown = (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (sessionRef.current) return;
+
+    const el = dragRef.current;
+    if (!el) return;
+
+    e.stopPropagation();
+    stopAnimation();
+
+    sessionRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialX: dragX.get(),
+      initialY: dragY.get(),
+    };
+
+    try {
+      el.setPointerCapture(e.pointerId);
+    } catch {
+      // PointerId tracking still keeps this item independent on older browsers.
+    }
+
+    setIsDragging(true);
+    dragScale.set(1.35);
+    onDrag(trash.uid, e.clientX, e.clientY);
+  };
+
+  const handlePointerMove = (e) => {
+    const session = sessionRef.current;
+    if (!session || session.pointerId !== e.pointerId) return;
+
+    dragX.set(session.initialX + e.clientX - session.startX);
+    dragY.set(session.initialY + e.clientY - session.startY);
+    onDrag(trash.uid, e.clientX, e.clientY);
+  };
+
+  const releasePointer = (pointerId) => {
+    const el = dragRef.current;
+    if (el) {
+      try {
+        el.releasePointerCapture(pointerId);
+      } catch {
+        // Pointer capture may already be released by the browser.
+      }
+    }
+  };
+
+  const snapBackAndResume = () => {
+    animate(dragX, 0, { type: "spring", stiffness: 300, damping: 20 });
+    animate(dragY, 0, { type: "spring", stiffness: 300, damping: 20 });
     resumeAnimation();
+  };
+
+  const handlePointerUp = (e) => {
+    const session = sessionRef.current;
+    if (!session || session.pointerId !== e.pointerId) return;
+
+    e.stopPropagation();
+    releasePointer(e.pointerId);
+    sessionRef.current = null;
+    resetDragVisuals();
+
+    const shouldResume = onDragEnd(trash.uid, trash.category, e.clientX, e.clientY);
+    if (shouldResume !== false) {
+      snapBackAndResume();
+    } else {
+      hasMissedRef.current = true;
+    }
+  };
+
+  const handlePointerCancel = (e) => {
+    const session = sessionRef.current;
+    if (!session || session.pointerId !== e.pointerId) return;
+
+    releasePointer(e.pointerId);
+    sessionRef.current = null;
+    resetDragVisuals();
+    onDragCancel(trash.uid);
+    snapBackAndResume();
   };
 
   return (
@@ -568,16 +695,15 @@ function FlowingTrashItem({ trash, onDrag, onDragEnd, onMissed }) {
         style={{ pointerEvents: 'none' }}
       >
         <motion.div
-          drag
-          dragSnapToOrigin={true}
-          dragMomentum={false}
-          dragElastic={0.05}
+          ref={dragRef}
           onPointerDown={handlePointerDown}
-          onDragStart={handleDragStart}
-          onDrag={onDrag}
-          onDragEnd={handleDragEnd}
-          whileDrag={{ scale: 1.35 }}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
           style={{
+            x: dragX,
+            y: dragY,
+            scale: dragScale,
             touchAction: 'none',
             cursor: 'grab',
             pointerEvents: 'auto',

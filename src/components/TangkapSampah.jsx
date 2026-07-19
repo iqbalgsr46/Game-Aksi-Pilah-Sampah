@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useMotionValue } from 'framer-motion';
 import { TRASH_TYPES } from './TrashItems';
 import { saveScore } from '../utils/leaderboard';
 
@@ -66,20 +66,113 @@ const FallingTrashItem = ({ trash }) => {
   );
 };
 
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+function DraggableBin({ dragContainerRef, children }) {
+  const wrapperRef = useRef(null);
+  const sessionRef = useRef(null);
+  const x = useMotionValue(0);
+  const scale = useMotionValue(1);
+  const [zIndex, setZIndex] = useState(10);
+
+  const finishDrag = useCallback((e) => {
+    const session = sessionRef.current;
+    if (!session || session.pointerId !== e.pointerId) return;
+
+    const el = wrapperRef.current;
+    if (el) {
+      try {
+        el.releasePointerCapture(e.pointerId);
+      } catch {
+        // Pointer capture may already be released by the browser.
+      }
+    }
+
+    sessionRef.current = null;
+    scale.set(1);
+    setZIndex(10);
+  }, [scale]);
+
+  const handlePointerDown = useCallback((e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (sessionRef.current) return;
+
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    e.stopPropagation();
+
+    const boundsRect = dragContainerRef.current?.getBoundingClientRect() ?? {
+      left: 0,
+      right: window.innerWidth,
+    };
+    const rect = el.getBoundingClientRect();
+    const initialX = x.get();
+
+    sessionRef.current = {
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      initialX,
+      minX: initialX + boundsRect.left - rect.left,
+      maxX: initialX + boundsRect.right - rect.right,
+    };
+
+    try {
+      el.setPointerCapture(e.pointerId);
+    } catch {
+      // Older mobile browsers can ignore capture; pointerId checks still protect each drag.
+    }
+
+    scale.set(1.05);
+    setZIndex(999);
+  }, [dragContainerRef, scale, x]);
+
+  const handlePointerMove = useCallback((e) => {
+    const session = sessionRef.current;
+    if (!session || session.pointerId !== e.pointerId) return;
+
+    const nextX = session.initialX + e.clientX - session.startX;
+    x.set(clamp(nextX, session.minX, session.maxX));
+  }, [x]);
+
+  return (
+    <motion.div
+      ref={wrapperRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={finishDrag}
+      onPointerCancel={finishDrag}
+      className="cursor-grab active:cursor-grabbing"
+      style={{
+        x,
+        scale,
+        zIndex,
+        position: 'relative',
+        touchAction: 'none',
+        pointerEvents: 'auto',
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function TangkapSampah({ currentGroupName, onSaveSessionScore, onClose, onGoHome, playClickSound }) {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(5);
   const [activeTrash, setActiveTrash] = useState([]);
   const [dropAnimations, setDropAnimations] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-  const [shakingBin, setShakingBin] = useState(null);
+  const [shakingBins, setShakingBins] = useState(new Set());
   const [combo, setCombo] = useState(1);
   const [floatingScores, setFloatingScores] = useState([]);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameId, setGameId] = useState(0); // State untuk mereset posisi tong
   
   const scoreRef = useRef(score);
+  const activeTrashRef = useRef(activeTrash);
   useEffect(() => { scoreRef.current = score; }, [score]);
+  useEffect(() => { activeTrashRef.current = activeTrash; }, [activeTrash]);
   const hasSavedRef = useRef(false); // mencegah penyimpanan ganda
   
   const comboRef = useRef(combo);
@@ -179,15 +272,18 @@ export default function TangkapSampah({ currentGroupName, onSaveSessionScore, on
       const baseSpeed = Math.max(3, 8 - (diffMultiplier * 0.8));
       const speed = baseSpeed + Math.random() * 2;
 
-      setActiveTrash(prev => [
-        ...prev, 
-        { 
-          uid: Date.now() + Math.random(), 
-          ...randomTrash,
-          startX,
-          speed
-        }
-      ]);
+      const nextTrash = { 
+        uid: Date.now() + Math.random(), 
+        ...randomTrash,
+        startX,
+        speed
+      };
+
+      setActiveTrash(prev => {
+        const next = [...prev, nextTrash];
+        activeTrashRef.current = next;
+        return next;
+      });
 
       // Interval between spawns gets faster
       const nextInterval = Math.max(800, 2500 - (diffMultiplier * 300));
@@ -200,73 +296,81 @@ export default function TangkapSampah({ currentGroupName, onSaveSessionScore, on
 
   // Handle Logic inside the game loop to avoid stale closure issues
   const handleCaught = useCallback((uid, category, binType, trashRect) => {
-    setActiveTrash(prev => {
-      const caughtItem = prev.find(t => t.uid === uid);
-      if (!caughtItem) return prev; // Already handled
+    const caughtItem = activeTrashRef.current.find(t => t.uid === uid);
+    if (!caughtItem) return; // Already handled
 
-      // Trigger effects
-      if (category === binType) {
-        // Benar
-        playSuccessSound();
-        const currentCombo = comboRef.current;
-        const earnedScore = 10 * currentCombo;
-        setScore(s => s + earnedScore);
-        
-        if (currentCombo > 0 && currentCombo % 10 === 0) {
-          setLives(l => (l < 5 ? l + 1 : l));
-        }
-        
-        const newCombo = currentCombo + 1;
-        setCombo(newCombo);
-        
-        setFloatingScores(fs => [...fs, {
-          id: Date.now(),
-          x: trashRect.left + (trashRect.width / 2),
-          y: trashRect.top,
-          text: newCombo > 2 ? `+${earnedScore} COMBO x${currentCombo}!` : `+${earnedScore}`,
-          isCombo: newCombo > 2
-        }]);
+    const nextTrash = activeTrashRef.current.filter(t => t.uid !== uid);
+    activeTrashRef.current = nextTrash;
+    setActiveTrash(nextTrash);
 
-        setTimeout(() => setFloatingScores(fs => fs.slice(1)), 1000);
-        
-        setDropAnimations(da => [...da, {
-          id: uid,
-          Component: caughtItem.Component,
-          x: trashRect.left + (trashRect.width / 2),
-          y: trashRect.top + (trashRect.height / 2)
-        }]);
-        setTimeout(() => setDropAnimations(da => da.filter(anim => anim.id !== uid)), 1000);
+    if (category === binType) {
+      // Benar
+      playSuccessSound();
+      const currentCombo = comboRef.current;
+      const earnedScore = 10 * currentCombo;
+      const newCombo = currentCombo + 1;
+      const floatingId = Date.now() + Math.random();
 
-      } else {
-        // Salah
-        playRejectSound();
-        setCombo(1);
-        setShakingBin(binType);
-        setTimeout(() => setShakingBin(null), 500);
-        setLives(l => {
-          const newLives = l - 1;
-          if (newLives <= 0) setGameOver(true);
-          return newLives;
-        });
-      }
-
-      return prev.filter(t => t.uid !== uid);
-    });
-  }, [playSuccessSound, playRejectSound]);
-
-  const handleMissed = useCallback((uid) => {
-    setActiveTrash(prev => {
-      const missedItem = prev.find(t => t.uid === uid);
-      if (!missedItem) return prev; // Already handled
+      comboRef.current = newCombo;
+      setCombo(newCombo);
+      setScore(s => s + earnedScore);
       
+      if (currentCombo > 0 && currentCombo % 10 === 0) {
+        setLives(l => (l < 5 ? l + 1 : l));
+      }
+      
+      setFloatingScores(fs => [...fs, {
+        id: floatingId,
+        x: trashRect.left + (trashRect.width / 2),
+        y: trashRect.top,
+        text: newCombo > 2 ? `+${earnedScore} COMBO x${currentCombo}!` : `+${earnedScore}`,
+        isCombo: newCombo > 2
+      }]);
+
+      setTimeout(() => setFloatingScores(fs => fs.filter(scoreItem => scoreItem.id !== floatingId)), 1000);
+      
+      setDropAnimations(da => [...da, {
+        id: uid,
+        Component: caughtItem.Component,
+        x: trashRect.left + (trashRect.width / 2),
+        y: trashRect.top + (trashRect.height / 2)
+      }]);
+      setTimeout(() => setDropAnimations(da => da.filter(anim => anim.id !== uid)), 1000);
+    } else {
+      // Salah
+      playRejectSound();
+      comboRef.current = 1;
       setCombo(1);
+      setShakingBins(prev => new Set(prev).add(binType));
+      setTimeout(() => {
+        setShakingBins(prev => {
+          const next = new Set(prev);
+          next.delete(binType);
+          return next;
+        });
+      }, 500);
       setLives(l => {
         const newLives = l - 1;
         if (newLives <= 0) setGameOver(true);
         return newLives;
       });
-      return prev.filter(t => t.uid !== uid);
+    }
+  }, [playSuccessSound, playRejectSound]);
+
+  const handleMissed = useCallback((uid) => {
+    const missedItem = activeTrashRef.current.find(t => t.uid === uid);
+    if (!missedItem) return; // Already handled
+    
+    comboRef.current = 1;
+    setCombo(1);
+    setLives(l => {
+      const newLives = l - 1;
+      if (newLives <= 0) setGameOver(true);
+      return newLives;
     });
+    const nextTrash = activeTrashRef.current.filter(t => t.uid !== uid);
+    activeTrashRef.current = nextTrash;
+    setActiveTrash(nextTrash);
   }, []);
 
   // GAME LOOP for Collision Detection
@@ -423,61 +527,43 @@ export default function TangkapSampah({ currentGroupName, onSaveSessionScore, on
         <div key={gameId} className="absolute bottom-0 left-0 w-full flex justify-center items-end gap-12 md:gap-32 short:gap-6 pointer-events-auto pb-4 short:pb-2">
           
           {/* Organik Bin */}
-          <motion.div 
-            drag="x"
-            dragConstraints={dragContainerRef}
-            dragElastic={0.1}
-            dragMomentum={false}
-            className="cursor-grab active:cursor-grabbing"
-          >
+          <DraggableBin dragContainerRef={dragContainerRef}>
             <motion.div 
               ref={organikRef} 
               className="flex flex-col items-center"
-              animate={shakingBin === 'Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : { x: 0 }}
-              transition={{ duration: shakingBin === 'Organik' ? 0.4 : 0.2 }}
+              animate={shakingBins.has('Organik') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : { x: 0 }}
+              transition={{ duration: shakingBins.has('Organik') ? 0.4 : 0.2 }}
             >
               <img src="/assets/images/Sampah Organik.png" alt="Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)] pointer-events-none" />
               <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md pointer-events-none">Organik</span>
             </motion.div>
-          </motion.div>
+          </DraggableBin>
           
           {/* Non Organik Bin */}
-          <motion.div 
-            drag="x"
-            dragConstraints={dragContainerRef}
-            dragElastic={0.1}
-            dragMomentum={false}
-            className="cursor-grab active:cursor-grabbing"
-          >
+          <DraggableBin dragContainerRef={dragContainerRef}>
             <motion.div 
               ref={nonOrganikRef} 
               className="flex flex-col items-center"
-              animate={shakingBin === 'Non Organik' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : { x: 0 }}
-              transition={{ duration: shakingBin === 'Non Organik' ? 0.4 : 0.2 }}
+              animate={shakingBins.has('Non Organik') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : { x: 0 }}
+              transition={{ duration: shakingBins.has('Non Organik') ? 0.4 : 0.2 }}
             >
               <img src="/assets/images/Sampah Non Organik.png" alt="Non Organik" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)] pointer-events-none" />
               <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md pointer-events-none">Non Organik</span>
             </motion.div>
-          </motion.div>
+          </DraggableBin>
           
           {/* B3 Bin */}
-          <motion.div 
-            drag="x"
-            dragConstraints={dragContainerRef}
-            dragElastic={0.1}
-            dragMomentum={false}
-            className="cursor-grab active:cursor-grabbing"
-          >
+          <DraggableBin dragContainerRef={dragContainerRef}>
             <motion.div 
               ref={b3Ref} 
               className="flex flex-col items-center"
-              animate={shakingBin === 'B3' ? { x: [-10, 10, -10, 10, -5, 5, 0] } : { x: 0 }}
-              transition={{ duration: shakingBin === 'B3' ? 0.4 : 0.2 }}
+              animate={shakingBins.has('B3') ? { x: [-10, 10, -10, 10, -5, 5, 0] } : { x: 0 }}
+              transition={{ duration: shakingBins.has('B3') ? 0.4 : 0.2 }}
             >
               <img src="/assets/images/Sampah B3.png" alt="B3" className="w-32 h-40 md:w-48 md:h-60 short:w-20 short:h-28 object-contain drop-shadow-[0_20px_15px_rgba(0,0,0,0.5)] pointer-events-none" />
               <span className="mt-4 short:mt-1 px-4 py-2 short:px-2 short:py-1 bg-black/60 backdrop-blur-sm text-white font-bubbly text-xl md:text-2xl short:text-base rounded-xl border-2 border-white/30 whitespace-nowrap drop-shadow-md pointer-events-none">B3</span>
             </motion.div>
-          </motion.div>
+          </DraggableBin>
 
         </div>
 
@@ -529,9 +615,12 @@ export default function TangkapSampah({ currentGroupName, onSaveSessionScore, on
                 hasSavedRef.current = false;
                 setScore(0);
                 setLives(5);
+                activeTrashRef.current = [];
                 setActiveTrash([]);
                 setTimeLeft(60);
+                comboRef.current = 1;
                 setCombo(1);
+                setShakingBins(new Set());
                 setGameOver(false);
                 setGameId(id => id + 1);
               }}
