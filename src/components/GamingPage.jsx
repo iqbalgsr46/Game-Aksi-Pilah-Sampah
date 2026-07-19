@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const MenuItem = ({ icon, label }) => (
+  <div className="flex items-center gap-6 px-10 py-3 cursor-pointer hover:bg-white/10 transition-colors group">
+    <span className="material-symbols-outlined text-[26px] text-gray-300 group-hover:text-white" style={{ fontVariationSettings: "'FILL' 1" }}>{icon}</span>
+    <span className="text-[19px] font-medium text-[#dcdedf] group-hover:text-white tracking-wide">{label}</span>
+  </div>
+);
 
 export default function GamingPage({ onClose, onRunGame }) {
   const [time, setTime] = useState("");
   const [battery, setBattery] = useState({ level: 100, charging: false, supported: true });
   const [wifi, setWifi] = useState({ online: navigator.onLine });
   const [playStats, setPlayStats] = useState({ lastPlayed: 'Belum pernah', playTimeStr: '0 jam' });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   useEffect(() => {
     // Load Play Stats
@@ -189,7 +197,7 @@ export default function GamingPage({ onClose, onRunGame }) {
       {/* Bottom Footer */}
       <div className="h-[72px] bg-[#1a1c21] border-t border-[#2d313a] flex items-center justify-between px-12 flex-shrink-0 z-40 relative">
          <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: 'inset 0 10px 15px -3px rgba(0, 0, 0, 0.2)' }}></div>
-         <div className="flex items-center gap-3 cursor-pointer group relative z-10">
+         <div className="flex items-center gap-3 cursor-pointer group relative z-10" onClick={() => setIsMenuOpen(true)}>
             <div className="bg-white rounded-full px-5 py-1.5 flex items-center justify-center">
               <span className="text-[#1a1c21] font-black text-[13px] uppercase tracking-[0.1em]">Gaming</span>
             </div>
@@ -208,6 +216,53 @@ export default function GamingPage({ onClose, onRunGame }) {
          </div>
       </div>
       
+      {/* Sidebar Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <div className="absolute inset-0 z-[100] flex">
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            
+            {/* Sidebar */}
+            <motion.div 
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative w-[340px] h-full bg-[#131519] flex flex-col shadow-2xl"
+            >
+               <div className="flex-1 overflow-y-auto py-10 flex flex-col gap-1 mt-6">
+                 <MenuItem icon="home" label="Beranda" />
+                 <MenuItem icon="grid_view" label="Perpustakaan" />
+                 <MenuItem icon="sell" label="Toko" />
+                 <MenuItem icon="group" label="Teman &amp; Obrolan" />
+                 <MenuItem icon="image" label="Media" />
+                 <MenuItem icon="download" label="Unduhan" />
+                 <MenuItem icon="settings" label="Pengaturan" />
+                 <MenuItem icon="power_settings_new" label="Daya" />
+               </div>
+               
+               {/* Bottom Button matching the footer */}
+               <div className="h-[72px] flex items-center px-12 cursor-pointer border-t border-transparent" onClick={() => setIsMenuOpen(false)}>
+                  <div className="flex items-center gap-3 group relative z-10">
+                    <div className="bg-white rounded-full px-5 py-1.5 flex items-center justify-center shadow-lg">
+                      <span className="text-[#1a1c21] font-black text-[13px] uppercase tracking-[0.1em]">Gaming</span>
+                    </div>
+                    <span className="text-white font-bold tracking-[0.15em] uppercase text-[15px] group-hover:text-gray-300">Menu</span>
+                  </div>
+               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
     </motion.div>
   );
 }
