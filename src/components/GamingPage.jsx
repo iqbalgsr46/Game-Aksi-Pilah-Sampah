@@ -128,11 +128,32 @@ export default function GamingPage({ onClose, onRunGame }) {
 
       {/* Hero Banner Section */}
       <div className="relative w-full h-[55%] min-h-[400px] flex-shrink-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1b1d22]/90 via-transparent to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1b1d22] via-[#1b1d22]/80 to-transparent z-10 pointer-events-none"></div>
         <div className="absolute bottom-0 w-full h-[200px] bg-gradient-to-t from-[#1b1d22] via-[#1b1d22]/80 to-transparent z-10 pointer-events-none"></div>
         
         {/* Banner Image */}
         <img src="/assets/images/banner-gaming-mode.png" alt="Game Banner" className="w-full h-full object-cover object-center brightness-90" />
+
+        {/* Game Info Overlay */}
+        <div className="absolute bottom-16 left-12 z-20 flex flex-col gap-5 max-w-3xl">
+          <div className="flex items-center gap-6">
+            <img src="/assets/images/logo.png" alt="Logo" className="w-32 h-32 rounded-2xl shadow-xl object-cover border-[1px] border-white/10" />
+            <div className="flex flex-col">
+              <h1 className="text-5xl font-extrabold text-white mb-2 tracking-wide drop-shadow-lg">Game Aksi Pilah Sampah</h1>
+              <p className="text-[#38bdf8] font-bold text-[17px] mb-2 drop-shadow">balsdev Corporation</p>
+              <div className="flex items-center text-gray-300 text-[15px] font-medium gap-4 drop-shadow">
+                <span className="flex items-center gap-1 text-white font-bold"><span className="text-[17px]">5.0</span> ☆</span>
+                <span>290k rating</span>
+                <span>Action & adventure + 5</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-gray-300 text-[15px] mt-2 flex flex-col gap-1.5 drop-shadow-md">
+            <p className="uppercase tracking-wide font-semibold text-gray-200">GAME AKSI PILAH SAMPAH - GREAT GAMES ACROSS EVERY GENRE. PLAY FREE</p>
+            <p>The range of modes on this game is unmatched. Relax with sorting, catching, and finding...</p>
+          </div>
+        </div>
       </div>
 
       {/* Main Container for the rest */}
