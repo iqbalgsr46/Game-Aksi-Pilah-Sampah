@@ -107,19 +107,13 @@ export default function PortalPage({ onRunGame }) {
              <span className="text-[12px] mt-1 font-semibold tracking-wide">Themes</span>
           </div>
         </div>
-        <div className="flex flex-col gap-6 w-full items-center mb-4">
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
-             <span className="material-symbols-outlined text-[22px]">notifications</span>
-             <span className="text-[10px] mt-1 font-medium text-center leading-tight">What's New</span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
-             <span className="material-symbols-outlined text-[22px]">download</span>
-             <span className="text-[10px] mt-1 font-medium">Downloads</span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-400">
-             <span className="material-symbols-outlined text-[22px]">library_books</span>
-             <span className="text-[10px] mt-1 font-medium">Library</span>
-          </div>
+        <div className="flex flex-col gap-6 w-full items-center mb-6">
+          <a href="https://github.com/iqbalgsr46/Game-Aksi-Pilah-Sampah" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center cursor-pointer group hover:opacity-80 transition-opacity">
+             <div className="w-[30px] h-[30px] rounded-full overflow-hidden flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300 bg-transparent">
+               <img src="/assets/images/github-premium.png" alt="GitHub" className="w-full h-full object-contain drop-shadow-md" />
+             </div>
+             <span className="text-[10px] mt-2 font-medium text-gray-400 group-hover:text-white transition-colors">GitHub</span>
+          </a>
         </div>
       </aside>
 
