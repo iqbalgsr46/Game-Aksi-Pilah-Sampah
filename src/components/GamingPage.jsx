@@ -13,7 +13,7 @@ const GamepadLoadingOverlay = () => (
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
     exit={{ opacity: 0, scale: 35 }}
-    transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+    transition={{ duration: 1.2, ease: "easeInOut" }}
     className="fixed inset-0 z-[9999] bg-[radial-gradient(ellipse_at_center,_#1c202a_0%,_#090a0d_100%)] flex items-center justify-center"
   >
     <svg width="320" height="320" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,7 +66,7 @@ export default function GamingPage({ onClose, onRunGame, playClickSound }) {
       // Wait for zoom animation to finish before unmounting page
       setTimeout(() => {
         onRunGame();
-      }, 700);
+      }, 1200);
     }, 2500);
   };
 
