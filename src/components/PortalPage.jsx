@@ -9,8 +9,40 @@ const scrollVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.25, 0.1, 0.25, 1] } }
 };
 
+const GamepadLoadingOverlay = () => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.3 }}
+    className="fixed inset-0 z-[9999] bg-[radial-gradient(ellipse_at_center,_#1c202a_0%,_#090a0d_100%)] flex items-center justify-center"
+  >
+    <svg width="160" height="160" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <motion.path
+        d="M22 42 C 22 28, 32 24, 50 24 C 68 24, 78 28, 78 42 L 82 62 C 84 70, 78 74, 72 72 C 67 70, 65 65, 62 62 L 58 58 C 55 55, 45 55, 42 58 L 38 62 C 35 65, 33 70, 28 72 C 22 74, 16 70, 18 62 Z"
+        stroke="white"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0, opacity: 0.2 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+      />
+      <motion.circle
+        cx="50" cy="36" r="4"
+        stroke="white"
+        strokeWidth="2.5"
+        initial={{ opacity: 0.2, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1.1 }}
+        transition={{ duration: 0.8, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
+      />
+    </svg>
+  </motion.div>
+);
+
 export default function PortalPage({ onRunGame, onOpenGaming }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const [isTransitioningToGaming, setIsTransitioningToGaming] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [isReviewsExpanded, setIsReviewsExpanded] = useState(false);
@@ -83,8 +115,18 @@ export default function PortalPage({ onRunGame, onOpenGaming }) {
     onRunGame();
   };
 
+  const handleOpenGamingClick = () => {
+    setIsTransitioningToGaming(true);
+    setTimeout(() => {
+      onOpenGaming();
+    }, 2500);
+  };
+
   return (
     <div className="flex h-screen w-screen bg-[#202020] text-gray-100 font-sans overflow-hidden">
+      <AnimatePresence>
+        {isTransitioningToGaming && <GamepadLoadingOverlay key="loading-overlay" />}
+      </AnimatePresence>
       {/* Sidebar - Hidden on mobile, visible on medium+ */}
       <aside className="hidden md:flex w-[72px] flex-col items-center py-2 bg-[#202020] border-r border-[#333] flex-shrink-0 z-20">
         <div className="mb-6 w-full flex justify-center mt-3">
@@ -98,7 +140,7 @@ export default function PortalPage({ onRunGame, onOpenGaming }) {
              <span className="material-symbols-outlined text-[26px]">dashboard_customize</span>
              <span className="text-[12px] mt-1 font-semibold tracking-wide">Apps</span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300" onClick={onOpenGaming}>
+          <div className="flex flex-col items-center cursor-pointer group hover:text-white text-gray-300" onClick={handleOpenGamingClick}>
              <span className="material-symbols-outlined text-[26px]">sports_esports</span>
              <span className="text-[12px] mt-1 font-semibold tracking-wide">Gaming</span>
           </div>
