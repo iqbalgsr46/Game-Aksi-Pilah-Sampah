@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ReviewsModal from './ReviewsModal';
 import TrashBinModal from './TrashBinModal';
 import { TRASH_TYPES } from './TrashItems';
 
@@ -13,8 +12,10 @@ export default function PortalPage({ onRunGame }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [selectedScreenshot, setSelectedScreenshot] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const [isReviewsExpanded, setIsReviewsExpanded] = useState(false);
   const [selectedTrashBin, setSelectedTrashBin] = useState(null);
+  const [isDescExpanded, setIsDescExpanded] = useState(false);
+  const [isSysReqExpanded, setIsSysReqExpanded] = useState(false);
   const screenshots = [1, 2, 3, 4, 5, 6];
 
   const handleCopyLink = () => {
@@ -128,20 +129,34 @@ export default function PortalPage({ onRunGame }) {
         <main className="flex-1 overflow-y-auto scrollbar-hide" onScroll={handleScroll}>
            {/* Banner / Hero */}
            <div className="relative w-full h-[400px]">
-              {/* Background Image & Gradient */}
+              {/* Background Image & Video */}
               <div className="absolute inset-0 bg-[#202020]">
-                {/* Background video on the right */}
-                <video 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  className="absolute top-0 right-0 w-3/4 h-full object-cover opacity-60 pointer-events-none"
+                {/* Masked Background video */}
+                <div 
+                  className="absolute top-0 right-0 w-[85%] h-full pointer-events-none"
+                  style={{
+                    maskImage: 'linear-gradient(to right, transparent 0%, black 40%, black 85%, transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 40%, black 85%, transparent 100%)'
+                  }}
                 >
-                  <source src="/assets/videos/Lake_with_purple_mountains_twilight_202607181509.mp4" type="video/mp4" />
-                </video>
-                {/* Gradient Fade */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#202020] via-[#202020] to-transparent w-[65%] z-0"></div>
+                  <div 
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                      maskImage: 'linear-gradient(to top, transparent 0%, black 25%, black 100%)',
+                      WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 25%, black 100%)'
+                    }}
+                  >
+                    <video 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline 
+                      className="w-full h-full object-cover opacity-60"
+                    >
+                      <source src="/assets/videos/Lake_with_purple_mountains_twilight_202607181509.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                </div>
               </div>
               
               {/* Hero Content */}
@@ -288,13 +303,84 @@ export default function PortalPage({ onRunGame }) {
                      <h2 className="text-[15px] font-bold text-white">Description</h2>
                    </div>
                    <div className="p-5 text-[13px] text-gray-300 leading-relaxed bg-[#202020]">
-                      <p className="uppercase tracking-wide mb-2 text-gray-200">GAME AKSI PILAH SAMPAH - GREAT GAMES ACROSS EVERY GENRE. PLAY FREE</p>
-                      Permainan Edukasi Pilah Sampah ini adalah permainan edukasi tentang pemilahan dan pengolahan sampah.
-                      Permainan board game bertema lingkungan ini bertujuan untuk mengedukasi pemainnya agar lebih cinta dan peduli lingkungan. <br/><br/>
-                      Terdapat beberapa mode permainan seru yang bisa Anda nikmati. Tantang dirimu untuk memisahkan sampah dengan benar dan selamatkan bumi kita!
+                      {!isDescExpanded ? (
+                        <>
+                          <p className="uppercase tracking-wide mb-2 text-gray-200">GAME AKSI PILAH SAMPAH - GREAT GAMES ACROSS EVERY GENRE. PLAY FREE</p>
+                          Permainan Edukasi Pilah Sampah ini adalah permainan edukasi tentang pemilahan dan pengolahan sampah.
+                          Permainan board game bertema lingkungan ini bertujuan untuk mengedukasi pemainnya agar lebih cinta dan peduli lingkungan. <br/><br/>
+                          Terdapat beberapa mode permainan seru yang bisa Anda nikmati. Tantang dirimu untuk memisahkan sampah dengan benar dan selamatkan bumi kita!
+                        </>
+                      ) : (
+                        <div className="flex flex-col gap-4">
+                          <p className="uppercase tracking-wide text-gray-200">GAME AKSI PILAH SAMPAH – BERMAIN SAMBIL MENYELAMATKAN BUMI. MAIN GRATIS</p>
+                          <p>Permainan Edukasi Pilah Sampah ini adalah permainan edukasi tentang pemilahan dan pengolahan sampah. Permainan board game bertema lingkungan ini bertujuan untuk mengedukasi pemainnya agar lebih cinta dan peduli lingkungan.</p>
+                          <p>Tantang dirimu dengan berbagai mode permainan seru. Pisahkan sampah organik, anorganik, dan B3 dengan tepat, pelajari cara daur ulang, dan jadilah pahlawan lingkungan. Temukan berbagai jenis tempat sampah dan sampah yang sering kita temui sehari-hari.</p>
+                          <p>Mulai mainkan Game Aksi Pilah Sampah hari ini dan kumpulkan poin kepedulian lingkungan sebanyak-banyaknya untuk membuka berbagai wawasan baru tentang pelestarian alam.</p>
+                          
+                          <p className="uppercase tracking-wide text-gray-200 mt-2">APA YANG BISA KAMU LAKUKAN DI GAME INI</p>
+                          
+                          <div>
+                            <p className="font-bold text-gray-200 mb-1">TEMUKAN CARA BARU BELAJAR LINGKUNGAN</p>
+                            <ul className="list-disc pl-5 space-y-1">
+                              <li>Selami petualangan mengumpulkan dan memilah sampah yang berserakan</li>
+                              <li>Jelajahi berbagai jenis sampah: Organik, Anorganik, Kertas, Plastik, dan B3</li>
+                              <li>Berpacu dengan waktu untuk menyelamatkan lingkungan dengan cara yang menyenangkan</li>
+                            </ul>
+                          </div>
+
+                          <div>
+                            <p className="font-bold text-gray-200 mb-1">KENALI MACAM-MACAM TEMPAT SAMPAH</p>
+                            <ul className="list-disc pl-5 space-y-1">
+                              <li>Pelajari fungsi dari setiap warna tempat sampah dengan detail</li>
+                              <li>Baca informasi edukatif tentang bahan berbahaya dan beracun (B3)</li>
+                              <li>Pahami cara pengolahan sampah untuk masa depan yang lebih baik</li>
+                            </ul>
+                          </div>
+
+                          <div>
+                            <p className="font-bold text-gray-200 mb-1">BERMAIN KAPAN SAJA, DI MANA SAJA</p>
+                            <ul className="list-disc pl-5 space-y-1">
+                              <li>Mainkan di handphone, tablet, maupun komputer kamu</li>
+                              <li>Nikmati interaksi layar sentuh yang responsif (mendukung fitur multi-touch)</li>
+                            </ul>
+                          </div>
+
+                          <div>
+                            <p className="font-bold text-gray-200 mb-1">COCOK UNTUK SEMUA UMUR</p>
+                            <ul className="list-disc pl-5 space-y-1">
+                              <li>Grafis visual yang ramah anak dan antarmuka yang mudah dipahami</li>
+                              <li>Animasi interaktif yang membuat proses belajar tidak membosankan</li>
+                            </ul>
+                          </div>
+
+                          <div>
+                            <p className="font-bold text-gray-200 mb-1">KEAMANAN & EDUKASI TERJAMIN</p>
+                            <ul className="list-disc pl-5 space-y-1">
+                              <li>Dirancang khusus sebagai media pembelajaran interaktif (serious game)</li>
+                              <li>Membantu orang tua dan guru dalam mengajarkan kepedulian lingkungan sejak dini</li>
+                              <li>Lingkungan bermain yang aman, positif, dan penuh dengan pesan edukasi</li>
+                            </ul>
+                          </div>
+
+                          <div className="flex flex-col gap-1 mt-2 text-[12px] text-gray-400">
+                            <p>MAINKAN SEKARANG: https://game-aksi-pilah-sampah.vercel.app</p>
+                            <p>KATEGORI: Edukasi, Simulasi, Lingkungan</p>
+                            <p>PLATFORM: Website (Desktop & Mobile)</p>
+                            <p>KONTROL: Mouse & Layar Sentuh (Multi-touch)</p>
+                            <p>LISENSI: Gratis untuk Dimainkan (Free to Play)</p>
+                          </div>
+
+                          <p className="mt-2 text-[12px] text-gray-400">HARAP DIPERHATIKAN: Game ini berbasis website dan sepenuhnya membutuhkan koneksi internet yang stabil untuk dapat dimainkan.</p>
+                        </div>
+                      )}
                       
                       <div className="mt-6">
-                         <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">Show more</span>
+                         <span 
+                           onClick={() => setIsDescExpanded(!isDescExpanded)}
+                           className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer"
+                         >
+                           {isDescExpanded ? 'Show less' : 'Show more'}
+                         </span>
                       </div>
                    </div>
                 </motion.section>
@@ -311,25 +397,25 @@ export default function PortalPage({ onRunGame }) {
                      <span className="material-symbols-outlined text-gray-300 text-[20px]">chevron_right</span>
                    </div>
                    <div className="p-6 bg-[#202020]">
-                      <div className="flex flex-col md:flex-row gap-8 mb-8">
-                         <div className="flex flex-col justify-center items-center md:items-start">
-                            <div className="text-[52px] font-bold text-white leading-none mb-2">5.0</div>
-                            <div className="text-[11px] text-gray-400 font-semibold tracking-wide">290K RATINGS</div>
+                      <div className="flex flex-col md:flex-row gap-8 mb-8 items-center md:items-start">
+                         <div className="flex flex-col justify-center items-center md:items-start w-[140px]">
+                            <div className="text-[72px] font-normal text-white leading-none mb-2 tracking-tight">4.2</div>
+                            <div className="text-[12px] text-gray-400 font-medium tracking-wide">288 RATINGS</div>
                          </div>
-                         <div className="flex flex-col gap-2 flex-1 max-w-[280px]">
+                         <div className="flex flex-col gap-2.5 flex-1 w-full max-w-[280px]">
                             {/* Bars */}
                             {[
-                               { star: 5, percent: '100%' },
-                               { star: 4, percent: '0%' },
-                               { star: 3, percent: '0%' },
-                               { star: 2, percent: '0%' },
-                               { star: 1, percent: '0%' },
+                               { star: 5, percent: '68%' },
+                               { star: 4, percent: '10%' },
+                               { star: 3, percent: '12%' },
+                               { star: 2, percent: '4%' },
+                               { star: 1, percent: '18%' },
                             ].map((item) => (
-                               <div key={item.star} className="flex items-center gap-2 text-[11px] text-gray-300 font-medium">
-                                  <span className="w-1.5 text-right">{item.star}</span>
-                                  <span className="material-symbols-outlined text-[10px] text-[#e65100]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                                  <div className="flex-1 h-1.5 bg-[#444] rounded-full overflow-hidden ml-1">
-                                     <div className="h-full bg-[#e65100] rounded-full" style={{ width: item.percent }}></div>
+                               <div key={item.star} className="flex items-center gap-2 text-[12px] text-gray-300 font-medium">
+                                  <span className="w-2 text-right">{item.star}</span>
+                                  <span className="material-symbols-outlined text-[13px] text-[#e86a04]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                                  <div className="flex-1 h-2.5 bg-[#4d3c2b] rounded-full ml-1">
+                                     <div className="h-full bg-[#e86a04] rounded-full" style={{ width: item.percent }}></div>
                                   </div>
                                </div>
                             ))}
@@ -339,7 +425,7 @@ export default function PortalPage({ onRunGame }) {
                       <div className="flex flex-col gap-3">
                          <h3 className="text-[17px] font-bold text-white">good</h3>
                          <div className="flex items-center gap-4">
-                            <div className="flex items-center text-[#e65100]">
+                            <div className="flex items-center text-[#e86a04]">
                                {[1,2,3,4,5].map(i => (
                                  <span key={i} className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                                ))}
@@ -360,9 +446,58 @@ export default function PortalPage({ onRunGame }) {
                             </div>
                          </div>
                       </div>
+
+                      {isReviewsExpanded && (
+                        <div className="flex flex-col gap-8 mt-8 border-t border-[#333] pt-8">
+                           <div className="flex flex-col gap-3">
+                               <h3 className="text-[17px] font-bold text-white">Sangat Edukatif!</h3>
+                               <div className="flex items-center gap-4">
+                                  <div className="flex items-center text-[#e86a04]">
+                                     {[1,2,3,4,5].map(i => (
+                                       <span key={i} className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                                     ))}
+                                  </div>
+                               </div>
+                               <p className="text-[13px] text-gray-300 leading-relaxed mb-3">
+                                 Game ini sangat membantu anak saya untuk mengerti cara memilah sampah yang benar. Grafisnya bagus dan mudah dimengerti. Terima kasih!
+                               </p>
+                               <div className="flex justify-between items-center text-[12px] text-gray-400 mt-2">
+                                  <div><span className="text-gray-200 font-medium">Budi Santoso</span> <span className="ml-2">1 week ago</span></div>
+                                  <div className="flex items-center gap-3">
+                                     <span>12 people found this helpful</span>
+                                     <span className="material-symbols-outlined text-[18px] cursor-pointer hover:text-white">outlined_flag</span>
+                                  </div>
+                               </div>
+                           </div>
+                           
+                           <div className="flex flex-col gap-3">
+                               <h3 className="text-[17px] font-bold text-white">Seru banget</h3>
+                               <div className="flex items-center gap-4">
+                                  <div className="flex items-center text-[#e86a04]">
+                                     {[1,2,3,4].map(i => (
+                                       <span key={i} className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                                     ))}
+                                     <span className="material-symbols-outlined text-[13px] text-[#4d3c2b]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                                  </div>
+                               </div>
+                               <p className="text-[13px] text-gray-300 leading-relaxed mb-3">
+                                 Gamenya seru dan menantang pas level tinggi. Tapi sayang sampahnya kadang agak susah dibedakan antara kertas dan karton. Overall mantap.
+                               </p>
+                               <div className="flex justify-between items-center text-[12px] text-gray-400 mt-2">
+                                  <div><span className="text-gray-200 font-medium">Rina</span> <span className="ml-2">3 weeks ago</span></div>
+                                  <div className="flex items-center gap-3">
+                                     <span>2 people found this helpful</span>
+                                     <span className="material-symbols-outlined text-[18px] cursor-pointer hover:text-white">outlined_flag</span>
+                                  </div>
+                               </div>
+                           </div>
+                        </div>
+                      )}
                       
                       <div className="mt-8">
-                         <span onClick={() => setShowReviewsModal(true)} className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">See all</span>
+                         <span onClick={() => setIsReviewsExpanded(!isReviewsExpanded)} className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">
+                           {isReviewsExpanded ? 'Show less' : 'See all'}
+                         </span>
                       </div>
                    </div>
                 </motion.section>
@@ -412,14 +547,41 @@ export default function PortalPage({ onRunGame }) {
                    </div>
                    <div className="p-5 text-[13px] text-gray-200 bg-[#202020]">
                       <div className="flex items-start gap-3 mb-5">
-                         <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                         <div className="w-5 h-5 rounded-full bg-[#107c10] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
                             <span className="material-symbols-outlined text-white text-[16px] font-bold">check</span>
                          </div>
                          <div className="leading-relaxed">
                             This product should work on your device. Items with a checkmark meet the developer's system requirements.
                          </div>
                       </div>
-                      <span className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer">Show more</span>
+                      
+                      {isSysReqExpanded && (
+                        <div className="flex flex-col gap-4 mb-6 ml-1">
+                           <div className="flex items-center gap-3">
+                              <span className="material-symbols-outlined text-[#107c10] text-[16px]">check</span>
+                              <div className="text-gray-300"><span className="font-semibold text-white">Available on:</span> PC, Mobile, Tablet</div>
+                           </div>
+                           <div className="flex items-center gap-3">
+                              <span className="material-symbols-outlined text-[#107c10] text-[16px]">check</span>
+                              <div className="text-gray-300"><span className="font-semibold text-white">OS:</span> Any OS (Windows, macOS, Android, iOS)</div>
+                           </div>
+                           <div className="flex items-center gap-3">
+                              <span className="material-symbols-outlined text-[#107c10] text-[16px]">check</span>
+                              <div className="text-gray-300"><span className="font-semibold text-white">Browser:</span> Chrome, Edge, Safari, Firefox</div>
+                           </div>
+                           <div className="flex items-center gap-3">
+                              <span className="material-symbols-outlined text-[#107c10] text-[16px]">check</span>
+                              <div className="text-gray-300"><span className="font-semibold text-white">Architecture:</span> x64, ARM (Web-based)</div>
+                           </div>
+                        </div>
+                      )}
+
+                      <span 
+                        onClick={() => setIsSysReqExpanded(!isSysReqExpanded)}
+                        className="text-[#4CC2FF] text-[13px] hover:underline font-medium cursor-pointer"
+                      >
+                        {isSysReqExpanded ? 'Show less' : 'Show more'}
+                      </span>
                    </div>
                 </motion.section>
 
@@ -743,11 +905,6 @@ export default function PortalPage({ onRunGame }) {
         )}
       </AnimatePresence>
 
-      {/* Reviews Modal */}
-      <ReviewsModal 
-        isOpen={showReviewsModal} 
-        onClose={() => setShowReviewsModal(false)} 
-      />
 
       {/* Trash Bin Info Modal */}
       <AnimatePresence>

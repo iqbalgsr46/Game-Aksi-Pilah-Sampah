@@ -5,13 +5,26 @@ export default function TrashBinModal({ bin, onClose }) {
   if (!bin) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm"
+      onClick={onClose}
+    >
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+        exit={{ 
+          opacity: 0, 
+          scale: 0.95, 
+          y: 10,
+          transition: { duration: 0.15, ease: "easeOut" }
+        }}
+        transition={{ type: "spring", duration: 0.4, bounce: 0.3 }}
         className="bg-[#202020] border border-[#333] rounded-xl overflow-hidden w-full max-w-md shadow-2xl flex flex-col relative"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="absolute top-3 right-3 z-10">
           <button 
@@ -53,6 +66,6 @@ export default function TrashBinModal({ bin, onClose }) {
           </div>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
