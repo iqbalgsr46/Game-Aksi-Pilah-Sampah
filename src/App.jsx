@@ -158,6 +158,7 @@ function App() {
 
       {/* Global Audio Elements */}
       <audio 
+        key={gameState === 'PLAYING' ? 'bgm-game' : 'bgm-menu'}
         ref={bgmRef} 
         src={gameState === 'PLAYING' ? "/assets/audio/The_Cleanest_Sweep (1).mp3" : "/assets/audio/Sundial_on_the_Terrace.mp3"} 
         loop 
