@@ -232,10 +232,10 @@ export default function GamingPage({ onClose, onRunGame }) {
             
             {/* Sidebar */}
             <motion.div 
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
               className="relative w-[340px] h-full bg-[#131519] flex flex-col shadow-2xl"
             >
                <div className="flex-1 overflow-y-auto py-10 flex flex-col gap-1 mt-6">
