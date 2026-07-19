@@ -175,7 +175,7 @@ export default function GamingPage({ onClose, onRunGame }) {
 
          {/* Navigation Tabs */}
          <div className="px-12 flex flex-wrap items-center justify-center gap-8 mt-4">
-            {['Aktivitas', 'Milikmu', 'Komunitas', 'Info Game'].map((tab) => (
+            {['Aktivitas', 'Milikmu', 'Info Game'].map((tab) => (
                <button 
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -208,14 +208,6 @@ export default function GamingPage({ onClose, onRunGame }) {
                      <p className="font-medium text-[17px] tracking-wide text-center text-gray-300">Waktu Bermain: <span className="text-white">{playStats.playTimeStr}</span></p>
                      <p className="font-medium text-[15px] tracking-wide text-center">Terakhir Dimainkan: {playStats.lastPlayed}</p>
                      <p className="font-medium text-[14px] tracking-wide text-center mt-2 italic text-[#5cba46]">Mainkan game untuk meningkatkan statistikmu!</p>
-                  </div>
-               )}
-
-               {activeTab === 'Komunitas' && (
-                  <div className="flex flex-col items-center justify-center gap-2 text-[#686f78] h-full">
-                     <span className="material-symbols-outlined text-[40px] mb-1">forum</span>
-                     <span className="font-medium text-[17px] tracking-wide text-center">Belum ada diskusi komunitas untuk Game Aksi Pilah Sampah.</span>
-                     <span className="text-sm">Jadilah yang pertama memulai diskusi!</span>
                   </div>
                )}
 
