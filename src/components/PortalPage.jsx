@@ -157,11 +157,15 @@ export default function PortalPage({ onRunGame, onOpenGaming, playClickSound }) 
     setIsTransitioningToGaming(true);
     
     setTimeout(() => {
+      setIsTransitioningToGaming(false); // Trigger exit animation
       const endAudio = new Audio('/assets/audio/gaming_end.wav');
       endAudio.volume = 1.0;
       endAudio.play().catch(e => console.log('Audio play failed:', e));
       
-      onOpenGaming();
+      // Wait for zoom animation to finish before unmounting page
+      setTimeout(() => {
+        onOpenGaming();
+      }, 700);
     }, 2500);
   };
 

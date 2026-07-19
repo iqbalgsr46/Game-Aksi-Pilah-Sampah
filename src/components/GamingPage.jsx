@@ -58,10 +58,15 @@ export default function GamingPage({ onClose, onRunGame, playClickSound }) {
     
     setIsLoading(true);
     setTimeout(() => {
+      setIsLoading(false); // Trigger exit animation
       const endAudio = new Audio('/assets/audio/gaming_end.wav');
       endAudio.volume = 1.0;
       endAudio.play().catch(e => console.log(e));
-      onRunGame();
+      
+      // Wait for zoom animation to finish before unmounting page
+      setTimeout(() => {
+        onRunGame();
+      }, 700);
     }, 2500);
   };
 
