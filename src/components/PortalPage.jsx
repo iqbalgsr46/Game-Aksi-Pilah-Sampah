@@ -116,6 +116,16 @@ export default function PortalPage({ onRunGame, onOpenGaming }) {
   };
 
   const handleOpenGamingClick = () => {
+    try {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.log("Fullscreen ditolak oleh browser:", err);
+        });
+      }
+    } catch (error) {
+      console.log("Fullscreen tidak didukung:", error);
+    }
+
     const startAudio = new Audio('/assets/audio/gaming_start.wav');
     startAudio.volume = 1.0;
     startAudio.play().catch(e => console.log('Audio play failed:', e));
