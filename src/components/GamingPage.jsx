@@ -137,7 +137,7 @@ export default function GamingPage({ onClose, onRunGame }) {
         {/* Game Info Overlay */}
         <div className="absolute bottom-40 left-12 z-20 flex flex-col gap-5 max-w-3xl">
           <div className="flex items-center gap-6">
-            <img src="/assets/images/logo.png" alt="Logo" className="w-32 h-32 rounded-2xl shadow-xl object-cover border-[1px] border-white/10" />
+            <img src="/assets/images/pp-game.png" alt="Logo" className="w-32 h-32 rounded-2xl shadow-xl object-cover border-[1px] border-white/10" />
             <div className="flex flex-col">
               <h1 className="text-5xl font-extrabold text-white mb-2 tracking-wide drop-shadow-lg">Game Aksi Pilah Sampah</h1>
               <p className="text-[#38bdf8] font-bold text-[17px] mb-2 drop-shadow">balsdev Corporation</p>
