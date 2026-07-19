@@ -125,10 +125,54 @@ function App() {
     }
   };
 
+  const steamAudioBufferRef = useRef(null);
+
+  useEffect(() => {
+    // Preload steam click audio buffer for Web Audio API
+    fetch('/assets/audio/steam_click.wav')
+      .then(res => res.arrayBuffer())
+      .then(arrayBuffer => {
+         const AudioContext = window.AudioContext || window.webkitAudioContext;
+         if (!audioCtxRef.current) {
+           audioCtxRef.current = new AudioContext();
+         }
+         return audioCtxRef.current.decodeAudioData(arrayBuffer);
+      })
+      .then(audioBuffer => {
+         steamAudioBufferRef.current = audioBuffer;
+      })
+      .catch(e => console.log("Failed to preload steam click", e));
+  }, []);
+
   const playSteamClick = () => {
-    if (!isMuted && steamClickRef.current) {
-      steamClickRef.current.currentTime = 0;
-      steamClickRef.current.play().catch(e => console.log(e));
+    if (isMuted) return;
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') ctx.resume();
+      
+      if (steamAudioBufferRef.current) {
+        const source = ctx.createBufferSource();
+        source.buffer = steamAudioBufferRef.current;
+        
+        const gainNode = ctx.createGain();
+        // Boost volume by 4.0x using Web Audio API!
+        gainNode.gain.value = 4.0; 
+        
+        source.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        source.start(0);
+      } else {
+        // Fallback to HTML5 audio if buffer isn't loaded yet
+        if (steamClickRef.current) {
+          steamClickRef.current.currentTime = 0;
+          steamClickRef.current.play().catch(e => e);
+        }
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
