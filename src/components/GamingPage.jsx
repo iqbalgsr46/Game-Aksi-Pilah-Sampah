@@ -132,7 +132,7 @@ export default function GamingPage({ onClose, onRunGame }) {
         <div className="absolute bottom-0 w-full h-[200px] bg-gradient-to-t from-[#1b1d22] via-[#1b1d22]/80 to-transparent z-10 pointer-events-none"></div>
         
         {/* Banner Image */}
-        <img src="/assets/images/image-1.png" alt="Game Banner" className="w-full h-full object-cover object-center brightness-90" />
+        <img src="/assets/images/banner-gaming-mode.png" alt="Game Banner" className="w-full h-full object-cover object-center brightness-90" />
       </div>
 
       {/* Main Container for the rest */}
