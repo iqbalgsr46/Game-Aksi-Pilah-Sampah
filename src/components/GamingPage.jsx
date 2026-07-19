@@ -191,7 +191,7 @@ export default function GamingPage({ onClose, onRunGame }) {
          <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: 'inset 0 10px 15px -3px rgba(0, 0, 0, 0.2)' }}></div>
          <div className="flex items-center gap-3 cursor-pointer group relative z-10">
             <div className="bg-white rounded-full px-5 py-1.5 flex items-center justify-center">
-              <span className="text-[#1a1c21] font-black text-[13px] uppercase tracking-[0.1em]">Steam</span>
+              <span className="text-[#1a1c21] font-black text-[13px] uppercase tracking-[0.1em]">Gaming</span>
             </div>
             <span className="text-white font-bold tracking-[0.15em] uppercase text-[15px] group-hover:text-gray-300">Menu</span>
          </div>
